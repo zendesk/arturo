@@ -64,7 +64,10 @@ module Arturo
     protected
 
     def require_permission
-      true
+      unless Arturo.permit_management.call(self)
+        render :action => 'forbidden', :status => 403
+        return false
+      end
     end
 
     def load_feature
