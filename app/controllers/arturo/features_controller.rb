@@ -64,7 +64,7 @@ module Arturo
     protected
 
     def require_permission
-      unless Arturo.permit_management.call(self)
+      unless Arturo.permit_management?(self)
         render :action => 'forbidden', :status => 403
         return false
       end
