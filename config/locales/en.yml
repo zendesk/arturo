@@ -1,0 +1,18 @@
+en:
+  activerecord:
+    models:
+      "arturo/feature": "Feature"
+    attributes:
+      "arturo/feature":
+        name: "Name"
+        deployment_percentage: "Deployment Percentage"
+  arturo:
+    features:
+      index:
+        title: 'Features'
+      new:
+        legend: "New Feature"
+      edit:
+        legend: "Edit Feature %{name}"
+      feature:
+        edit: 'Edit'

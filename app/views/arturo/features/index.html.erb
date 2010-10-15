@@ -1,0 +1,25 @@
+<%= form_tag('#', :method => 'put', 'data-update-path' => feature_path(:id => ':id'), :remote => true) do %>
+  <fieldset>
+    <legend><%= t('.title') %></legend>
+    <table>
+      <col class='name' />
+      <col class='deployment_percentage' />
+      <col class='edit' />
+      <thead>
+        <tr>
+          <th><%= t('activerecord.attributes.arturo/feature.name') %></th>
+          <th><%= t('activerecord.attributes.arturo/feature.deployment_percentage') %></th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr class='no_js'><th colspan='4'><%= submit_tag %></th></tr>
+      </tfoot>
+      <tbody>
+        <% @features.each do |f| %>
+          <%= render :partial => 'feature', :locals => { :feature => f } %>
+        <% end %>
+      </tbody>
+    </table>
+  </fieldset>
+<% end %>
