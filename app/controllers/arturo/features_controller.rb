@@ -1,5 +1,8 @@
 require 'action_controller'
 
+# TODO: this doesn't do anything radically out of the ordinary.
+#       Are there Rails 3 patterns/mixins/methods I can use
+#       to clean it up a bit?
 module Arturo
 
   base = Object.const_defined?(:ApplicationController) ? ApplicationController : ActionController::Base
