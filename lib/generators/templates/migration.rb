@@ -1,3 +1,5 @@
+require 'active_support/core_ext'
+
 class CreateFeatures < ActiveRecord::Migration
   def self.up
     create_table :features do |t|

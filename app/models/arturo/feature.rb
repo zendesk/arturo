@@ -1,14 +1,24 @@
+require 'active_record'
+
 # a stub
 # possible TODO: remove and and refactor into an acts_as_feature mixin
 module Arturo
-  class Feature < ActiveRecord::Base
+  class Feature < ::ActiveRecord::Base
+
+    DEFAULT_ATTRIBUTES = { :deployment_percentage => 0 }
+
     validates_presence_of :name, :deployment_percentage
-    validates_uniqueness_of :name, :symbol, :allow_blank => true
+    validates_uniqueness_of :name, :allow_blank => true
     validates_numericality_of :deployment_percentage,
                                             :only_integer => true,
                                             :allow_blank => true,
                                             :greater_than_or_equal_to => 0,
                                             :less_than_or_equal_to => 100
+
+    # Create a new Feature
+    def initialize(attributes = {})
+      super(DEFAULT_ATTRIBUTES.merge(attributes || {}))
+    end
 
     # @param [Object] thing_that_has_features a User, Account,
     #                 or other model with an #id method

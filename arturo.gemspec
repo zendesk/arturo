@@ -11,17 +11,10 @@ Gem::Specification.new do |gem|
   gem.test_files = []
   gem.require_paths = [".", "lib"]
   gem.has_rdoc = 'false'
-  if gem.respond_to? :specification_version
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    gem.specification_version = 2
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      # gem.add_runtime_dependency('gem', '>= 0.4')
-    else
-      # gem.add_dependency('gem', '>= 0.4')
-    end
-  else
-    # gem.add_dependency('gem', '>= 0.4')
-  end
+  current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
+  gem.specification_version = 2
+  gem.add_runtime_dependency('activesupport', '~> 3.0')
+  gem.add_runtime_dependency('activerecord', '~> 3.0')
 
   eval(File.read(File.join(File.dirname(__FILE__), 'development_dependencies.rb')))
 end

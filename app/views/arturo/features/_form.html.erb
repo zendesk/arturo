@@ -6,10 +6,6 @@
     <%= form.text_field(:name, :required => 'required') %>
     <%= error_messages_for(feature, :name) %>
 
-    <%= form.label(:symbol, content_tag(:abbr, t('activerecord.attributes.arturo/feature.symbol'), :title => t('arturo.features.symbol_explanation'))) %>
-    <%= form.text_field(:symbol, :required => 'required', :pattern => '[A-Za-z][A-Za-z0-9_]*', :title => t('arturo.features.symbol_pattern_explanation')) %>
-    <%= error_messages_for(feature, :symbol) %>
-
     <%= form.label(:deployment_percentage) %>
     <%= form.range_field(:deployment_percentage, :min => '0', :max => '100', :step => '1') %>
     <%= error_messages_for(feature, :deployment_percentage) %>

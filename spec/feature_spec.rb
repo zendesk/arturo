@@ -1,10 +1,9 @@
 require File.expand_path('../spec_helper', __FILE__)
-require 'active_model'
 require 'arturo'
 
 describe Arturo::Feature do
   before do
-    @feature = Feature.new(:name => 'Foo')
+    @feature = ::Arturo::Feature.new(:name => 'Foo')
   end
 
   it 'must require a name' do
@@ -26,8 +25,8 @@ end
 
 describe 'Arturo::Feature#enabled_for?' do
   before do
-    @feature = Feature.new(:name => 'Foo')
-    @things = (1..10000).to_a.map { |i| Object.new.tap { |t| t.stubs(:id).returns(i) } }
+    @feature = ::Arturo::Feature.new(:name => 'Foo')
+    @things = (1..2000).to_a.map { |i| Object.new.tap { |t| t.stubs(:id).returns(i) } }
   end
 
   it 'must return false for all things when deployment_percentage = 0' do
@@ -36,6 +35,7 @@ describe 'Arturo::Feature#enabled_for?' do
   end
 
   it 'must return true for all things when deployment_percentage = 100' do
+    @feature.deployment_percentage = 100
     @things.each { |t| @feature.enabled_for?(t).must_equal(true) }
   end
 

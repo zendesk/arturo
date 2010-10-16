@@ -15,6 +15,8 @@ require 'mocha'
   $LOAD_PATH.unshift(dir)
 end
 
+require File.expand_path('../prepare_database', __FILE__)
+
 class MiniTest::Unit::TestCase
 
 end
