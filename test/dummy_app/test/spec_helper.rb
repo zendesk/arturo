@@ -3,7 +3,7 @@ require 'rubygems'
 require 'bundler'
 Bundler.setup
 
-require File.expand_path('../dummy_app/config/environment', __FILE__)
+require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
 require 'minitest/spec'

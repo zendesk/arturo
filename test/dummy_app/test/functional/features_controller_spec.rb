@@ -1,6 +1,11 @@
 require File.expand_path('../../spec_helper', __FILE__)
+require 'arturo/features_controller'
 
 describe Arturo::FeaturesController do
+  def self.setup(*args, &block)
+    before(*args, &block)
+  end
+
   include ActionController::TestCase::Behavior
 
   describe 'while signed in as a non-administrator' do
