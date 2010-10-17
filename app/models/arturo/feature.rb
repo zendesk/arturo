@@ -5,6 +5,8 @@ require 'active_record'
 module Arturo
   class Feature < ::ActiveRecord::Base
 
+    include Arturo::SpecialHandling
+
     DEFAULT_ATTRIBUTES = { :deployment_percentage => 0 }
 
     validates_presence_of :name, :deployment_percentage
@@ -32,12 +34,13 @@ module Arturo
     #                 or other model with an #id method
     # @return [true,false] whether or not this feature is enabled
     #                      for thing_that_has_features
+    # @see Arturo::SpecialHandling#whitelisted?
+    # @see Arturo::SpecialHandling#blacklisted?
     def enabled_for?(thing_that_has_features)
       return false if thing_that_has_features.nil?
-      threshold = self.deployment_percentage || 0
-      return false if threshold == 0
-      return true if threshold == 100
-      (((thing_that_has_features.id + 17) * 13) % 100) < threshold
+      return false if blacklisted?(thing_that_has_features)
+      return true if  whitelisted?(thing_that_has_features)
+      passes_threshold?(thing_that_has_features)
     end
 
     def to_s
@@ -50,6 +53,16 @@ module Arturo
 
     def inspect
       "<Arturo::Feature #{name}, deployed to #{deployment_percentage}%>"
+    end
+
+    protected
+
+    def passes_threshold?(thing_that_has_features)
+      threshold = self.deployment_percentage || 0
+      return false if threshold == 0
+      return true if threshold == 100
+      (((thing_that_has_features.id + 17) * 13) % 100) < threshold
+      
     end
   end
 end
