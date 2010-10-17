@@ -48,7 +48,7 @@ module Arturo
     def update
       if @feature.update_attributes(params[:feature])
         flash[:notice] = "Updated feature #{@feature.name}"
-        redirect_to features_path
+        redirect_to feature_path(@feature)
       else
           flash[:alert] = "Sorry. There was a problem updating feature #{@feature.name}."
         render :action => 'edit'

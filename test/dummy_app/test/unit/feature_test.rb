@@ -1,5 +1,4 @@
 require File.expand_path('../../test_helper', __FILE__)
-require 'arturo/feature'
 
 class ArturoFeatureTest < ActiveSupport::TestCase
 

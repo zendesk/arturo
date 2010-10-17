@@ -9,10 +9,12 @@ if Object.const_defined?(:Bundler) && Bundler.const_defined?(:Dsl) && self.kind_
     gem  'rake'
     gem  'redgreen',      '~> 1.2'
     gem  'sqlite3-ruby',  '~> 1.3', :require => 'sqlite3'
+    gem  'factory_girl',  '~> 1.3'
   end  
 else #gemspec  
   gem.add_development_dependency  'mocha'
   gem.add_development_dependency  'rake'
   gem.add_development_dependency  'redgreen',     '~> 1.2'
   gem.add_development_dependency  'sqlite3-ruby', '~> 1.3'
+  gem.add_development_dependency  'factory_girl', '~> 1.3'
 end

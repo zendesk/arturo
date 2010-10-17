@@ -48,4 +48,58 @@ module ArturoFeaturesControllerTests
 
   end
 
+  class AdminTest < ActionController::TestCase
+    self.controller_class = Arturo::FeaturesController
+
+    def setup
+      Arturo.permit_management do
+        true
+      end
+      @features = [
+        Factory(:feature),
+        Factory(:feature),
+        Factory(:feature)
+      ]
+    end
+
+    def test_get_index
+      get :index
+      assert_response :success
+      assert_select 'table tbody tr input[type=range]'
+      assert_select 'table .no_js input[type=submit]'
+    end
+
+    def test_get_new
+      get :new
+      assert_response :success
+    end
+
+    def test_post_create
+      post :create, :feature => { :name => 'anything' }
+      assert Arturo::Feature.find_by_name('anything').present?
+      assert_redirected_to features_path
+    end
+
+    def test_get_show
+      get :show, :id => @features.first.id
+      assert_response :success
+    end
+
+    def test_get_edit
+      get :edit, :id => @features.first.id
+      assert_response :success
+    end
+
+    def test_put_update
+      put :update, :id => @features.first.id, :feature => { :name => 'anything' }
+      assert_redirected_to feature_path(@features.first)
+    end
+
+    def test_delete_destroy
+      delete :destroy, :id => @features.first.id
+      assert_redirected_to features_path
+    end
+
+  end
+
 end
