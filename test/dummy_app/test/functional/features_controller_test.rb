@@ -70,6 +70,16 @@ module ArturoFeaturesControllerTests
       assert_select 'table tfoot input[type=submit]'
     end
 
+    def test_put_update_all
+      put :update_all, :features => {
+                        @features.first.id => { :deployment_percentage => '14' },
+                        @features.last.id  => { :deployment_percentage => '98' }
+                       }
+      assert_equal '14', @features.first.reload.deployment_percentage.to_s
+      assert_equal '98', @features.last.reload.deployment_percentage.to_s
+      assert_redirected_to features_path
+    end
+
     def test_get_new
       get :new
       assert_response :success

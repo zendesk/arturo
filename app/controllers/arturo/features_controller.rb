@@ -21,6 +21,28 @@ module Arturo
       respond_with @features
     end
 
+    def update_all
+      updated_count = 0
+      errors = []
+      features_params = params[:features] || {}
+      features_params.each do |id, attributes|
+        feature = Arturo::Feature.find_by_id(id)
+        if feature.blank?
+          errors << "No such feature: #{id}"
+        elsif feature.update_attributes(attributes)
+          updated_count += 1
+        else
+          errors << "Error updating feature #{id}"
+        end
+      end
+      if errors.any?
+        flash[:error] = errors
+      else
+        flash[:success] = "Updated #{updated_count} features."
+      end
+      redirect_to features_path
+    end
+
     def show
       respond_with @feature
     end
