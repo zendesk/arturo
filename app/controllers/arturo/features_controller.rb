@@ -33,7 +33,7 @@ module Arturo
     def create
       @feature = Arturo::Feature.new(params[:feature])
       if @feature.save
-        flash[:notice] = "Created feature #{@feature.name}"
+        flash[:notice] = "Created #{@feature}"
         redirect_to features_path
       else
         flash[:alert] = "Sorry. There was a problem saving the feature."
@@ -47,19 +47,19 @@ module Arturo
 
     def update
       if @feature.update_attributes(params[:feature])
-        flash[:notice] = "Updated feature #{@feature.name}"
+        flash[:notice] = "Updated #{@feature}"
         redirect_to feature_path(@feature)
       else
-          flash[:alert] = "Sorry. There was a problem updating feature #{@feature.name}."
+          flash[:alert] = "Sorry. There was a problem updating #{@feature}."
         render :action => 'edit'
       end
     end
 
     def destroy
       if @feature.destroy
-        flash[:notice] = "Removed feature #{@feature.name}."
+        flash[:notice] = "Removed #{@feature}."
       else
-        flash[:alert] = "Sorry. There was a problem removing feature #{@feature.name}."
+        flash[:alert] = "Sorry. There was a problem removing #{@feature}."
       end
       redirect_to features_path
     end

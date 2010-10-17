@@ -2,6 +2,10 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class ArturoFeatureTest < ActiveSupport::TestCase
 
+  def setup
+    reset_translations!
+  end
+
   def feature
     @feature ||= Factory(:feature)
   end
@@ -12,20 +16,37 @@ class ArturoFeatureTest < ActiveSupport::TestCase
 
   def test_to_feature
     assert_equal feature, ::Arturo::Feature.to_feature(feature)
-    assert_equal feature, ::Arturo::Feature.to_feature(feature.name)
-    assert_nil ::Arturo::Feature.to_feature("a feature that doesn't exist")
+    assert_equal feature, ::Arturo::Feature.to_feature(feature.symbol)
+    assert_nil ::Arturo::Feature.to_feature(:does_not_exist)
   end
 
-  def test_requires_a_name
-    feature.name = nil
+  def test_requires_a_symbol
+    feature.symbol = nil
     assert !feature.valid?
-    assert feature.errors[:name].present?
+    assert feature.errors[:symbol].present?
   end
 
   def test_requires_a_deployment_percentage
     feature.deployment_percentage = nil
     assert !feature.valid?
     assert feature.errors[:deployment_percentage].present?
+  end
+
+  def test_symbol_is_readonly
+    original_symbol = feature.symbol
+    feature.symbol = :foo_bar
+    feature.save
+    assert_equal original_symbol.to_sym, feature.reload.symbol.to_sym
+  end
+
+  def test_sane_default_for_name
+    feature.symbol = :foo_bar
+    assert_equal 'Foo Bar', feature.name
+  end
+
+  def test_name_uses_internationalization_when_available
+    define_translation("arturo.feature.#{feature.symbol}", 'Happy Feature')
+    assert_equal 'Happy Feature', feature.name
   end
 
   def test_sets_deployment_percentage_to_0_by_default

@@ -5,10 +5,4 @@ ActiveRecord::Base.establish_connection({
   :database => ':memory:'
 })
 
-ActiveRecord::Schema.define do
-  create_table :features do |t|
-    t.string   :name, :null => false
-    t.integer  :deployment_percentage, :null => false
-    t.timestamps
-  end
-end
+require File.expand_path('../../db/schema.rb', __FILE__)

@@ -22,7 +22,7 @@ module ArturoFeaturesControllerTests
     end
 
     def test_post_create_is_forbidden
-      post :create, :feature => { :name => 'anything' }
+      post :create, :feature => { :deployment_percentage => '38' }
       assert_response :forbidden
     end
 
@@ -37,7 +37,7 @@ module ArturoFeaturesControllerTests
     end
 
     def test_put_update_is_forbidden
-      put :update, :id => 1, :feature => { :name => 'anything' }
+      put :update, :id => 1, :feature => { :deployment_percentae => '81' }
       assert_response :forbidden
     end
 
@@ -75,8 +75,8 @@ module ArturoFeaturesControllerTests
     end
 
     def test_post_create
-      post :create, :feature => { :name => 'anything' }
-      assert Arturo::Feature.find_by_name('anything').present?
+      post :create, :feature => { :symbol => 'anything' }
+      assert Arturo::Feature.find_by_symbol('anything').present?
       assert_redirected_to features_path
     end
 
@@ -91,7 +91,7 @@ module ArturoFeaturesControllerTests
     end
 
     def test_put_update
-      put :update, :id => @features.first.id, :feature => { :name => 'anything' }
+      put :update, :id => @features.first.id, :feature => { :deployment_percentage => '2' }
       assert_redirected_to feature_path(@features.first.reload)
     end
 

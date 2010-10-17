@@ -15,8 +15,17 @@ require 'arturo'
 require 'arturo/feature'
 require 'arturo/feature_factories'
 
-class MiniTest::Unit::TestCase
+class ActiveSupport::TestCase
+  def reset_translations!
+    I18n.reload!
+  end
 
+  def define_translation(key, value)
+    hash = key.to_s.split('.').reverse.inject(value) do |value, key_part|
+      { key_part.to_sym => value }
+    end
+    I18n.backend.store_translations I18n.locale, hash
+  end
 end
 
 MiniTest::Unit.autorun

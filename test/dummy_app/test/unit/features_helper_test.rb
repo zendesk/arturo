@@ -16,7 +16,7 @@ class ArturoFeaturesHelperTest < ActiveSupport::TestCase
 
   def test_if_feature_enabled_with_nonexistent_feature
     @block.expects(:call).never
-    assert_nil @helper.if_feature_enabled('nonexistent', &@block)
+    assert_nil @helper.if_feature_enabled(:nonexistent, &@block)
   end
 
   def test_if_feature_enabled_uses_arturo_thing_that_has_features

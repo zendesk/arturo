@@ -4,9 +4,12 @@ en:
       "arturo/feature": "Feature"
     attributes:
       "arturo/feature":
+        symbol: "Symbol"
         name: "Name"
         deployment_percentage: "Deployment Percentage"
   arturo:
+    feature:
+      nameless: "(no name)"
     features:
       index:
         title: 'Features'

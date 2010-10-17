@@ -2,9 +2,9 @@
   <fieldset>
     <legend><%= legend %></legend>
 
-    <%= form.label(:name) %>
-    <%= form.text_field(:name, :required => 'required') %>
-    <%= error_messages_for(feature, :name) %>
+    <%= form.label(:symbol) %>
+    <%= form.text_field(:symbol, :required => 'required') %>
+    <%= error_messages_for(feature, :symbol) %>
 
     <%= form.label(:deployment_percentage) %>
     <%= form.range_field(:deployment_percentage, :min => '0', :max => '100', :step => '1') %>

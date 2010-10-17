@@ -5,12 +5,12 @@ module Arturo
   # are "(deny,allow)".)
   # @example
   #   # allow admins:
-  #   Arturo::Feature.whitelist('some feature') do |user|
+  #   Arturo::Feature.whitelist(:some_feature) do |user|
   #     user.is_admin?
   #   end
   #
   #   # disallow for small accounts:
-  #   Arturo::Feature.blacklist('another feature') do |user|
+  #   Arturo::Feature.blacklist(:another_feature) do |user|
   #     user.account.small?
   #   end
   #
@@ -33,12 +33,12 @@ module Arturo
         @blacklists ||= {}
       end
 
-      def whitelist(feature_name, &block)
-        whitelists[feature_name] = block
+      def whitelist(feature_symbol, &block)
+        whitelists[feature_symbol.to_sym] = block
       end
 
-      def blacklist(feature_name, &block)
-        blacklists[feature_name] = block
+      def blacklist(feature_symbol, &block)
+        blacklists[feature_symbol.to_sym] = block
       end
     end
 
@@ -53,7 +53,7 @@ module Arturo
     end
 
     def x_listed?(list_map, thing_that_has_features)
-      list = list_map[self.name]
+      list = list_map[self.symbol.to_sym]
       list.present? && list.call(thing_that_has_features)
     end
 
