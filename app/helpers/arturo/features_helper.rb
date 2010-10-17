@@ -7,7 +7,9 @@ module Arturo
 
     def if_feature_enabled(name, &block)
       feature = ::Arturo::Feature.to_feature(name)
-      if feature.present? && feature.enabled_for?(nil)
+      return nil if feature.blank?
+      thing = ::Arturo.thing_that_has_features.bind(self).call
+      if feature.present? && feature.enabled_for?(thing)
         return block.call
       end
     end
