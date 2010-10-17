@@ -33,6 +33,7 @@ module Arturo
     # @return [true,false] whether or not this feature is enabled
     #                      for thing_that_has_features
     def enabled_for?(thing_that_has_features)
+      return false if thing_that_has_features.nil?
       threshold = self.deployment_percentage || 0
       return false if threshold == 0
       return true if threshold == 100

@@ -32,12 +32,17 @@ class ArturoFeatureTest < ActiveSupport::TestCase
     assert_equal 0, ::Arturo::Feature.new.deployment_percentage
   end
 
+  def test_enabled_for_returns_false_if_thing_is_nil
+    feature.deployment_percentage = 100
+    assert !feature.enabled_for?(nil)
+  end
+
   def test_enabled_for_returns_false_for_all_things_when_deployment_percentage_is_0
     feature.deployment_percentage = 0
     bunch_of_things.each { |t| assert !feature.enabled_for?(t) }
   end
 
-  def test_returns_true_for_all_things_when_deployment_percentage_is_100
+  def test_returns_true_for_all_non_nil_things_when_deployment_percentage_is_100
     feature.deployment_percentage = 100
     bunch_of_things.each { |t| assert feature.enabled_for?(t) }
   end
