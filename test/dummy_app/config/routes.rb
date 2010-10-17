@@ -1,4 +1,6 @@
 DummyApp::Application.routes.draw do
+  resources :features, :controller => 'arturo/features'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
