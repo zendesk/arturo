@@ -13,8 +13,7 @@ Gem::Specification.new do |gem|
   gem.has_rdoc = 'false'
   current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
   gem.specification_version = 2
-  gem.add_runtime_dependency('activesupport', '~> 3.0')
-  gem.add_runtime_dependency('activerecord', '~> 3.0')
+  gem.add_runtime_dependency('rails', '~> 3.0')
 
   eval(File.read(File.join(File.dirname(__FILE__), 'development_dependencies.rb')))
 end
