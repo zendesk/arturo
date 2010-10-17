@@ -14,11 +14,14 @@
         </tr>
       </thead>
       <tfoot>
-        <tr class='no_js'><th colspan='4'><%= submit_tag %></th></tr>
+        <tr><th colspan='4'><%= link_to t('.new'), new_feature_path %> <%= submit_tag %></th></tr>
       </tfoot>
       <tbody>
         <% @features.each do |f| %>
           <%= render :partial => 'feature', :locals => { :feature => f } %>
+        <% end %>
+        <% if @features.none? %>
+        <tr class='if_no_features'><td colspan='4'>No features yet.</td></tr>
         <% end %>
       </tbody>
     </table>

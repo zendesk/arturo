@@ -66,7 +66,8 @@ module ArturoFeaturesControllerTests
       get :index
       assert_response :success
       assert_select 'table tbody tr input[type=range]'
-      assert_select 'table .no_js input[type=submit]'
+      assert_select 'table tfoot a[href=?]', @controller.new_feature_path
+      assert_select 'table tfoot input[type=submit]'
     end
 
     def test_get_new

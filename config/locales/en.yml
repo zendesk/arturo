@@ -13,6 +13,7 @@ en:
     features:
       index:
         title: 'Features'
+        new: 'New'
       new:
         title: New Feature
         legend: "New Feature"
