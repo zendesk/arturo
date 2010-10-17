@@ -11,11 +11,15 @@ en:
       index:
         title: 'Features'
       new:
+        title: New Feature
         legend: "New Feature"
       edit:
+        title: "Edit Feature %{name}"
         legend: "Edit Feature %{name}"
       feature:
         edit: 'Edit'
+      show:
+        title: "Feature %{name}"
       forbidden:
         title: Forbidden
         text: You do not have permission to access that resource.
