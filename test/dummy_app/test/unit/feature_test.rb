@@ -3,11 +3,17 @@ require File.expand_path('../../test_helper', __FILE__)
 class ArturoFeatureTest < ActiveSupport::TestCase
 
   def feature
-    @feature ||= ::Arturo::Feature.new(:name => 'Foo')
+    @feature ||= Factory(:feature)
   end
 
   def bunch_of_things
     @things ||= (1..2000).to_a.map { |i| Object.new.tap { |t| t.stubs(:id).returns(i) } }
+  end
+
+  def test_to_feature
+    assert_equal feature, ::Arturo::Feature.to_feature(feature)
+    assert_equal feature, ::Arturo::Feature.to_feature(feature.name)
+    assert_nil ::Arturo::Feature.to_feature("a feature that doesn't exist")
   end
 
   def test_requires_a_name
@@ -23,7 +29,7 @@ class ArturoFeatureTest < ActiveSupport::TestCase
   end
 
   def test_sets_deployment_percentage_to_0_by_default
-    assert_equal 0, feature.deployment_percentage
+    assert_equal 0, ::Arturo::Feature.new.deployment_percentage
   end
 
   def test_enabled_for_returns_false_for_all_things_when_deployment_percentage_is_0

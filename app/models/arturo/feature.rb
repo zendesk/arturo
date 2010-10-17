@@ -15,6 +15,14 @@ module Arturo
                                             :greater_than_or_equal_to => 0,
                                             :less_than_or_equal_to => 100
 
+    # Looks up a feature by name. Also accepts a Feature as input.
+    # @param [String, Arturo::Feature] feature_or_name a Feature or a name of a Feature
+    # @return [Arturo::Feature, nil] the Feature if found, else nil
+    def self.to_feature(feature_or_name)
+      return feature_or_name if feature_or_name.kind_of?(self)
+      self.where(:name => feature_or_name.to_s).first
+    end
+
     # Create a new Feature
     def initialize(attributes = {})
       super(DEFAULT_ATTRIBUTES.merge(attributes || {}))
