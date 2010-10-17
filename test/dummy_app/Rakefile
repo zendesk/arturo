@@ -8,7 +8,7 @@ DummyApp::Application.load_tasks
 
 Rake::TestTask.new(:test) do |t|
   t.libs << 'app/controllers' << 'app/mailers' << 'app/models' << 'lib'
-  t.pattern = 'spec/**/*_spec.rb'
+  t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
 
