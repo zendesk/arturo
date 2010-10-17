@@ -92,7 +92,7 @@ module ArturoFeaturesControllerTests
 
     def test_put_update
       put :update, :id => @features.first.id, :feature => { :name => 'anything' }
-      assert_redirected_to feature_path(@features.first)
+      assert_redirected_to feature_path(@features.first.reload)
     end
 
     def test_delete_destroy

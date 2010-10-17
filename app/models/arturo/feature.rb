@@ -38,5 +38,17 @@ module Arturo
       return true if threshold == 100
       (((thing_that_has_features.id + 17) * 13) % 100) < threshold
     end
+
+    def to_s
+      "Feature #{name}"
+    end
+
+    def to_param
+      persisted? ? "#{id}-#{name.parameterize}" : nil
+    end
+
+    def inspect
+      "<Arturo::Feature #{name}, deployed to #{deployment_percentage}%>"
+    end
   end
 end

@@ -48,4 +48,12 @@ class ArturoFeatureTest < ActiveSupport::TestCase
     bunch_of_things.each { |t| yes += 1 if feature.enabled_for?(t) }
     assert_in_delta 0.37 * bunch_of_things.length, yes, 0.02 * bunch_of_things.length
   end
+
+  def test_to_s
+    assert feature.to_s.include?(feature.name)
+  end
+
+  def test_to_param
+    assert_match feature.to_param, %r{^#{feature.id}-}
+  end
 end
