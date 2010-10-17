@@ -5,6 +5,12 @@ require 'action_controller'
 #       to clean it up a bit?
 module Arturo
 
+  begin
+    require 'application_controller'
+  rescue LoadError
+    # do nothing
+  end
+
   base = Object.const_defined?(:ApplicationController) ? ApplicationController : ActionController::Base
 
   # Handles all Feature actions. Clients of the Arturo engine
