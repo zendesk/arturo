@@ -16,3 +16,6 @@ en:
         legend: "Edit Feature %{name}"
       feature:
         edit: 'Edit'
+      forbidden:
+        title: Forbidden
+        text: You do not have permission to access that resource.
