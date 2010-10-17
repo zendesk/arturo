@@ -1,5 +1,4 @@
 require File.expand_path('../spec_helper', __FILE__)
-require 'arturo'
 
 describe Arturo::Feature do
   before do
