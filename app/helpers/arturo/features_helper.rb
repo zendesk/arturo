@@ -5,6 +5,13 @@ module Arturo
   module FeaturesHelper
     include ActionView::Helpers::TagHelper
 
+    def if_feature_enabled(name, &block)
+      feature = ::Arturo::Feature.to_feature(name)
+      if feature.present? && feature.enabled_for?(nil)
+        return block.call
+      end
+    end
+
     def range_tag(name, value, options = {})
       tag(:input, { 'type' => 'range', 'name' => name, 'id' => sanitize_to_id(name), 'value' => value }.update(options.stringify_keys))
     end
