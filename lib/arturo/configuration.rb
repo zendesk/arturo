@@ -10,8 +10,8 @@ module Arturo
   # Configure Arturo.
   # @yield [] calls the passed block in the context of the Arturo module.
   # @example
-  #   Arturo.configure do |arturo|
-  #     arturo.permit_management do
+  #   Arturo.configure do
+  #     permit_management do
   #       ...
   #     end
   #   end
