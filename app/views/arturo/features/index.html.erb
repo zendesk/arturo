@@ -21,7 +21,7 @@
           <%= render :partial => 'feature', :locals => { :feature => f } %>
         <% end %>
         <% if @features.none? %>
-        <tr class='if_no_features'><td colspan='4'>No features yet.</td></tr>
+        <tr class='if_no_features'><td colspan='4'><%= t('.none_yet') %></td></tr>
         <% end %>
       </tbody>
     </table>

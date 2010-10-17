@@ -28,17 +28,17 @@ module Arturo
       features_params.each do |id, attributes|
         feature = Arturo::Feature.find_by_id(id)
         if feature.blank?
-          errors << "No such feature: #{id}"
+          errors << t('arturo.features.flash.no_such_feature', :id => id)
         elsif feature.update_attributes(attributes)
           updated_count += 1
         else
-          errors << "Error updating feature #{id}"
+          errors << t('arturo.features.flash.error_updating', :id => id)
         end
       end
       if errors.any?
         flash[:error] = errors
       else
-        flash[:success] = "Updated #{updated_count} features."
+        flash[:success] = t('arturo.features.flash.updated_many', :count => updated_count)
       end
       redirect_to features_path
     end
@@ -55,10 +55,10 @@ module Arturo
     def create
       @feature = Arturo::Feature.new(params[:feature])
       if @feature.save
-        flash[:notice] = "Created #{@feature}"
+        flash[:notice] = t('arturo.features.flash.created', :name => @feature.to_s)
         redirect_to features_path
       else
-        flash[:alert] = "Sorry. There was a problem saving the feature."
+        flash[:alert] = t('arturo.features.flash.error_creating', :name => @feature.to_s)
         render :action => 'new'
       end
     end
@@ -69,19 +69,19 @@ module Arturo
 
     def update
       if @feature.update_attributes(params[:feature])
-        flash[:notice] = "Updated #{@feature}"
+        flash[:notice] = t('arturo.features.flash.updated', :name => @feature.to_s)
         redirect_to feature_path(@feature)
       else
-          flash[:alert] = "Sorry. There was a problem updating #{@feature}."
+          flash[:alert] = t('arturo.features.flash.error_updating', :name => @feature.to_s)
         render :action => 'edit'
       end
     end
 
     def destroy
       if @feature.destroy
-        flash[:notice] = "Removed #{@feature}."
+        flash[:notice] = t('arturo.features.flash.removed', :name => @feature.to_s)
       else
-        flash[:alert] = "Sorry. There was a problem removing #{@feature}."
+        flash[:alert] = t('arturo.features.flash.error_removing', :name => @feature.to_s)
       end
       redirect_to features_path
     end
