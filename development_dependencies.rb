@@ -7,12 +7,12 @@ if Object.const_defined?(:Bundler) && Bundler.const_defined?(:Dsl) && self.kind_
   group :development do
     gem  'mocha'
     gem  'rake'
-    gem  'redgreen',  '~> 1.2'
-    gem  'sqlite3',   '~> 0.1'
+    gem  'redgreen',      '~> 1.2'
+    gem  'sqlite3-ruby',  '~> 1.3', :require => 'sqlite3'
   end  
 else #gemspec  
   gem.add_development_dependency  'mocha'
   gem.add_development_dependency  'rake'
-  gem.add_development_dependency  'redgreen',  '~> 1.2'
-  gem.add_development_dependency  'sqlite3',   '~> 0.1'
+  gem.add_development_dependency  'redgreen',     '~> 1.2'
+  gem.add_development_dependency  'sqlite3-ruby', '~> 1.3'
 end
