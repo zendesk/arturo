@@ -5,12 +5,18 @@ module Arturo
   module FeaturesHelper
     include ActionView::Helpers::TagHelper
 
-    def if_feature_enabled(symbol_or_feature, &block)
+    def feature_enabled?(symbol_or_feature)
       feature = ::Arturo::Feature.to_feature(symbol_or_feature)
-      return nil if feature.blank?
+      return false if feature.blank?
       thing = ::Arturo.thing_that_has_features.bind(self).call
-      if feature.present? && feature.enabled_for?(thing)
-        return block.call
+      feature.enabled_for?(thing)
+    end
+
+    def if_feature_enabled(symbol_or_feature, &block)
+      if feature_enabled?(symbol_or_feature)
+        block.call
+      else
+        nil
       end
     end
 
