@@ -4,7 +4,6 @@ require 'action_view/helpers/form_tag_helper'
 module Arturo
   module FeaturesHelper
     include ActionView::Helpers::TagHelper
-    include Arturo::FeatureAvailability
 
     def deployment_percentage_range_and_output_tags(name, value, options = {})
       id = sanitize_to_id(name)
