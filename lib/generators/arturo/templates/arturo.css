@@ -61,4 +61,7 @@
   padding-left: 9px;
 }
 
+.feature_new .errors, .feature_edit .errors { color: red; }
+.feature_new :invalid { border-color: red; }
+
 .feature_new footer, .feature_edit footer { margin-top: 2em; }
