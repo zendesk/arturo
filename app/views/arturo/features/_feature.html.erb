@@ -1,5 +1,5 @@
 <tr class='feature' id="feature_<%= feature.id %>">
-  <td><%= feature.name %></td>
-  <td><%= range_tag("features[#{feature.id}][deployment_percentage]", feature.deployment_percentage, :id => "features_#{feature.id}_deployment_percentage", :min => '0', :max => '100', :step => '1') %></td>
+  <td><code class='ruby symbol'><%= feature.symbol %></code></td>
+  <td><%= range_tag("features[#{feature.id}][deployment_percentage]", feature.deployment_percentage, :id => "features_#{feature.id}_deployment_percentage", :min => '0', :max => '100', :step => '1') %><output for="features_<%= feature.id %>_deployment_percentage"><%= feature.deployment_percentage %></output></td>
   <td><%= link_to t('.edit'), edit_feature_path(feature), :rel => 'edit', :class => 'edit' %></td>
 </tr>

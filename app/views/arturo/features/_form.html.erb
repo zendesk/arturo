@@ -3,7 +3,7 @@
     <legend><%= legend %></legend>
 
     <%= form.label(:symbol) %>
-    <%= form.text_field(:symbol, :required => 'required') %>
+    <%= form.text_field(:symbol, :required => 'required', :class => 'symbol') %>
     <%= error_messages_for(feature, :symbol) %>
 
     <%= form.label(:deployment_percentage) %>
