@@ -2,7 +2,7 @@
 <%= form_tag(features_path, :method => 'put', 'data-update-path' => feature_path(:id => ':id'), :remote => true) do %>
   <fieldset>
     <legend><%= t('.title') %></legend>
-    <table class='no_js features'>
+    <table class='features'>
       <col class='name' />
       <col class='deployment_percentage' />
       <col class='edit' />

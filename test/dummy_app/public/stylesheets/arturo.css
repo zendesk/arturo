@@ -19,11 +19,11 @@
   text-align: left;
 }
 
-.features input[type=range] { width: 200px; }
+input.deployment_percentage[type=range] { width: 200px; }
 
-.features.no_js output { display: none; }
-.features output { margin-left: 1em; }
-.features output:after { content: "%"; }
+output.deployment_percentage.no_js { display: none; }
+output.deployment_percentage { margin-left: 1em; }
+output.deployment_percentage:after { content: "%"; }
 
 .features a[rel=edit] { visibility: hidden; }
 .features tr:hover a[rel=edit] { visibility: inherit; }
@@ -38,8 +38,8 @@
 
 .feature_new label, .feature_edit label { font-weight: bold; }
 
-.feature_new  label, .feature_new  input, .feature_new  textarea, .feature_new  select,
-.feature_edit label, .feature_edit input, .feature_edit textarea, .feature_edit select {
+.feature_new  label, .feature_new  .errors,
+.feature_edit label, .feature_edit .errors {
   display: block;
 }
 
