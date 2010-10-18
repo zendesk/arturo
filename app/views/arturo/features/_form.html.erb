@@ -8,7 +8,7 @@
 
     <%= form.label(:deployment_percentage) %>
     <%= form.range_field(:deployment_percentage, :min => '0', :max => '100', :step => '1', :class => 'deployment_percentage') %>
-    <output for="features_<%= feature.id %>_deployment_percentage" class='deployment_percentage no_js'><%= feature.deployment_percentage %></output>
+    <output for="feature_deployment_percentage" class='deployment_percentage no_js'><%= feature.deployment_percentage %></output>
     <%= error_messages_for(feature, :deployment_percentage) %>
 
     <footer><%= form.submit %></footer>
