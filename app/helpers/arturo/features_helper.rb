@@ -4,21 +4,7 @@ require 'action_view/helpers/form_tag_helper'
 module Arturo
   module FeaturesHelper
     include ActionView::Helpers::TagHelper
-
-    def feature_enabled?(symbol_or_feature)
-      feature = ::Arturo::Feature.to_feature(symbol_or_feature)
-      return false if feature.blank?
-      thing = ::Arturo.thing_that_has_features.bind(self).call
-      feature.enabled_for?(thing)
-    end
-
-    def if_feature_enabled(symbol_or_feature, &block)
-      if feature_enabled?(symbol_or_feature)
-        block.call
-      else
-        nil
-      end
-    end
+    include Arturo::FeatureAvailability
 
     def deployment_percentage_range_and_output_tags(name, value, options = {})
       id = sanitize_to_id(name)
