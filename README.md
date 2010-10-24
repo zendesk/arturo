@@ -8,9 +8,61 @@ a given percent* of your users and whitelisting and blacklisting users based
 on any criteria you can express in Ruby.
 
     * The selection isn't random. It's not even pseudo-random. It's completely
-      deterministic. This assures that iff a user has a feature one day, unless
-      you decrease the deployment percentage of the feature, the user
-      will continue to have the feature enabled.
+      deterministic. This assures that if a user has a feature on Monday, the
+      user will still have it on Tuesday (unless, of course, you *decrease*
+      the feature's deployment percentage or change its white- or blacklist
+      settings).
+
+### A quick example
+
+Trish, a developer is working on a new feature: a live feed of recent postings
+in the user's city that shows up in the user's sidebar. First, she uses Arturo's
+view helpers to control who sees the sidebar widget:
+
+    <%# in app/views/layout/_sidebar.html.erb: %>
+    <% if_feature_enabled(:live_postings) do %>
+    <div class='widget'>
+      <h3>Recent Postings</h3>
+      <ol id='live_postings'>
+      </ol>
+    </div>
+    <% end %>
+
+Then Trish writes some Javascript that will poll the server for recent
+postings and put them in the sidebar widget:
+
+    // in public/javascript/live_postings.js:
+    $(function() {
+      var livePostingsList = $('#live_postings');
+      if (livePostingsList.length > 0) {
+        var updatePostingsList = function() {
+          livePostingsList.load('/listings/recent');
+          setTimeout(updatePostingsList, 30);
+        }
+        updatePostingsList();
+      }
+    });
+
+Trish uses Arturo's Controller filters to control who has access to
+the feature:
+
+    # in app/controllers/postings_controller:
+    class PostingsController < ApplicationController
+      require_feature! :live_postings, :only => :recent
+      # ...
+    end
+
+Trish then deploys this code to production. Nobody will see the feature yet,
+since it's not on for anyone. (In fact, the feature doesn't yet exist
+in the database, which is the same as being deployed to 0% of users.) A week
+later, when the company is ready to start deploying the feature to a few
+people, the product manager, Vijay, signs in to their site and navigates
+to `/features`, adds a new feature called "live_postings" and sets its
+deployment percentage to 3%. After a few days, the operations team decides
+that the increase in traffic is not going to overwhelm their servers, and
+Vijay can bump the deployment percentage up to 50%. A few more days go by
+and they clean up the last few bugs they found with the "live_postings"
+feature and deploy it to all users.
 
 **Note**: the following is the **intended** use of Arturo. It is not yet
 complete and neither the 1.0 version of the gem nor the Rails 2.3-specific
@@ -59,7 +111,7 @@ There are configuration options for the following:
    (see [admin permissions](#adminpermissions))
  * the block that yields the object that has features
    (a User, Person, or Account, see
-   [things that have features](#thingsthathavefeatures))
+   [feature recipients](#featurerecipients))
  * whitelists and blacklists for features
    (see [white- and blacklisting](#wblisting))
 
@@ -97,13 +149,22 @@ or
       signed_in? && signed_in_person.can?(:manage_features)
     end
 
-### <span id='thingsthathavefeatures'>Things that Have Features</span>
+### <span id='featurerecipients'>Feature Recipients</span>
 
-`Arturo.thing_that_has_features` is a block that is run in the context
-of a Controller or View instance. Like `Arturo.permit_management`, it
-is configued in `config/initializers/arturo_initializer.rb`.
-It should return an `Object` that responds to `#id`. If you want to deploy
-features on a per-user basis, a reasonable implementation might be
+Clients of Arturo may want to deploy new features on a per-user, per-project,
+per-account, or other basis. For example, it is likely Twitter deployed
+"#newtwitter" on a per-user basis. Conversely, Facebook -- at least in its
+early days -- may have deployed features on a per-university basis. It wouldn't
+make much sense to deploy a feature to one user of a Basecamp project but not
+to others, so 37Signals would probably want a per-project or per-account basis.
+
+`Arturo.feature_recipient` is intended to support these many use cases. It is a
+block that returns the current "thing" (a user, account, project, university,
+...) that is a member of the category that is the basis for deploying new
+features. Like `Arturo.permit_management`, it is configured in
+`config/initializers/arturo_initializer.rb`. It should return an `Object` that
+responds to `#id`. If you want to deploy features on a per-user basis, a
+reasonable implementation might be
 
     Arturo.thing_that_has_features do
       current_user
@@ -170,6 +231,11 @@ does not have the `:hold_book` feature.
 `require_feature!` accepts as a second argument a `Hash` that it passes on
 to `before_filter`, so you can use `:only` and `:except` to specify exactly
 which actions are filtered.
+
+If you want to customize the page that is rendered on 403 Forbidden
+responses, put the view in
+`RAILS_ROOT/app/views/arturo/features/forbidden.html.erb`. Rails will
+check there before falling back on Arturo's forbidden page.
 
 #### Conditional Evaluation
 
