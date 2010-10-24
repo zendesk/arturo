@@ -13,7 +13,10 @@ Gem::Specification.new do |gem|
   gem.has_rdoc = 'false'
   current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
   gem.specification_version = 2
-  gem.add_runtime_dependency('rails', '~> 3.0')
-
-  eval(File.read(File.join(File.dirname(__FILE__), 'development_dependencies.rb')))
+  gem.add_runtime_dependency      'rails',        '~> 3.0'
+  gem.add_development_dependency  'mocha'
+  gem.add_development_dependency  'rake'
+  gem.add_development_dependency  'redgreen',     '~> 1.2'
+  gem.add_development_dependency  'sqlite3-ruby', '~> 1.3'
+  gem.add_development_dependency  'factory_girl', '~> 1.3'
 end

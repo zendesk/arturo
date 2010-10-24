@@ -82,6 +82,7 @@ DEPENDENCIES
   arturo!
   factory_girl (~> 1.3)
   mocha
+  rails (~> 3.0)
   rake
   redgreen (~> 1.2)
   sqlite3-ruby (~> 1.3)
