@@ -5,7 +5,7 @@ Arturo.permit_management do
   true
 end
 
-Arturo.thing_that_has_features do
+Arturo.feature_recipient do
   # current_user
 end
 

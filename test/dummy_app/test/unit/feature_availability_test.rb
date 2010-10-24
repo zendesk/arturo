@@ -11,7 +11,7 @@ class ArturoFeatureAvailabilityTest < ActiveSupport::TestCase
       h.extend Arturo::FeatureAvailability
       h.stubs(:current_user).returns(@current_user)
     end
-    Arturo.thing_that_has_features { current_user }
+    Arturo.feature_recipient { current_user }
   end
 
   def test_if_feature_enabled_with_nonexistent_feature
@@ -19,7 +19,7 @@ class ArturoFeatureAvailabilityTest < ActiveSupport::TestCase
     assert_nil @helper.if_feature_enabled(:nonexistent, &@block)
   end
 
-  def test_if_feature_enabled_uses_arturo_thing_that_has_features
+  def test_if_feature_enabled_uses_arturo_feature_recipient
     @feature.expects(:enabled_for?).with(@current_user)
     @helper.if_feature_enabled(@feature, &@block)
   end

@@ -44,17 +44,17 @@ module Arturo
 
     protected
 
-    def whitelisted?(thing_that_has_features)
-      x_listed?(self.class.whitelists, thing_that_has_features)
+    def whitelisted?(feature_recipient)
+      x_listed?(self.class.whitelists, feature_recipient)
     end
 
-    def blacklisted?(thing_that_has_features)
-      x_listed?(self.class.blacklists, thing_that_has_features)
+    def blacklisted?(feature_recipient)
+      x_listed?(self.class.blacklists, feature_recipient)
     end
 
-    def x_listed?(list_map, thing_that_has_features)
+    def x_listed?(list_map, feature_recipient)
       list = list_map[self.symbol.to_sym]
-      list.present? && list.call(thing_that_has_features)
+      list.present? && list.call(feature_recipient)
     end
 
   end

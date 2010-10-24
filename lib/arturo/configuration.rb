@@ -10,8 +10,8 @@ module Arturo
   # A block that, when bound to a Controller or Helper instance,
   # returns an object (probably a User, Person, or Account),
   # that may or may not have features enabled.
-  mattr_writer :thing_that_has_features
-  @@thing_that_has_features = lambda { nil }
+  mattr_writer :feature_recipient
+  @@feature_recipient = lambda { nil }
 
   # Get or set Arturo's permission block.
   # @param [block] block
@@ -33,12 +33,11 @@ module Arturo
   # thing that may or may not have features enabled.
   # @param [block] block
   # @return [block]
-  # @see Arturo.permission_block
-  def self.thing_that_has_features(&block)
+  def self.feature_recipient(&block)
     if block
-      @@thing_that_has_features = block
+      @@feature_recipient = block
     end
-    @@thing_that_has_features
+    @@feature_recipient
   end
 
 end

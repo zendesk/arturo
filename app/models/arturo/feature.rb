@@ -33,17 +33,17 @@ module Arturo
       super(DEFAULT_ATTRIBUTES.merge(attributes || {}))
     end
 
-    # @param [Object] thing_that_has_features a User, Account,
+    # @param [Object] feature_recipient a User, Account,
     #                 or other model with an #id method
     # @return [true,false] whether or not this feature is enabled
-    #                      for thing_that_has_features
+    #                      for feature_recipient
     # @see Arturo::SpecialHandling#whitelisted?
     # @see Arturo::SpecialHandling#blacklisted?
-    def enabled_for?(thing_that_has_features)
-      return false if thing_that_has_features.nil?
-      return false if blacklisted?(thing_that_has_features)
-      return true if  whitelisted?(thing_that_has_features)
-      passes_threshold?(thing_that_has_features)
+    def enabled_for?(feature_recipient)
+      return false if feature_recipient.nil?
+      return false if blacklisted?(feature_recipient)
+      return true if  whitelisted?(feature_recipient)
+      passes_threshold?(feature_recipient)
     end
 
     def name
@@ -65,11 +65,11 @@ module Arturo
 
     protected
 
-    def passes_threshold?(thing_that_has_features)
+    def passes_threshold?(feature_recipient)
       threshold = self.deployment_percentage || 0
       return false if threshold == 0
       return true if threshold == 100
-      (((thing_that_has_features.id + 17) * 13) % 100) < threshold
+      (((feature_recipient.id + 17) * 13) % 100) < threshold
       
     end
   end
