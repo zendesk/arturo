@@ -2,7 +2,7 @@
 Gem::Specification.new do |gem|
   gem.version = '1.1.0'
   gem.name = 'arturo'
-  gem.files = Dir["lib/**/*", "app/**/*", "config/**/*"] + %w(README.md)
+  gem.files = Dir["lib/**/*", "app/**/*", "config/**/*"] + %w(README.md HISTORY.md)
   gem.summary = "Feature sliders, wrapped up in an engine"
   gem.description = "Deploy features incrementally to your users"
   gem.email = "james.a.rosen@gmail.com"
