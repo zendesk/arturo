@@ -6,7 +6,7 @@ Arturo.permit_management do
 end
 
 Arturo.feature_recipient do
-  # current_user
+  current_user
 end
 
 # Whitelists and Blacklists:
