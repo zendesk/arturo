@@ -64,10 +64,6 @@ Vijay can bump the deployment percentage up to 50%. A few more days go by
 and they clean up the last few bugs they found with the "live_postings"
 feature and deploy it to all users.
 
-**Note**: the following is the **intended** use of Arturo. It is not yet
-complete and neither the 1.0 version of the gem nor the Rails 2.3-specific
-branch is available.
-
 ## Installation
 
 ### In Rails 3, with Bundler
@@ -77,6 +73,9 @@ branch is available.
 ### In Rails 3, without Bundler
 
     $ gem install arturo --version="~> 1.0"
+
+**Note**: the following two sections describe the **intended** use of
+Arturo with Rails 2. Arturo does not yet have Rails 2 support.
 
 ### In Rails 2, with Bundler
 
@@ -256,6 +255,12 @@ The latter can be used like so:
     end
 
 #### Caching
+
+**Note**: Arturo does not yet have caching support. Be very careful when
+caching actions or pages that involve feature detection as you will get
+strange behavior when a use who has access to a feature requests a page
+just after one who does not (and vice versa). The following is the
+**intended** support for caching.
 
 Both the `require_feature!` before filter and the `if_feature_enabled` block
 evaluation automatically append a string based on the feature's
