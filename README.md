@@ -92,12 +92,16 @@ checkout.
 
 ### In Rails
 
-#### Run the migrations:
+#### Run the generators:
 
     $ rails g arturo:migration
     $ rails g arturo:initializer
     $ rails g arturo:route
     $ rails g arturo:assets
+
+#### Run the migration:
+
+    $ rake db:migrate
 
 #### Edit the configuration
 
