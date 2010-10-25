@@ -17,6 +17,8 @@ module Arturo
   # should redefine Arturo::FeaturesController#permitted? to
   # return true only for users who are permitted to manage features.
   class FeaturesController < base
+    include Arturo::FeatureManagement
+
     unloadable
     respond_to :html, :json, :xml
     before_filter :require_permission
@@ -95,7 +97,7 @@ module Arturo
     protected
 
     def require_permission
-      unless Arturo.permit_management?(self)
+      unless may_manage_features?
         render :action => 'forbidden', :status => 403
         return false
       end

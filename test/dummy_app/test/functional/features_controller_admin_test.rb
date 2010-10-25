@@ -5,9 +5,10 @@ class ArturoFeaturesControllerAdminTest < ActionController::TestCase
   self.controller_class = Arturo::FeaturesController
 
   def setup
-    Arturo.permit_management do
-      true
-    end
+    @current_user = Object.new.tap { |u| u.stubs(:admin?).returns(true) }
+    Arturo::FeaturesController.any_instance.
+      stubs(:current_user).
+      returns(@current_user)
     @features = [
       Factory(:feature),
       Factory(:feature),

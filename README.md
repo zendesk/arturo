@@ -110,10 +110,10 @@ checkout.
 Open up the newly-generated `config/initializers/arturo_initializer.rb`.
 There are configuration options for the following:
 
- * the block that determines whether a user has permission to manage features
+ * the method that determines whether a user has permission to manage features
    (see [admin permissions](#adminpermissions))
- * the block that yields the object that has features
-   (a User, Person, or Account, see
+ * the method that returns the object that has features
+   (e.g. User, Person, or Account; see
    [feature recipients](#featurerecipients))
  * whitelists and blacklists for features
    (see [white- and blacklisting](#wblisting))
@@ -136,20 +136,19 @@ work with you on support for your favorite framework.
 
 ### <span id='adminpermissions'>Admin Permissions</span>
 
-`Arturo.permit_management` is a block that is run in the context of
-a Controller instance. It should return `true` iff the current user
-can manage permissions. Configure the block in
+`Arturo::FeatureManagement#may_manage_features?` is a method that is run in
+the context of a Controller or View instance. It should return `true` if
+and only if the current user may manage permissions. The default implementation
+is as follows:
+
+    current_user.present? && current_user.admin?
+
+You can change the implementation in
 `config/initializers/arturo_initializer.rb`. A reasonable implementation
 might be
 
     Arturo.permit_management do
-      current_user.admin?
-    end
-
-or
-
-    Arturo.permit_management do
-      signed_in? && signed_in_person.can?(:manage_features)
+      signed_in? && current_user.can?(:manage_features)
     end
 
 ### <span id='featurerecipients'>Feature Recipients</span>
@@ -161,27 +160,15 @@ early days -- may have deployed features on a per-university basis. It wouldn't
 make much sense to deploy a feature to one user of a Basecamp project but not
 to others, so 37Signals would probably want a per-project or per-account basis.
 
-`Arturo.feature_recipient` is intended to support these many use cases. It is a
-block that returns the current "thing" (a user, account, project, university,
-...) that is a member of the category that is the basis for deploying new
-features. Like `Arturo.permit_management`, it is configured in
-`config/initializers/arturo_initializer.rb`. It should return an `Object` that
-responds to `#id`. If you want to deploy features on a per-user basis, a
-reasonable implementation might be
+`Arturo::FeatureAvailability#feature_recipient` is intended to support these
+many use cases. It is a method that returns the current "thing" (a user, account,
+project, university, ...) that is a member of the category that is the basis for
+deploying new features. It should return an `Object` that responds to `#id`.
 
-    Arturo.feature_recipient do
-      current_user
-    end
-
-or
-
-    Arturo.feature_recipient do
-      signed_in_person
-    end
-
-If, on the other hand, you have accounts that have many users and you
-want to deploy features on a per-account basis, a reasonable implementation
-might be
+The default implementation simply returns `current_user`. Like
+`Arturo::FeatureManagement#may_manage_features?`, this method can be configured
+in `config/initializers/arturo_initializer.rb`. If you want to deploy features
+on a per-account basis, a reasonable implementation might be
 
     Arturo.feature_recipient do
       current_account

@@ -1,22 +1,29 @@
 require 'arturo'
 
-Arturo.permit_management do
-  # current_user.present? && current_user.admin?
-  true
-end
+# Configure who may manage features here.
+# The following is the default implementation.
+# Arturo::FeatureManagement.class_eval do
+#   def may_manage_features?
+#     current_user.present? && current_user.admin?
+#   end
+# end
 
-Arturo.feature_recipient do
-  current_user
-end
+# Configure what receives features here.
+# The following is the default implementation.
+# Arturo::FeatureAvailability.class_eval do
+#   def feature_recipient
+#     current_user
+#   end
+# end
 
 # Whitelists and Blacklists:
 #
-# # Enable feature one for all admins:
-# Arturo::Feature.whitelist('feature one') do |user|
+# Enable feature one for all admins:
+# Arturo::Feature.whitelist(:feature_one) do |user|
 #   user.admin?
 # end
 #
-# # Disable feature two for all small accounts:
-# Arturo::Feature.blacklist('feature two') do |user|
+# Disable feature two for all small accounts:
+# Arturo::Feature.blacklist(:feature_two) do |user|
 #   user.account.small?
 # end

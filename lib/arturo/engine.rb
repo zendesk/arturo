@@ -4,6 +4,7 @@ module Arturo
       include Arturo::FeatureAvailability
       helper  Arturo::FeatureAvailability
       include Arturo::ControllerFilters
+      helper  Arturo::FeatureManagement
     end
   end
 end

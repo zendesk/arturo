@@ -12,8 +12,7 @@ module Arturo
     def feature_enabled?(symbol_or_feature)
       feature = ::Arturo::Feature.to_feature(symbol_or_feature)
       return false if feature.blank?
-      thing = ::Arturo.feature_recipient.bind(self).call
-      feature.enabled_for?(thing)
+      feature.enabled_for?(feature_recipient)
     end
 
     def if_feature_enabled(symbol_or_feature, &block)
@@ -22,6 +21,15 @@ module Arturo
       else
         nil
       end
+    end
+
+    # By default, returns current_user.
+    # 
+    # If you would like to change this implementation, it is recommended
+    # you do so in config/initializers/arturo_initializer.rb
+    # @return [Object] the recipient of features.
+    def feature_recipient
+      current_user
     end
 
   end

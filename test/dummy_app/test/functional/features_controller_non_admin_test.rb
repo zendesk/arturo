@@ -5,9 +5,7 @@ class ArturoFeaturesControllerNonAdminTest < ActionController::TestCase
   self.controller_class = Arturo::FeaturesController
 
   def setup
-    Arturo.permit_management do
-      false
-    end
+    Arturo::FeaturesController.any_instance.stubs(:current_user).returns(nil)
   end
 
   def test_get_index_is_forbidden

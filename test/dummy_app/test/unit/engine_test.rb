@@ -9,6 +9,7 @@ class EngineTest < ActiveSupport::TestCase
   def test_feature_availability_methods_are_not_actions
     assert !BooksController.action_methods.include?('feature_enabled?')
     assert !BooksController.action_methods.include?('if_feature_enabled')
+    assert !BooksController.action_methods.include?('feature_recipient')
   end
 
   def test_feature_availability_is_a_helper
@@ -21,6 +22,14 @@ class EngineTest < ActiveSupport::TestCase
 
   def test_controller_filter_methods_are_not_actions
     assert !BooksController.action_methods.include?('on_feature_disabled')
+  end
+
+  def test_feature_management_is_a_helper
+    assert BooksController._helpers < Arturo::FeatureManagement
+  end
+
+  def test_feature_management_methods_are_not_actions
+    assert !BooksController.action_methods.include?('may_manage_features?')
   end
 
 end
