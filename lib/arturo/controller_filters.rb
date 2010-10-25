@@ -18,7 +18,7 @@ module Arturo
 
     module ClassMethods
 
-      def require_feature!(name, options = {})
+      def require_feature(name, options = {})
         before_filter options do |controller|
           unless controller.feature_enabled?(name)
             controller.on_feature_disabled(name)

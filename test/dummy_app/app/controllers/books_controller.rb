@@ -1,7 +1,7 @@
 class BooksController < ApplicationController
 
-  require_feature! :books
-  require_feature! :book_holds, :only => :holds
+  require_feature :books
+  require_feature :book_holds, :only => :holds
 
   # instead of a model:
   BOOKS = {}

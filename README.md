@@ -48,7 +48,7 @@ the feature:
 
     # in app/controllers/postings_controller:
     class PostingsController < ApplicationController
-      require_feature! :live_postings, :only => :recent
+      require_feature :live_postings, :only => :recent
       # ...
     end
 
@@ -215,10 +215,10 @@ every action within `BookHoldsController` that is invoked by a user who
 does not have the `:hold_book` feature.
 
     class BookHoldsController < ApplicationController
-      require_feature! :hold_book
+      require_feature :hold_book
     end
 
-`require_feature!` accepts as a second argument a `Hash` that it passes on
+`require_feature` accepts as a second argument a `Hash` that it passes on
 to `before_filter`, so you can use `:only` and `:except` to specify exactly
 which actions are filtered.
 
@@ -253,7 +253,7 @@ strange behavior when a user who has access to a feature requests a page
 just after one who does not (and vice versa). The following is the
 **intended** support for caching.
 
-Both the `require_feature!` before filter and the `if_feature_enabled` block
+Both the `require_feature` before filter and the `if_feature_enabled` block
 evaluation automatically append a string based on the feature's
 `last_modified` timestamp to cache keys that Rails generates. Thus, you don't
 have to worry about expiring caches when you increase a feature's deployment
