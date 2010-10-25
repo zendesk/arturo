@@ -165,13 +165,13 @@ features. Like `Arturo.permit_management`, it is configured in
 responds to `#id`. If you want to deploy features on a per-user basis, a
 reasonable implementation might be
 
-    Arturo.thing_that_has_features do
+    Arturo.feature_recipient do
       current_user
     end
 
 or
 
-    Arturo.thing_that_has_features do
+    Arturo.feature_recipient do
       signed_in_person
     end
 
@@ -179,13 +179,13 @@ If, on the other hand, you have accounts that have many users and you
 want to deploy features on a per-account basis, a reasonable implementation
 might be
 
-    Arturo.thing_that_has_features do
+    Arturo.feature_recipient do
       current_account
     end
 
 or
 
-    Arturo.thing_that_has_features do
+    Arturo.feature_recipient do
       current_user.account
     end
 
@@ -258,7 +258,7 @@ The latter can be used like so:
 
 **Note**: Arturo does not yet have caching support. Be very careful when
 caching actions or pages that involve feature detection as you will get
-strange behavior when a use who has access to a feature requests a page
+strange behavior when a user who has access to a feature requests a page
 just after one who does not (and vice versa). The following is the
 **intended** support for caching.
 
