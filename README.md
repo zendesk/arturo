@@ -74,19 +74,11 @@ feature and deploy it to all users.
 
     $ gem install arturo --version="~> 1.0"
 
-**Note**: the following two sections describe the **intended** use of
-Arturo with Rails 2. Arturo does not yet have Rails 2 support.
+### In Rails 2.3
 
-### In Rails 2, with Bundler
-
-    gem 'arturo', :git => 'git://github.com/jamesarosen/arturo.git',
-                  :tag => 'rails_2_3'
-
-### In Rails 2, without Bundler
-
-Put the `rails_2_3` branch of `git://github.com/jamesarosen/arturo.git` into
-your `vendor/plugins/` directory. You can use Git submodules or a simple
-checkout.
+For Rails 2.3 support, see the
+[`rails_2_3` branch](http://github.com/jamesarosen/arturo/tree/rails_2_3)
+of Arturo.
 
 ## Configuration
 
@@ -102,6 +94,8 @@ checkout.
 #### Run the migration:
 
     $ rake db:migrate
+
+#### Edit the generated migration as necessary
 
 #### Edit the configuration
 
