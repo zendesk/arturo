@@ -80,8 +80,16 @@ latest version of Rails 2.3 support.
 
 ### In Rails 2.3, with Bundler
 
+In your `Gemfile`:
+
     gem 'arturo', :git => 'git://github.com/jamesarosen/arturo.git',
                   :version => '~> 0.2.3'
+
+Unfortunately, Rails 2.3 won't automatically load Arturo as a Plugin
+(and thus not pick up its "engine-ness") without **also** declaring
+it as a Rails gem. Thus, in `config/environment.rb`:
+
+    config.gem 'arturo', :version => '~> 0.2.3'
 
 ### In Rails 2.3, without Bundler
 

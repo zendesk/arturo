@@ -25,7 +25,7 @@ module Arturo
     # @return [Arturo::Feature, nil] the Feature if found, else nil
     def self.to_feature(feature_or_symbol)
       return feature_or_symbol if feature_or_symbol.kind_of?(self)
-      self.where(:symbol => feature_or_symbol.to_sym).first
+      self.find(:first, :conditions => { :symbol => feature_or_symbol.to_s })
     end
 
     # Create a new Feature
@@ -56,11 +56,20 @@ module Arturo
     end
 
     def to_param
-      persisted? ? "#{id}-#{symbol.to_s.parameterize}" : nil
+      new_record? ? nil : "#{id}-#{symbol.to_s.parameterize}"
     end
 
     def inspect
       "<Arturo::Feature #{name}, deployed to #{deployment_percentage}%>"
+    end
+
+    def symbol
+      sym = read_attribute(:symbol).to_s
+      sym.blank? ? nil : sym.to_sym
+    end
+
+    def symbol=(sym)
+      write_attribute(:symbol, sym.to_s)
     end
 
     protected

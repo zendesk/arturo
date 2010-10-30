@@ -25,9 +25,10 @@ module Arturo
     end
 
     def error_messages_for(feature, attribute)
-      if feature.errors[attribute].any?
+      errors = feature.errors.on(attribute)
+      if errors && errors.any?
         content_tag(:ul, :class => 'errors') do
-          feature.errors[attribute].map { |msg| content_tag(:li, msg, :class => 'error') }.join(''.html_safe)
+          errors.map { |msg| content_tag(:li, msg, :class => 'error') }.join(''.html_safe)
         end
       else
         ''

@@ -1,8 +1,5 @@
 require 'action_controller'
 
-# TODO: this doesn't do anything radically out of the ordinary.
-#       Are there Rails 3 patterns/mixins/methods I can use
-#       to clean it up a bit?
 module Arturo
 
   begin
@@ -20,13 +17,16 @@ module Arturo
     include Arturo::FeatureManagement
 
     unloadable
-    respond_to :html, :json, :xml
     before_filter :require_permission
     before_filter :load_feature, :only => [ :show, :edit, :update, :destroy ]
 
     def index
       @features = Arturo::Feature.all
-      respond_with @features
+      respond_to do |format|
+        format.html { }
+        format.json { render :json => @features }
+        format.xml  { render :xml  => @features }
+      end
     end
 
     def update_all
@@ -52,12 +52,20 @@ module Arturo
     end
 
     def show
-      respond_with @feature
+      respond_to do |format|
+        format.html { }
+        format.json { render :json => @feature }
+        format.xml  { render :xml  => @feature }
+      end
     end
 
     def new
       @feature = Arturo::Feature.new(params[:feature])
-      respond_with @feature
+      respond_to do |format|
+        format.html { }
+        format.json { render :json => @feature }
+        format.xml  { render :xml  => @feature }
+      end
     end
 
     def create
@@ -72,7 +80,11 @@ module Arturo
     end
 
     def edit
-      respond_with @feature
+      respond_to do |format|
+        format.html { }
+        format.json { render :json => @feature }
+        format.xml  { render :xml  => @feature }
+      end
     end
 
     def update

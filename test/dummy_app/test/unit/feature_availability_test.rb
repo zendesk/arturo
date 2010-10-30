@@ -31,8 +31,7 @@ class ArturoFeatureAvailabilityTest < ActiveSupport::TestCase
 
   def test_if_feature_enabled_with_enabled_feature
     @feature.stubs(:enabled_for?).returns(true)
-    @block.expects(:call).once.returns('result')
-    assert_equal 'result', @helper.if_feature_enabled(@feature, &@block)
+    assert_equal 'Content that requires a feature', @helper.if_feature_enabled(@feature, &@block)
   end
 
 end

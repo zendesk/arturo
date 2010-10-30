@@ -20,7 +20,7 @@ class ArturoFeaturesControllerAdminTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_select 'table tbody tr input[type=range]'
-    assert_select 'table tfoot a[href=?]', @controller.new_feature_path
+    assert_select 'table tfoot a[href=?]', @controller.send(:new_feature_path)
     assert_select 'table tfoot input[type=submit]'
   end
 

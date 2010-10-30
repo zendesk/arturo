@@ -13,7 +13,7 @@ class EngineTest < ActiveSupport::TestCase
   end
 
   def test_feature_availability_is_a_helper
-    assert Arturo::FeaturesController._helpers < Arturo::FeatureAvailability
+    assert Arturo::FeaturesController.master_helper_module < Arturo::FeatureAvailability
   end
 
   def test_controllers_include_filters
@@ -25,11 +25,19 @@ class EngineTest < ActiveSupport::TestCase
   end
 
   def test_feature_management_is_a_helper
-    assert BooksController._helpers < Arturo::FeatureManagement
+    assert BooksController.master_helper_module < Arturo::FeatureManagement
   end
 
   def test_feature_management_methods_are_not_actions
     assert !BooksController.action_methods.include?('may_manage_features?')
+  end
+
+  def test_range_support_is_a_helper
+    assert BooksController.master_helper_module < Arturo::RangeFormSupport::HelperMethods
+  end
+
+  def test_form_builder_has_range_tag
+    assert ActionView::Helpers::FormBuilder < Arturo::RangeFormSupport::FormBuilderMethods
   end
 
 end
