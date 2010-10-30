@@ -1,3 +1,10 @@
+## Rails 2.3
+
+This is the Rails 2.3 branch of Arturo. It is available as a gem with the
+version number `0.2.3.x`. See [Installation](#installation), below. For
+Rails 3.0 support, see the
+[master branch](http://github.com/jamesarosen/arturo).
+
 ## What
 
 Arturo provides feature sliders for Rails. It lets you turn features on and off
@@ -64,25 +71,19 @@ Vijay can bump the deployment percentage up to 50%. A few more days go by
 and they clean up the last few bugs they found with the "live_postings"
 feature and deploy it to all users.
 
-## Installation
+## <span id='installation'>Installation</span>
 
-### In Rails 3, with Bundler
+Arturo's support for Rails 2.3 is available as a gem with version
+numbers matching `0.2.3.x`. The best strategy is to use the
+"pessimistic" gem version `"~> 0.2.3"`, which will get you the
+latest version of Rails 2.3 support.
 
-    gem 'arturo', '~> 1.0'
-
-### In Rails 3, without Bundler
-
-    $ gem install arturo --version="~> 1.0"
-
-**Note**: the following two sections describe the **intended** use of
-Arturo with Rails 2. Arturo does not yet have Rails 2 support.
-
-### In Rails 2, with Bundler
+### In Rails 2.3, with Bundler
 
     gem 'arturo', :git => 'git://github.com/jamesarosen/arturo.git',
-                  :tag => 'rails_2_3'
+                  :version => '~> 0.2.3'
 
-### In Rails 2, without Bundler
+### In Rails 2.3, without Bundler
 
 Put the `rails_2_3` branch of `git://github.com/jamesarosen/arturo.git` into
 your `vendor/plugins/` directory. You can use Git submodules or a simple
@@ -94,10 +95,12 @@ checkout.
 
 #### Run the generators:
 
-    $ rails g arturo:migration
-    $ rails g arturo:initializer
-    $ rails g arturo:route
-    $ rails g arturo:assets
+    $ script/generate arturo:migration
+    $ script/generate arturo:initializer
+    $ script/generate arturo:route
+    $ script/generate arturo:assets
+
+#### Edit the generated migration as necessary
 
 #### Run the migration:
 

@@ -1,6 +1,9 @@
-# my_rails_engine.gemspec
+# Gem versions for Rails 2.3 support should be numbered 0.2.3.x.
+# Unfortunately, this means the versions will not follow
+# the principles of semantic versioning. Ah well, another day
+# another battle.
 Gem::Specification.new do |gem|
-  gem.version = '1.1.1'
+  gem.version = '0.2.3.1'
   gem.name = 'arturo'
   gem.files = Dir["lib/**/*", "app/**/*", "config/**/*"] + %w(README.md HISTORY.md)
   gem.summary = "Feature sliders, wrapped up in an engine"
@@ -13,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.has_rdoc = 'false'
   current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
   gem.specification_version = 2
-  gem.add_runtime_dependency      'rails',        '~> 3.0'
+  gem.add_runtime_dependency      'rails',        '~> 2.3.8'
   gem.add_development_dependency  'mocha'
   gem.add_development_dependency  'rake'
   gem.add_development_dependency  'redgreen',     '~> 1.2'
