@@ -1,7 +1,6 @@
-DummyApp::Application.routes.draw do
+ActionController::Routing::Routes.draw do |map|
 
-  resources :books, :only => 'show' do
-    post :holds, :on => :member
-  end
+  map.resources :books, :only => ['show'],
+                        :member => { 'holds' => 'post' }
 
 end

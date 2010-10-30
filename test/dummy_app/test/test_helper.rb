@@ -2,11 +2,9 @@ ENV["RAILS_ENV"] = "test"
 require 'rubygems'
 require 'bundler'
 Bundler.setup
+require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
+require 'test_help'
 
-require File.expand_path('../../config/environment', __FILE__)
-require 'rails/test_help'
-
-require 'minitest/unit'
 require 'mocha'
 require 'factory_girl'
 
@@ -16,6 +14,9 @@ require 'arturo/feature'
 require 'arturo/feature_factories'
 
 class ActiveSupport::TestCase
+  self.use_transactional_fixtures = true
+  self.use_instantiated_fixtures  = false
+  fixtures :all
   def reset_translations!
     I18n.reload!
   end
@@ -27,5 +28,3 @@ class ActiveSupport::TestCase
     I18n.backend.store_translations I18n.locale, hash
   end
 end
-
-MiniTest::Unit.autorun
