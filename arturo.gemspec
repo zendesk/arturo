@@ -3,7 +3,7 @@
 # the principles of semantic versioning. Ah well, another day
 # another battle.
 Gem::Specification.new do |gem|
-  gem.version = '0.2.3.1'
+  gem.version = '0.2.3.2'
   gem.name = 'arturo'
   gem.files = Dir["lib/**/*", "app/**/*", "config/**/*"] + %w(README.md HISTORY.md)
   gem.summary = "Feature sliders, wrapped up in an engine"
