@@ -1,7 +1,7 @@
 PATH
   remote: /Users/jamesrosen/Projects/rmu/arturo
   specs:
-    arturo (0.2.3.2)
+    arturo (0.2.3.3)
       rails (~> 2.3.8)
 
 GEM
