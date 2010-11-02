@@ -2,21 +2,12 @@ require 'action_controller'
 
 module Arturo
 
-  begin
-    require 'application_controller'
-  rescue LoadError
-    # do nothing
-  end
-
-  base = Object.const_defined?(:ApplicationController) ? ApplicationController : ActionController::Base
-
   # Handles all Feature actions. Clients of the Arturo engine
   # should redefine Arturo::FeaturesController#permitted? to
   # return true only for users who are permitted to manage features.
-  class FeaturesController < base
+  class FeaturesController < ApplicationController
     include Arturo::FeatureManagement
 
-    unloadable
     before_filter :require_permission
     before_filter :load_feature, :only => [ :show, :edit, :update, :destroy ]
 
