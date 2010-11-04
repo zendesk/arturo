@@ -1,4 +1,8 @@
-<% form_for(feature, :as => 'feature', :url => (feature.new_record? ? features_path : feature_path(feature))) do |form| %>
+<% form_for(:feature, feature,
+                      :url => (feature.new_record? ? features_path : feature_path(feature)),
+                      :html => {
+                        :method => (feature.new_record? ? :post : :put)
+                      }) do |form| %>
   <fieldset>
     <legend><%= legend %></legend>
 
