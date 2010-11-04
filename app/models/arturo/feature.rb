@@ -78,8 +78,7 @@ module Arturo
       threshold = self.deployment_percentage || 0
       return false if threshold == 0
       return true if threshold == 100
-      (((feature_recipient.id + 17) * 13) % 100) < threshold
-      
+      (((feature_recipient.id + (self.id || 1) + 17) * 13) % 100) < threshold
     end
   end
 end
