@@ -24,7 +24,7 @@ module Arturo
     end
 
     # By default, returns current_user.
-    # 
+    #
     # If you would like to change this implementation, it is recommended
     # you do so in config/initializers/arturo_initializer.rb
     # @return [Object] the recipient of features.

@@ -83,7 +83,7 @@ module Arturo
         flash[:notice] = t('arturo.features.flash.updated', :name => @feature.to_s)
         redirect_to feature_path(@feature)
       else
-          flash[:alert] = t('arturo.features.flash.error_updating', :name => @feature.to_s)
+        flash[:alert] = t('arturo.features.flash.error_updating', :name => @feature.to_s)
         render :action => 'edit'
       end
     end

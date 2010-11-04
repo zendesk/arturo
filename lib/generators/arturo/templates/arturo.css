@@ -43,12 +43,12 @@ output.deployment_percentage:after { content: "%"; }
   display: block;
 }
 
-.feature_new  label + input, .feature_new  label + textarea, .feature_new  label + select, 
+.feature_new  label + input, .feature_new  label + textarea, .feature_new  label + select,
 .feature_edit label + input, .feature_edit label + textarea, .feature_edit label + select {
   margin-top: 0.5em;
 }
 
-.feature_new  input + label, .feature_new  textarea + label, .feature_new  select + label, 
+.feature_new  input + label, .feature_new  textarea + label, .feature_new  select + label,
 .feature_edit input + label, .feature_edit textarea + label, .feature_edit select + label {
   margin-top: 1.5em;
 }
