@@ -8,7 +8,7 @@ module Arturo
     include Arturo::SpecialHandling
 
     Arturo::Feature::SYMBOL_REGEX = /^[a-zA-z][a-zA-Z0-9_]*$/
-    DEFAULT_ATTRIBUTES = { :deployment_percentage => 0 }
+    DEFAULT_ATTRIBUTES = { :deployment_percentage => 0 }.with_indifferent_access
 
     attr_readonly :symbol
 
