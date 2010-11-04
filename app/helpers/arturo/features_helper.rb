@@ -23,16 +23,5 @@ module Arturo
     def deployment_percentage_output_tag(id, value)
       content_tag(:output, value, { 'for' => id, 'class' => 'deployment_percentage no_js' })
     end
-
-    def error_messages_for(feature, attribute)
-      errors = feature.errors.on(attribute)
-      if errors && errors.any?
-        content_tag(:ul, :class => 'errors') do
-          errors.map { |msg| content_tag(:li, msg, :class => 'error') }.join(''.html_safe)
-        end
-      else
-        ''
-      end
-    end
   end
 end
