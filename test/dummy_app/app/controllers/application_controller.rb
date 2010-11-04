@@ -7,4 +7,8 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
+
+  def current_user
+    User.new(:name => 'Freddykins', :admin => true)
+  end
 end
