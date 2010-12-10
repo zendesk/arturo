@@ -29,12 +29,12 @@ en:
         title: Forbidden
         text: You do not have permission to access that resource.
       flash:
-        no_such_feature: "No such feature: {id}"
-        error_updating: "Error updating feature #{id}"
-        updated_many: "Updated {count} feature(s)"
+        no_such_feature: "No such feature: %{id}"
+        error_updating: "Error updating feature %{id}"
+        updated_many: "Updated %{count} feature(s)"
         created: "Created {name}"
         error_creating: "Sorry, there was an error creating the feature."
-        updated: "Updated {name}"
-        error_updating: "Sorry, there was an error updating {name}"
-        removed: "Removed {name}"
-        error_removing: "Sorry, there was an error removing {name}"
+        updated: "Updated %{name}"
+        error_updating: "Sorry, there was an error updating %{name}"
+        removed: "Removed %{name}"
+        error_removing: "Sorry, there was an error removing %{name}"
