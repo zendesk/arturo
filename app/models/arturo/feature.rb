@@ -5,7 +5,8 @@ require 'active_record'
 module Arturo
   class Feature < ::ActiveRecord::Base
 
-    include Arturo::SpecialHandling
+    include Arturo::SpecialHandling, Arturo::DefaultHandling
+    
 
     Arturo::Feature::SYMBOL_REGEX = /^[a-zA-z][a-zA-Z0-9_]*$/
     DEFAULT_ATTRIBUTES = { :deployment_percentage => 0 }.with_indifferent_access
@@ -37,13 +38,9 @@ module Arturo
     #                 or other model with an #id method
     # @return [true,false] whether or not this feature is enabled
     #                      for feature_recipient
-    # @see Arturo::SpecialHandling#whitelisted?
-    # @see Arturo::SpecialHandling#blacklisted?
     def enabled_for?(feature_recipient)
       return false if feature_recipient.nil?
-      return false if blacklisted?(feature_recipient)
-      return true if  whitelisted?(feature_recipient)
-      passes_threshold?(feature_recipient)
+      _enabled_for? feature_recipient
     end
 
     def name

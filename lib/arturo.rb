@@ -1,5 +1,6 @@
 module Arturo
 
+  require 'arturo/default_handling'
   require 'arturo/special_handling'
   require 'arturo/feature_availability'
   require 'arturo/feature_management'
