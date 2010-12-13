@@ -32,7 +32,7 @@ en:
         no_such_feature: "No such feature: %{id}"
         error_updating: "Error updating feature %{id}"
         updated_many: "Updated %{count} feature(s)"
-        created: "Created {name}"
+        created: "Created %{name}"
         error_creating: "Sorry, there was an error creating the feature."
         updated: "Updated %{name}"
         error_updating: "Sorry, there was an error updating %{name}"
