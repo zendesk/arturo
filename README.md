@@ -258,3 +258,19 @@ percentage. See `Arturo::CacheSupport` for more information.
 Arturo gets its name from
 [Professor Maximillian Arturo](http://en.wikipedia.org/wiki/Maximillian_Arturo)
 on [Sliders](http://en.wikipedia.org/wiki/Sliders).
+
+## Contributing ##
+
+For bug reports, open an [issue](https://github.com/jamesarosen/Timecop.js/issues)
+on GitHub.
+
+Timecop.js has a ‘commit-bit’ policy, much like the Rubinius project
+and Gemcutter. Submit a patch that is accepted, and you can get full
+commit access to the project. All you have to do is open an issue
+asking for access and I'll add you as a collaborator.
+Feel free to fork the project though and have fun in your own sandbox.
+
+## Authors ##
+
+* [https://github.com/jamesarosen](James A. Rosen)
+* [https://github.com/plukevdh](Luke van der Hoeven)
