@@ -26,6 +26,8 @@ class ArturoFeatureTest < ActiveSupport::TestCase
     assert feature.errors[:symbol].present?
   end
 
+  # regression
+  # @see https://github.com/jamesarosen/arturo/issues/7
   def test_deployment_percentage_is_not_overwritten_on_create
     new_feature = ::Arturo::Feature.create('symbol' => :foo, 'deployment_percentage' => 37)
     assert_equal '37', new_feature.deployment_percentage.to_s
