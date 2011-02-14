@@ -239,6 +239,17 @@ The latter can be used like so:
       widgets
     end
 
+#### Outside a Controller
+
+If you want to check availability outside of a controller or view (really
+outside of something that has `Arturo::FeatureAvailability` mixed in), you
+can do the following:
+
+    Arturo.feature_enabled_for?(:foo, recipient)
+
+This will check both whether the `:foo` feature exists and whether it is
+enabled for `recipient`.
+
 #### Caching
 
 **Note**: Arturo does not yet have caching support. Be very careful when
