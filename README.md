@@ -243,12 +243,15 @@ The latter can be used like so:
 
 If you want to check availability outside of a controller or view (really
 outside of something that has `Arturo::FeatureAvailability` mixed in), you
-can do the following:
+can ask either
 
     Arturo.feature_enabled_for?(:foo, recipient)
 
-This will check both whether the `:foo` feature exists and whether it is
-enabled for `recipient`.
+or the slightly fancier
+
+    Arturo.foo_enabled_for?(recipient)
+
+Both check whether the `foo` feature exists and is enabled for `recipient`.
 
 #### Caching
 
