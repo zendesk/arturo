@@ -7,6 +7,7 @@ require 'test_help'
 
 require 'mocha'
 require 'factory_girl'
+require 'timecop'
 
 require File.expand_path('../prepare_database', __FILE__)
 require 'arturo'
