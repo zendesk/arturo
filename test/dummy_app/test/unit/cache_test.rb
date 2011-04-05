@@ -17,12 +17,12 @@ class CacheTest < ActiveSupport::TestCase
   end
 
   def test_first_load_hits_database
-    Arturo::Feature.expects(:where).once.returns([@feature])
+    Arturo::Feature.expects(:find).once.returns(@feature)
     Arturo::Feature.to_feature(@feature.symbol)
   end
 
   def test_subsequent_loads_within_ttl_hit_cache
-    Arturo::Feature.expects(:where).once.returns([@feature])
+    Arturo::Feature.expects(:find).once.returns(@feature)
     Arturo::Feature.to_feature(@feature.symbol)
     Arturo::Feature.to_feature(@feature.symbol)
     Arturo::Feature.to_feature(@feature.symbol)
@@ -31,20 +31,20 @@ class CacheTest < ActiveSupport::TestCase
   def test_clear_cache
     Arturo::Feature.to_feature(@feature.symbol)
     Arturo::Feature.feature_cache.clear
-    Arturo::Feature.expects(:where).once.returns([@feature])
+    Arturo::Feature.expects(:find).once.returns(@feature)
     Arturo::Feature.to_feature(@feature.symbol)
   end
 
   def test_turn_off_caching
     Arturo::Feature.cache_ttl = 0
-    Arturo::Feature.expects(:where).twice.returns([@feature])
+    Arturo::Feature.expects(:find).twice.returns(@feature)
     Arturo::Feature.to_feature(@feature.symbol)
     Arturo::Feature.to_feature(@feature.symbol)
   end
 
   def test_ttl_expiry
     Arturo::Feature.to_feature(@feature.symbol)
-    Arturo::Feature.expects(:where).once.returns([@feature])
+    Arturo::Feature.expects(:find).once.returns(@feature)
     Timecop.travel(Time.now + Arturo::Feature.cache_ttl - 5.seconds)
     Arturo::Feature.to_feature(@feature.symbol)
     Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
