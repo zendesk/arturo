@@ -6,6 +6,7 @@ module Arturo
   require 'arturo/feature_caching'
   require 'arturo/controller_filters'
   require 'arturo/range_form_support'
+  require 'arturo/middleware'
   require 'arturo/engine' if defined?(Rails) && Rails::VERSION::MAJOR == 2 && Rails::VERSION::MINOR == 3
 
   class <<self

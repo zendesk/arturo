@@ -256,6 +256,11 @@ The latter can be used like so:
       widgets
     end
 
+#### Rack Middleware
+
+    require 'arturo'
+    use Arturo::Middleware, :feature => :my_feature
+
 #### Outside a Controller
 
 If you want to check availability outside of a controller or view (really

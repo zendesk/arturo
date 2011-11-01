@@ -13,6 +13,7 @@ require File.expand_path('../prepare_database', __FILE__)
 require 'arturo'
 require 'arturo/feature'
 require 'arturo/feature_factories'
+require 'arturo/test_support'
 
 class ActiveSupport::TestCase
   self.use_transactional_fixtures = true
