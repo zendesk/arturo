@@ -19,14 +19,19 @@ module Arturo
     def self.extended(base)
       class <<base
         alias_method_chain :to_feature, :caching
-        attr_accessor :cache_ttl, :feature_cache
+        attr_accessor :cache_ttl, :feature_cache, :cache_warming_enabled
       end
+      base.cache_warming_enabled = false
       base.cache_ttl = 0
       base.feature_cache = Arturo::FeatureCaching::Cache.new
     end
 
     def caches_features?
       self.cache_ttl.to_i > 0
+    end
+
+    def cache_warming_enabled?
+      caches_features? && (true == cache_warming_enabled)
     end
 
     # Wraps Arturo::Feature.to_feature with in-memory caching.
@@ -39,12 +44,22 @@ module Arturo
       elsif (cached_feature = feature_cache.read(feature_or_symbol.to_sym))
         cached_feature
       elsif (f = to_feature_without_caching(feature_or_symbol))
-        feature_cache.write(f.symbol, f, :expires_in => cache_ttl)
+        if cache_warming_enabled?
+          warm_feature_cache
+        else
+          feature_cache.write(f.symbol, f, :expires_in => cache_ttl)
+        end
         f
       end
     end
 
     protected
+
+    def warm_feature_cache
+      all(:order => "id DESC").each do |f|
+        feature_cache.write(f.symbol, f, :expires_in => cache_ttl)
+      end
+    end
 
     # Quack like a Rails cache.
     class Cache
