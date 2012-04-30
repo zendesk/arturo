@@ -13,6 +13,10 @@ class ArturoControllerFiltersTest < ActionController::TestCase
     Factory(:feature, :symbol => :book_holds, :deployment_percentage => 0)
   end
 
+  def test_on_feature_disabled_not_an_action
+    assert !@controller.action_methods.include?(:on_feature_disabled)
+  end
+
   def test_get_show
     get :show, :id => '2'
     assert_response :success
