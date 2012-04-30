@@ -29,8 +29,8 @@ module Arturo
     end
 
     # Create a new Feature
-    def initialize(attributes = {})
-      super(DEFAULT_ATTRIBUTES.merge(attributes || {}))
+    def initialize(attributes = {}, options = {}, &block)
+      super(DEFAULT_ATTRIBUTES.merge(attributes || {}), options, &block)
     end
 
     # @param [Object] feature_recipient a User, Account,
