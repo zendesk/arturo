@@ -3,37 +3,23 @@ require 'arturo/features_helper'
 
 class ArturoFeaturesHelperTest < ActiveSupport::TestCase
 
-  ERBHandler = ActionView::Template::Handlers::ERB
+  include ActionView::Helpers::TagHelper
+  include Arturo::FeaturesHelper
 
-  class Context
-    include Arturo::FeaturesHelper
-    attr_accessor :_template, :output_buffer
+  attr_accessor :output_buffer
 
-    def initialize
-      @output_buffer = "original"
-      @_virtual_path = nil
-    end
-
-    def bad_feature
-      feature = Factory(:feature)  
-      feature.deployment_percentage = 101
-      feature.valid?
-      return feature
+  def bad_feature
+    @bad_feature ||= Factory(:feature).tap do |f|
+      f.deployment_percentage = 101
+      f.valid?
     end
   end
-  
+
   def test_error_messages_for
-    output = "<ul class=\"errors\"><li class=\"error\">must be less than or equal to 100</li></ul>"
+    expected = "<ul class=\"errors\"><li class=\"error\">must be less than or equal to 100</li></ul>"
+    actual = error_messages_for(bad_feature, :deployment_percentage)
 
-    template_result = ActionView::Template.new(
-      "<%= error_messages_for(bad_feature, :deployment_percentage) %>",
-      "partial",
-      ERBHandler,
-      :virtual_path => "partial"
-    )
-
-    assert_equal output, template_result.render( Context.new, {} )
-    assert template_result.render( Context.new, {} ).html_safe?
-  
+    assert_equal expected, actual
+    assert actual.html_safe?
   end
 end
