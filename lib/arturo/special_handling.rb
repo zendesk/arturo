@@ -42,6 +42,14 @@ module Arturo
       end
     end
 
+    def _enabled_for?(feature_recipient)
+      return false if blacklisted?(feature_recipient)
+      return true if  whitelisted?(feature_recipient)
+      super
+    end
+    private :_enabled_for?
+
+
     protected
 
     def whitelisted?(feature_recipient)
