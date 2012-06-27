@@ -88,7 +88,7 @@ of Arturo.
 
     $ rails g arturo:migration
     $ rails g arturo:initializer
-    $ rails g arturo:route
+    $ rails g arturo:routes
     $ rails g arturo:assets
 
 #### Run the migration:
