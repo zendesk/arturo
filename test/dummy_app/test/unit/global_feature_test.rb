@@ -18,6 +18,10 @@ class ArturoGlobalFeatureTest < ActiveSupport::TestCase
     assert ::Arturo.feature_enabled?(feature.symbol)
   end
 
+  def test_feature_enabled_false_for_nil_feature
+    assert !::Arturo.feature_enabled?(:not_found)
+  end
+
   def test_to_feature_finds_global_feature
     assert_equal feature, ::Arturo::Feature.to_feature(feature)
     assert_equal feature, ::Arturo::Feature.to_feature(feature.symbol)
