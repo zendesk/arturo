@@ -9,6 +9,10 @@ class ArturoGlobalFeatureTest < ActiveSupport::TestCase
     @feature ||= Factory(:global_feature)
   end
 
+  def test_correct_class_name_used
+    assert_equal feature.class_name, "Arturo::GlobalFeature"
+  end
+
   def test_to_feature_finds_global_feature
     assert_equal feature, ::Arturo::Feature.to_feature(feature)
     assert_equal feature, ::Arturo::Feature.to_feature(feature.symbol)

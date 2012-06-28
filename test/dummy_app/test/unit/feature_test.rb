@@ -20,6 +20,11 @@ class ArturoFeatureTest < ActiveSupport::TestCase
     assert_nil ::Arturo::Feature.to_feature(:does_not_exist)
   end
 
+  def test_correct_class_name_used
+    assert_equal feature.class_name, "Arturo::Feature"
+  end
+
+
   def test_feature_enabled_for_existent_feature
     feature.update_attribute(:deployment_percentage, 100)
     recipient = stub('User', :to_s => 'Paula', :id => 12)
