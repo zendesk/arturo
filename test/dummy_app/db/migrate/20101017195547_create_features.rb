@@ -5,6 +5,7 @@ class CreateFeatures < ActiveRecord::Migration
     create_table :features do |t|
       t.string   :symbol, :null => false
       t.integer  :deployment_percentage, :null => false
+      t.string   :class_name, :null => false, :default => "Arturo::Feature"
       #Any additional fields here
 
       t.timestamps

@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(:version => 20101017195547) do
   create_table "features", :force => true do |t|
     t.string   "symbol",                :null => false
     t.integer  "deployment_percentage", :null => false
+    t.string   "class_name",            :null => false, :default => "Arturo::Feature"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
   end
