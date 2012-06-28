@@ -19,6 +19,13 @@ module Arturo
       f && f.enabled_for?(recipient)
     end
 
+    def feature_enabled?(feature_name)
+      f = self::Feature.to_feature(feature_name)
+      method_missing :feature_enabled?, feature_name if f && f.class != Arturo::GlobalFeature
+
+      f && f.enabled?
+    end
+
     ENABLED_FOR_METHOD_NAME = /^(\w+)_enabled_for\?$/
 
     def respond_to?(symbol)
