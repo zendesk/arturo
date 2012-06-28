@@ -19,6 +19,20 @@ class ArturoGlobalFeatureTest < ActiveSupport::TestCase
     assert_equal Arturo::GlobalFeature, feature.class
   end
 
+  def test_enable_feature
+    feature.enable!
+    assert_equal 100, feature.deployment_percentage
+    assert feature.enabled?, "Feature should be enabled"
+  end
+
+  def test_disable_feature
+    feature.deployment_percentage == 100
+
+    feature.disable!
+    assert_equal 0, feature.deployment_percentage
+    assert !feature.enabled?, "Feature should be disabled."
+  end
+
   def test_global_feature_overrides_enabled_for
     feature.update_attribute(:deployment_percentage, 100)
     recipient = stub('User', :to_s => 'Paula', :id => 12)

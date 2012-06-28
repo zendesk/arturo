@@ -17,6 +17,14 @@ module Arturo
       enabled?
     end
 
+    def enable!
+      update_attribute :deployment_percentage, 100
+    end
+
+    def disable!
+      update_attribute :deployment_percentage, 0
+    end
+
     def inspect
       "<Arturo::GlobalFeature #{name}, state: #{enabled? ? "enabled" : "disabled"}>"
     end
