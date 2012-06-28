@@ -13,6 +13,11 @@ class ArturoGlobalFeatureTest < ActiveSupport::TestCase
     assert_equal feature.class_name, "Arturo::GlobalFeature"
   end
 
+  def test_responds_to_feature_enabled_helper
+    feature.enable!
+    assert ::Arturo.feature_enabled?(feature.symbol)
+  end
+
   def test_to_feature_finds_global_feature
     assert_equal feature, ::Arturo::Feature.to_feature(feature)
     assert_equal feature, ::Arturo::Feature.to_feature(feature.symbol)

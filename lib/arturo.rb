@@ -21,7 +21,7 @@ module Arturo
 
     def feature_enabled?(feature_name)
       f = self::Feature.to_feature(feature_name)
-      method_missing :feature_enabled?, feature_name unless Arturo::GlobalFeature === f.class
+      method_missing :feature_enabled?, feature_name unless f.class == Arturo::GlobalFeature
 
       f && f.enabled?
     end
