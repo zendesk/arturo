@@ -31,15 +31,15 @@ module Arturo
 
     # Wraps Arturo::Feature.to_feature with in-memory caching.
     def to_feature_with_caching(feature_or_symbol)
-      if !self.caches_features?
-        return to_feature_without_caching(feature_or_symbol)
+      if !caches_features?
+        to_feature_without_caching(feature_or_symbol)
       elsif (feature_or_symbol.kind_of?(Arturo::Feature))
-        feature_cache.write(feature_or_symbol.symbol, feature_or_symbol, :expires_in => cache_ttl)
+        feature_cache.write(feature_or_symbol.symbol.to_sym, feature_or_symbol, :expires_in => cache_ttl)
         feature_or_symbol
       elsif (cached_feature = feature_cache.read(feature_or_symbol.to_sym))
         cached_feature
       elsif (f = to_feature_without_caching(feature_or_symbol))
-        feature_cache.write(f.symbol, f, :expires_in => cache_ttl)
+        feature_cache.write(f.symbol.to_sym, f, :expires_in => cache_ttl)
         f
       end
     end
@@ -51,8 +51,8 @@ module Arturo
       def initialize
         @data = {} # of the form {key => [value, expires_at or nil]}
       end
+
       def read(name, options = nil)
-        name = name.to_s
         value, expires_at = *@data[name]
         if value && (expires_at.blank? || expires_at > Time.now)
           value
@@ -60,8 +60,8 @@ module Arturo
           nil
         end
       end
+
       def write(name, value, options = nil)
-        name = name.to_s
         expires_at = if options && options.respond_to?(:[]) && options[:expires_in]
           Time.now + options.delete(:expires_in)
         else
@@ -71,6 +71,7 @@ module Arturo
           @data[name] = [value, expires_at]
         end
       end
+
       def clear
         @data.clear
       end
