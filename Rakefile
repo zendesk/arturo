@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rake'
 
 require 'rake/testtask'
-Rake::TestTask.new(:test) do |t|
+Rake::TestTask.new do |t|
   t.libs << 'app/controllers' << 'app/mailers' << 'app/models' << 'lib'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
@@ -21,7 +21,7 @@ rescue LoadError
   end
 end
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
