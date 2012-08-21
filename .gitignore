@@ -1,3 +1,4 @@
-.bundle
-arturo*.gem
+/.rvmrc
+/.bundle
+/arturo*.gem
 tags
