@@ -16,6 +16,15 @@ module Arturo
     before_filter :require_permission
     before_filter :load_feature, :only => [ :show, :edit, :update, :destroy ]
 
+    def arturo_engine
+      if defined?(super)
+        super
+      else
+        self
+      end
+    end
+    helper_method :arturo_engine
+
     def index
       @features = Arturo::Feature.all
       respond_with @features
@@ -40,7 +49,7 @@ module Arturo
       else
         flash[:success] = t('arturo.features.flash.updated_many', :count => updated_count)
       end
-      redirect_to features_path
+      redirect_to arturo_engine.features_path
     end
 
     def show
@@ -56,7 +65,7 @@ module Arturo
       @feature = Arturo::Feature.new(params[:feature])
       if @feature.save
         flash[:notice] = t('arturo.features.flash.created', :name => @feature.to_s)
-        redirect_to features_path
+        redirect_to arturo_engine.features_path
       else
         flash[:alert] = t('arturo.features.flash.error_creating', :name => @feature.to_s)
         render :action => 'new'
@@ -70,9 +79,9 @@ module Arturo
     def update
       if @feature.update_attributes(params[:feature])
         flash[:notice] = t('arturo.features.flash.updated', :name => @feature.to_s)
-        redirect_to feature_path(@feature)
+        redirect_to arturo_engine.feature_path(@feature)
       else
-          flash[:alert] = t('arturo.features.flash.error_updating', :name => @feature.to_s)
+        flash[:alert] = t('arturo.features.flash.error_updating', :name => @feature.to_s)
         render :action => 'edit'
       end
     end
@@ -83,7 +92,7 @@ module Arturo
       else
         flash[:alert] = t('arturo.features.flash.error_removing', :name => @feature.to_s)
       end
-      redirect_to features_path
+      redirect_to arturo_engine.features_path
     end
 
     protected
