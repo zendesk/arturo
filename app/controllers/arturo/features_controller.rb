@@ -17,12 +17,8 @@ module Arturo
     before_filter :load_feature, :only => [ :show, :edit, :update, :destroy ]
 
     def arturo_engine
-      if defined?(super)
-        super
-      else
-        self
-      end
-    end
+      self
+    end unless defined? arturo_engine
     helper_method :arturo_engine
 
     def index

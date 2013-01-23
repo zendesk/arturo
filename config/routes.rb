@@ -1,4 +1,4 @@
-if Rails::VERSION::MAJOR == 2 or (Rails::VERSION::MAJOR == 3 and Rails::VERSION::MINOR == 0)
+if Arturo::Engine.respond_to?(:routes) && Arturo::Engine.routes.respond_to?(:draw) # support for rails 2 and 3.0
   Rails.application.routes.draw do
     resources :features, :controller => 'arturo/features'
     put 'features', :to => 'arturo/features#update_all', :as => 'features'
