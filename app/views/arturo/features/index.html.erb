@@ -1,5 +1,5 @@
 <h2><%= t('.title') %></h2>
-<%= form_tag(features_path, :method => 'put', 'data-update-path' => feature_path(:id => ':id'), :remote => true) do %>
+<%= form_tag(arturo_engine.features_path, :method => 'put', 'data-update-path' => arturo_engine.feature_path(:id => ':id'), :remote => true) do %>
   <fieldset>
     <legend><%= t('.title') %></legend>
     <table class='features'>
@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tfoot>
-        <tr><th colspan='4'><%= link_to t('.new'), new_feature_path %> <%= submit_tag %></th></tr>
+        <tr><th colspan='4'><%= link_to t('.new'), arturo_engine.new_feature_path %> <%= submit_tag %></th></tr>
       </tfoot>
       <tbody>
         <% @features.each do |f| %>

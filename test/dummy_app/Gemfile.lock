@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/jamesarosen/Projects/arturo
+  remote: /Users/mgrosser/code/tools/arturo
   specs:
     arturo (1.3.0)
       rails (~> 3.0)
