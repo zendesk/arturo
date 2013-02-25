@@ -98,6 +98,11 @@ class ArturoFeatureTest < ActiveSupport::TestCase
     assert_in_delta 0.37 * bunch_of_things.length, yes, 0.02 * bunch_of_things.length
   end
 
+  def test_returns_false_for_things_with_nil_id
+    feature.deployment_percentage = 99
+    refute feature.enabled_for?(stub(:id => nil))
+  end
+
   def test_enabled_for_is_not_identical_across_features
     foo = Factory(:feature, :symbol => :foo, :deployment_percentage => 55)
     bar = Factory(:feature, :symbol => :bar, :deployment_percentage => 55)
