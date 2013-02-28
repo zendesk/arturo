@@ -5,6 +5,7 @@ Gem::Specification.new do |gem|
   gem.files = Dir["lib/**/*", "app/**/*", "config/**/*"] + %w(README.md HISTORY.md)
   gem.summary = "Feature sliders, wrapped up in an engine"
   gem.description = "Deploy features incrementally to your users"
+  gem.license = "MIT"
   gem.email = "james.a.rosen@gmail.com"
   gem.homepage = "http://github.com/jamesarosen/arturo"
   gem.authors = ["James A. Rosen"]
