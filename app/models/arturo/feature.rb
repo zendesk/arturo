@@ -67,8 +67,8 @@ module Arturo
 
     def passes_threshold?(feature_recipient)
       threshold = self.deployment_percentage || 0
-      return false if threshold == 0 || !feature_recipient.id
       return true if threshold == 100
+      return false if threshold == 0 || !feature_recipient.id
       (((feature_recipient.id + (self.id || 1) + 17) * 13) % 100) < threshold
     end
   end

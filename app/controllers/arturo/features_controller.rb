@@ -16,10 +16,12 @@ module Arturo
     before_filter :require_permission
     before_filter :load_feature, :only => [ :show, :edit, :update, :destroy ]
 
-    def arturo_engine
-      self
-    end unless defined? arturo_engine
-    helper_method :arturo_engine
+    if Rails.version < "3.1.0"
+      def arturo_engine
+        self
+      end
+      helper_method :arturo_engine
+    end
 
     def index
       @features = Arturo::Feature.all

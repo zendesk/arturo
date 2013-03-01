@@ -1,12 +1,11 @@
 ENV["RAILS_ENV"] = "test"
-require 'rubygems'
-require 'bundler'
-Bundler.setup
+require 'bundler/setup'
 
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
 require 'minitest/unit'
+require 'minitest/rg'
 require 'mocha'
 require 'factory_girl'
 require 'timecop'
