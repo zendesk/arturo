@@ -98,9 +98,14 @@ class ArturoFeatureTest < ActiveSupport::TestCase
     assert_in_delta 0.37 * bunch_of_things.length, yes, 0.02 * bunch_of_things.length
   end
 
-  def test_returns_false_for_things_with_nil_id
+  def test_returns_false_for_things_with_nil_id_and_not_100
     feature.deployment_percentage = 99
     refute feature.enabled_for?(stub(:id => nil))
+  end
+
+  def test_returns_false_for_things_with_nil_id_and_100
+    feature.deployment_percentage = 100
+    assert feature.enabled_for?(stub(:id => nil))
   end
 
   def test_enabled_for_is_not_identical_across_features
