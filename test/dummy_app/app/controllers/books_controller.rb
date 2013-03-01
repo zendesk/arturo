@@ -29,7 +29,7 @@ class BooksController < ApplicationController
   end
 
   def current_user
-    "Fred"
+    User.new(:name => "Fred")
   end
 
 end
