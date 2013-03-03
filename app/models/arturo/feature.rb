@@ -29,25 +29,10 @@ module Arturo
       self.where(:symbol => feature_or_symbol.to_sym).first
     end
 
-    initializer_arity = begin
-      ActiveRecord::Base.new({}, {})
-      2
-    rescue ArgumentError
-      1
-    rescue
-      2
-    end
-
-    if initializer_arity == 2
-      # Create a new Feature
-      def initialize(attributes = {}, options = {}, &block)
-        super(DEFAULT_ATTRIBUTES.merge(attributes || {}), options, &block)
-      end
-    else
-      # Create a new Feature
-      def initialize(attributes = {}, &block)
-        super(DEFAULT_ATTRIBUTES.merge(attributes || {}), &block)
-      end
+    # Create a new Feature
+    def initialize(*args, &block)
+      args[0] = DEFAULT_ATTRIBUTES.merge(args[0] || {})
+      super(*args, &block)
     end
 
     # @param [Object] feature_recipient a User, Account,
