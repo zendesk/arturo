@@ -1,5 +1,7 @@
 require 'rubygems'
+require 'bundler/setup'
 require 'rake'
+require 'appraisal'
 
 require 'rake/testtask'
 Rake::TestTask.new do |t|
