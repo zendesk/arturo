@@ -42,6 +42,13 @@ class CacheTest < ActiveSupport::TestCase
     Arturo::Feature.to_feature(@feature.symbol)
   end
 
+  def test_nils_are_cached
+    Arturo::Feature.expects(:where).once.returns([])
+    Arturo::Feature.to_feature(:ramen)
+    Arturo::Feature.to_feature(:ramen)
+    Arturo::Feature.to_feature(:ramen)
+  end
+
   def test_works_with_other_cache_backend
     Arturo::Feature.feature_cache = StupidCache.new
     Arturo::Feature.expects(:where).once.returns([@feature.reload])
