@@ -18,7 +18,7 @@ class ArturoFeaturesControllerAdminTest < ActionController::IntegrationTest
     get "/arturo/features"
     assert_response :success
     assert_select 'table tbody tr input[type=range]'
-    assert_select 'table tfoot a[href=?]', arturo_engine.new_feature_path
+    assert_select 'table tfoot a[href=?]', '/arturo/features/new'
     assert_select 'table tfoot input[type=submit]'
   end
 
@@ -29,7 +29,7 @@ class ArturoFeaturesControllerAdminTest < ActionController::IntegrationTest
     }
     assert_equal '14', @features.first.reload.deployment_percentage.to_s
     assert_equal '98', @features.last.reload.deployment_percentage.to_s
-    assert_redirected_to arturo_engine.features_path
+    assert_redirected_to '/arturo/features'
   end
 
   def test_get_new
@@ -40,7 +40,7 @@ class ArturoFeaturesControllerAdminTest < ActionController::IntegrationTest
   def test_post_create
     post "/arturo/features", :feature => { :symbol => 'anything' }
     assert Arturo::Feature.find_by_symbol('anything').present?
-    assert_redirected_to arturo_engine.features_path
+    assert_redirected_to '/arturo/features'
   end
 
   def test_get_show
@@ -55,12 +55,12 @@ class ArturoFeaturesControllerAdminTest < ActionController::IntegrationTest
 
   def test_put_update
     put "/arturo/features/#{@features.first.id}", :feature => { :deployment_percentage => '2' }
-    assert_redirected_to arturo_engine.feature_path(@features.first.reload)
+    assert_redirected_to "/arturo/features/#{@features.first.to_param}"
   end
 
   def test_delete_destroy
     delete "/arturo/features/#{@features.first.id}"
-    assert_redirected_to arturo_engine.features_path
+    assert_redirected_to '/arturo/features'
   end
 
 end
