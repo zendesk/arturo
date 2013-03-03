@@ -8,6 +8,6 @@ script: "bundle exec rake test"
 jdk:
   - openjdk6
 gemfile:
-  - gemfiles/rails3-1.gemfile
-  - gemfiles/rails3-2.gemfile
-  - gemfiles/rails4-0.gemfile
+  - gemfiles/rails3_1.gemfile
+  - gemfiles/rails3_2.gemfile
+  - gemfiles/rails4_0.gemfile
