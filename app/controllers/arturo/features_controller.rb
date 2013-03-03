@@ -106,7 +106,7 @@ module Arturo
     end
 
     def feature_params
-      if params.respond_to?(:permit)
+      if defined?(ActionController::Parameters)
         params.permit(:feature => permitted_attributes)[:feature]
       else
         params[:feature] || {}
@@ -114,7 +114,7 @@ module Arturo
     end
 
     def features_params
-      if params.respond_to?(:require)
+      if defined?(ActionController::Parameters)
         permitted = permitted_attributes
         features = params[:features]
         features.each do |id, attributes|
