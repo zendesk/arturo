@@ -1,4 +1,5 @@
 require 'action_controller'
+require 'arturo/feature_params_support'
 
 # TODO: this doesn't do anything radically out of the ordinary.
 #       Are there Rails 3 patterns/mixins/methods I can use
@@ -10,6 +11,7 @@ module Arturo
   # return true only for users who are permitted to manage features.
   class FeaturesController < ApplicationController
     include Arturo::FeatureManagement
+    include Arturo::FeatureParamsSupport
 
     unloadable
     respond_to :html, :json, :xml
@@ -103,30 +105,6 @@ module Arturo
 
     def load_feature
       @feature ||= Arturo::Feature.find(params[:id])
-    end
-
-    def feature_params
-      if defined?(ActionController::Parameters)
-        params.permit(:feature => permitted_attributes)[:feature]
-      else
-        params[:feature] || {}
-      end
-    end
-
-    def features_params
-      if defined?(ActionController::Parameters)
-        permitted = permitted_attributes
-        features = params[:features]
-        features.each do |id, attributes|
-          features[id] = ActionController::Parameters.new(attributes).permit(*permitted)
-        end
-      else
-        params[:features] || {}
-      end
-    end
-
-    def permitted_attributes
-      [ :symbol, :deployment_percentage ]
     end
 
   end
