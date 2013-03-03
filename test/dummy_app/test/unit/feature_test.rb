@@ -121,6 +121,6 @@ class ArturoFeatureTest < ActiveSupport::TestCase
   end
 
   def test_to_param
-    assert_match feature.to_param, %r{^#{feature.id}-}
+    assert_match %r{^#{feature.id}-}, feature.to_param
   end
 end

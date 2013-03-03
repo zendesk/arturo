@@ -31,7 +31,6 @@ module Arturo
     def update_all
       updated_count = 0
       errors = []
-      features_params = params[:features] || {}
       features_params.each do |id, attributes|
         feature = Arturo::Feature.find_by_id(id)
         if feature.blank?
@@ -55,12 +54,12 @@ module Arturo
     end
 
     def new
-      @feature = Arturo::Feature.new(params[:feature])
+      @feature = Arturo::Feature.new(feature_params)
       respond_with @feature
     end
 
     def create
-      @feature = Arturo::Feature.new(params[:feature])
+      @feature = Arturo::Feature.new(feature_params)
       if @feature.save
         flash[:notice] = t('arturo.features.flash.created', :name => @feature.to_s)
         redirect_to arturo_engine.features_path
@@ -75,7 +74,7 @@ module Arturo
     end
 
     def update
-      if @feature.update_attributes(params[:feature])
+      if @feature.update_attributes(feature_params)
         flash[:notice] = t('arturo.features.flash.updated', :name => @feature.to_s)
         redirect_to arturo_engine.feature_path(@feature)
       else
@@ -104,6 +103,30 @@ module Arturo
 
     def load_feature
       @feature ||= Arturo::Feature.find(params[:id])
+    end
+
+    def feature_params
+      if params.respond_to?(:permit)
+        params.permit(:feature => permitted_attributes)[:feature]
+      else
+        params[:feature] || {}
+      end
+    end
+
+    def features_params
+      if params.respond_to?(:require)
+        permitted = permitted_attributes
+        features = params[:features]
+        features.each do |id, attributes|
+          features[id] = ActionController::Parameters.new(attributes).permit(*permitted)
+        end
+      else
+        params[:features] || {}
+      end
+    end
+
+    def permitted_attributes
+      [ :symbol, :deployment_percentage ]
     end
 
   end

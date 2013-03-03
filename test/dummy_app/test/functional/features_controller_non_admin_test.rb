@@ -1,7 +1,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 require 'arturo/features_controller'
 
-class ArturoFeaturesControllerNonAdminTest < ActionController::IntegrationTest
+class ArturoFeaturesControllerNonAdminTest < Arturo::IntegrationTest
 
   def setup
     Arturo::FeaturesController.any_instance.stubs(:current_user).returns(nil)

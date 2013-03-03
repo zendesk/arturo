@@ -31,4 +31,8 @@ class ActiveSupport::TestCase
   end
 end
 
+Arturo::IntegrationTest = defined?(ActionDispatch::IntegrationTest) ?
+  ActionDispatch::IntegrationTest :
+  ActionController::IntegrationTest
+
 MiniTest::Unit.autorun

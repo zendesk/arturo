@@ -10,6 +10,7 @@ module Arturo
     Arturo::Feature::SYMBOL_REGEX = /^[a-zA-z][a-zA-Z0-9_]*$/
     DEFAULT_ATTRIBUTES = { :deployment_percentage => 0 }.with_indifferent_access
 
+    attr_accessible :symbol, :deployment_percentage if Rails::VERSION::MAJOR < 4
     attr_readonly :symbol
 
     validates_presence_of :symbol, :deployment_percentage
@@ -28,9 +29,23 @@ module Arturo
       self.where(:symbol => feature_or_symbol.to_sym).first
     end
 
-    # Create a new Feature
-    def initialize(attributes = {}, options = {}, &block)
-      super(DEFAULT_ATTRIBUTES.merge(attributes || {}), options, &block)
+    initializer_arity = begin
+      ActiveRecord::Base.new({}, {})
+      2
+    rescue ArgumentError
+      1
+    end
+
+    if initializer_arity == 2
+      # Create a new Feature
+      def initialize(attributes = {}, options = {}, &block)
+        super(DEFAULT_ATTRIBUTES.merge(attributes || {}), options, &block)
+      end
+    else
+      # Create a new Feature
+      def initialize(attributes = {}, &block)
+        super(DEFAULT_ATTRIBUTES.merge(attributes || {}), &block)
+      end
     end
 
     # @param [Object] feature_recipient a User, Account,
