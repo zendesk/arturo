@@ -34,6 +34,8 @@ module Arturo
       2
     rescue ArgumentError
       1
+    rescue
+      2
     end
 
     if initializer_arity == 2
