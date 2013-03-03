@@ -9,7 +9,7 @@ class ArturoFeaturesHelperTest < ActiveSupport::TestCase
   attr_accessor :output_buffer
 
   def bad_feature
-    @bad_feature ||= Factory(:feature).tap do |f|
+    @bad_feature ||= create(:feature).tap do |f|
       f.deployment_percentage = 101
       f.valid?
     end

@@ -7,7 +7,7 @@ class ArturoFeatureTest < ActiveSupport::TestCase
   end
 
   def feature
-    @feature ||= Factory(:feature)
+    @feature ||= create(:feature)
   end
 
   def bunch_of_things
@@ -31,7 +31,7 @@ class ArturoFeatureTest < ActiveSupport::TestCase
   end
 
   def test_x_enabled_for
-    @feature = Factory(:feature, :deployment_percentage => 100, :symbol => :foo)
+    @feature = create(:feature, :deployment_percentage => 100, :symbol => :foo)
     recipient = stub('User', :to_s => 'Paula', :id => 12)
     assert ::Arturo.foo_enabled_for?(recipient), "#{feature} should be enabled for #{recipient}"
   end
@@ -109,8 +109,8 @@ class ArturoFeatureTest < ActiveSupport::TestCase
   end
 
   def test_enabled_for_is_not_identical_across_features
-    foo = Factory(:feature, :symbol => :foo, :deployment_percentage => 55)
-    bar = Factory(:feature, :symbol => :bar, :deployment_percentage => 55)
+    foo = create(:feature, :symbol => :foo, :deployment_percentage => 55)
+    bar = create(:feature, :symbol => :bar, :deployment_percentage => 55)
     has_foo = bunch_of_things.map { |t| foo.enabled_for?(t) }
     has_bar = bunch_of_things.map { |t| bar.enabled_for?(t) }
     assert has_foo != has_bar

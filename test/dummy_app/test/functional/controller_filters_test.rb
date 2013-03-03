@@ -9,8 +9,8 @@ class ArturoControllerFiltersTest < ActionController::TestCase
       '2' => 'Jane Eyre',
       '3' => 'Robison Crusoe'
     })
-    Factory(:feature, :symbol => :books, :deployment_percentage => 100)
-    Factory(:feature, :symbol => :book_holds, :deployment_percentage => 0)
+    create(:feature, :symbol => :books, :deployment_percentage => 100)
+    create(:feature, :symbol => :book_holds, :deployment_percentage => 0)
   end
 
   def test_on_feature_disabled_not_an_action

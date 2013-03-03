@@ -20,7 +20,7 @@ class CacheTest < ActiveSupport::TestCase
   end
 
   def setup
-    @feature = Factory(:feature)
+    @feature = create(:feature)
     Arturo::Feature.cache_ttl = 30.minutes
     Arturo::Feature.feature_cache.clear
   end

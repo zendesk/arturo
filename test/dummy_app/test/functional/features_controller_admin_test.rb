@@ -8,9 +8,9 @@ class ArturoFeaturesControllerAdminTest < ActionController::IntegrationTest
       stubs(:current_user).
       returns(@current_user)
     @features = [
-      Factory(:feature),
-      Factory(:feature),
-      Factory(:feature)
+      create(:feature),
+      create(:feature),
+      create(:feature)
     ]
   end
 

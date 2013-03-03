@@ -17,6 +17,8 @@ require 'arturo/feature_factories'
 require 'arturo/test_support'
 
 class ActiveSupport::TestCase
+  include ::FactoryGirl::Syntax::Methods
+
   def reset_translations!
     I18n.reload!
   end

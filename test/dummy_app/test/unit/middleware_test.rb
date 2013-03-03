@@ -7,7 +7,7 @@ class MiddlewareTest < ActiveSupport::TestCase
   end
 
   def feature
-    @feature ||= Factory(:feature)
+    @feature ||= create(:feature)
   end
 
   def underlying_app

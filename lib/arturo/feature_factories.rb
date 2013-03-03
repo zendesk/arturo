@@ -1,4 +1,8 @@
-Factory.define :feature, :class => Arturo::Feature do |f|
-  f.sequence(:symbol) { |n| "feature_#{n}".to_sym }
-  f.deployment_percentage { |_| rand(101) }
+FactoryGirl.define do
+  sequence(:feature_symbol) { |n| "feature_#{n}".to_sym }
+
+  factory :feature, :class => Arturo::Feature do
+    symbol                { generate(:feature_symbol) }
+    deployment_percentage { rand(101) }
+  end
 end

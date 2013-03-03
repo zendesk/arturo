@@ -4,7 +4,7 @@ require 'arturo/features_helper'
 class ArturoFeatureAvailabilityTest < ActiveSupport::TestCase
 
   def setup
-    @feature = Factory(:feature)
+    @feature = create(:feature)
     @block = lambda { 'Content that requires a feature' }
     @current_user = Object.new
     @helper = Object.new.tap do |h|
