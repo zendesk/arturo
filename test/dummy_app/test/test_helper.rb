@@ -5,7 +5,12 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
 require 'minitest/unit'
-require 'minitest/rg' if MiniTest::Unit.respond_to?(:output=)
+
+begin
+  require 'minitest/rg'
+rescue NameError
+end
+
 require 'mocha'
 require 'factory_girl'
 require 'timecop'
