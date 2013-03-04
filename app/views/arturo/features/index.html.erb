@@ -1,4 +1,7 @@
 <h2><%= t('.title') %></h2>
+
+<%= arturo_flash_messages %>
+
 <%= form_tag(arturo_engine.features_path, :method => 'put', 'data-update-path' => arturo_engine.feature_path(:id => ':id'), :remote => true) do %>
   <fieldset>
     <legend><%= t('.title') %></legend>
