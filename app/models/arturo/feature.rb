@@ -65,6 +65,10 @@ module Arturo
       "<Arturo::Feature #{name}, deployed to #{deployment_percentage}%>"
     end
 
+    def self.last_updated_at
+      maximum(:updated_at)
+    end
+
     protected
 
     def passes_threshold?(feature_recipient)

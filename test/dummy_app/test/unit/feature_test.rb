@@ -42,6 +42,23 @@ class ArturoFeatureTest < ActiveSupport::TestCase
     assert feature.errors[:symbol].present?
   end
 
+  def test_last_updated_at
+    Timecop.travel(Time.local(2008, 9, 1, 12, 0, 0))
+    feature1 = create(:feature)
+
+    updated_at = Time.local(2011, 9, 1, 12, 0, 0)
+
+    Timecop.freeze(updated_at) do
+      feature2 = create(:feature)
+    end
+
+    assert_equal updated_at, Arturo::Feature.last_updated_at
+  end
+
+  def test_last_updated_at_with_no_features
+    assert_nil Arturo::Feature.last_updated_at
+  end
+
   # regression
   # @see https://github.com/jamesarosen/arturo/issues/7
   def test_deployment_percentage_is_not_overwritten_on_create
