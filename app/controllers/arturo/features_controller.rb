@@ -18,7 +18,7 @@ module Arturo
     before_filter :require_permission
     before_filter :load_feature, :only => [ :show, :edit, :update, :destroy ]
 
-    if Rails::VERSION::MAJOR == 3 && Rails::VERSION::MINOR < 1
+    if Rails::VERSION::MAJOR == 3 && Rails::VERSION::MINOR == 0
       def arturo_engine
         self
       end
