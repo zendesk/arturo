@@ -5,11 +5,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
 require 'minitest/unit'
-
-begin
-  require 'minitest/rg'
-rescue NameError
-end
+require 'minitest/rg'
 
 require 'factory_girl'
 require 'timecop'
