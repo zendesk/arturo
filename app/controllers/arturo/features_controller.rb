@@ -40,7 +40,7 @@ module Arturo
         elsif feature.update_attributes(attributes)
           updated_count += 1
         else
-          errors << t('arturo.features.flash.error_updating', :id => id)
+          errors << t('arturo.features.flash.error_updating', :id => id, :errors => feature.errors.full_messages.to_sentence)
         end
       end
       if errors.any?

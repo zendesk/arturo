@@ -1,2 +1,5 @@
 <h2><%= t('.title', :name => @feature.name) %></h2>
+
+<%= arturo_flash_messages %>
+
 <%= render :partial => 'form', :locals => { :feature => @feature, :legend =>  t('.legend', :name => @feature.name) } %>
