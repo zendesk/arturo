@@ -11,7 +11,6 @@ begin
 rescue NameError
 end
 
-require 'mocha'
 require 'factory_girl'
 require 'timecop'
 
