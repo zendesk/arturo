@@ -1,3 +1,3 @@
-source 'https://bundler-api.herokuapp.com'
+source 'https://rubygems.org'
 
 gemspec
