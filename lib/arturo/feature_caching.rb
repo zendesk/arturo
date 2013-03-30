@@ -16,6 +16,10 @@ module Arturo
   # to use a shared cache like Memcached.
   module FeatureCaching
 
+    # A marker in the cache to record the fact that the feature with the
+    # given symbol doesn't exist.
+    NO_SUCH_FEATURE = :NO_SUCH_FEATURE
+
     def self.extended(base)
       class <<base
         alias_method_chain :to_feature, :caching
@@ -39,17 +43,16 @@ module Arturo
       if !self.caches_features?
         return to_feature_without_caching(feature_or_symbol)
       elsif (feature_or_symbol.kind_of?(Arturo::Feature))
-        feature_cache.write(feature_or_symbol.symbol, feature_or_symbol, :expires_in => cache_ttl)
+        feature_cache.write(feature_or_symbol.symbol.to_sym, feature_or_symbol, :expires_in => cache_ttl)
         feature_or_symbol
       elsif (cached_feature = feature_cache.read(feature_or_symbol.to_sym))
-        cached_feature
-      elsif (f = to_feature_without_caching(feature_or_symbol))
-        if cache_warming_enabled?
-          warm_feature_cache
-        else
-          feature_cache.write(f.symbol, f, :expires_in => cache_ttl)
-        end
-        f
+        cached_feature == NO_SUCH_FEATURE ? nil : cached_feature
+      else
+        symbol = feature_or_symbol.to_sym
+        feature = to_feature_without_caching(feature_or_symbol)
+        warm_feature_cache if cache_warming_enabled?
+        feature_cache.write(symbol, feature || NO_SUCH_FEATURE, :expires_in => cache_ttl)
+        feature
       end
     end
 
