@@ -44,8 +44,8 @@ module Arturo
         cached_feature == NO_SUCH_FEATURE ? nil : cached_feature
       else
         symbol = feature_or_symbol.to_sym
-        feature = to_feature_without_caching(symbol) || NO_SUCH_FEATURE
-        feature_cache.write(symbol, feature, :expires_in => cache_ttl)
+        feature = to_feature_without_caching(symbol)
+        feature_cache.write(symbol, feature || NO_SUCH_FEATURE, :expires_in => cache_ttl)
         feature
       end
     end
