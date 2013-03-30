@@ -44,9 +44,9 @@ class CacheTest < ActiveSupport::TestCase
 
   def test_nils_are_cached
     Arturo::Feature.expects(:where).once.returns([])
-    Arturo::Feature.to_feature(:ramen)
-    Arturo::Feature.to_feature(:ramen)
-    Arturo::Feature.to_feature(:ramen)
+    assert_nil Arturo::Feature.to_feature(:ramen)
+    assert_nil Arturo::Feature.to_feature(:ramen)
+    assert_nil Arturo::Feature.to_feature(:ramen)
   end
 
   def test_works_with_other_cache_backend
