@@ -38,3 +38,6 @@ en:
         error_updating: "Could not update feature #%{id}: %{errors}."
         removed: "Removed %{name}"
         error_removing: "Sorry, there was an error removing %{name}"
+    no_such_feature:
+      name: "NoSuchFeature: %{symbol}"
+      symbol_required: "NoSuchFeature marker objects must have a symbol."
