@@ -42,11 +42,11 @@ class CacheTest < ActiveSupport::TestCase
     Arturo::Feature.to_feature(@feature.symbol)
   end
 
-  def test_nils_are_cached
+  def test_no_such_feature_is_cached
     Arturo::Feature.expects(:where).once.returns([])
-    Arturo::Feature.to_feature(:ramen)
-    Arturo::Feature.to_feature(:ramen)
-    Arturo::Feature.to_feature(:ramen)
+    assert_kind_of Arturo::NoSuchFeature, Arturo::Feature.to_feature(:ramen)
+    assert_kind_of Arturo::NoSuchFeature, Arturo::Feature.to_feature(:ramen)
+    assert_kind_of Arturo::NoSuchFeature, Arturo::Feature.to_feature(:ramen)
   end
 
   def test_works_with_other_cache_backend
