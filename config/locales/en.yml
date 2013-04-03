@@ -39,5 +39,5 @@ en:
         removed: "Removed %{name}"
         error_removing: "Sorry, there was an error removing %{name}"
     no_such_feature:
-      to_s: "NoSuchFeature: %{symbol}"
+      name: "NoSuchFeature: %{symbol}"
       symbol_required: "NoSuchFeature marker objects must have a symbol."

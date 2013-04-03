@@ -15,7 +15,7 @@ module Arturo
     end
 
     def name
-      I18n.t('arturo.no_such_feature.to_s', :symbol => symbol)
+      I18n.t('arturo.no_such_feature.name', :symbol => symbol)
     end
 
     alias_method :to_s, :name
