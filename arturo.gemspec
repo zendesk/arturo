@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = [".", "lib"]
   gem.has_rdoc = 'false'
   gem.specification_version = 2
-  gem.add_runtime_dependency      'rails',        '> 3.0', '< 5.0'
+  gem.add_runtime_dependency      'rails',        '> 3.1', '< 5.0'
   gem.add_development_dependency  'mocha'
   gem.add_development_dependency  'rake'
   gem.add_development_dependency  'minitest-rg'
