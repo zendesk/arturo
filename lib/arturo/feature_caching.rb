@@ -1,3 +1,5 @@
+require 'arturo/no_such_feature'
+
 module Arturo
 
   # To be extended by Arturo::Feature if you want to enable
@@ -15,10 +17,6 @@ module Arturo
   # Alternatively, you could redefine Arturo::Feature.feature_cache
   # to use a shared cache like Memcached.
   module FeatureCaching
-
-    # A marker in the cache to record the fact that the feature with the
-    # given symbol doesn't exist.
-    NO_SUCH_FEATURE = :NO_SUCH_FEATURE
 
     def self.extended(base)
       class <<base
@@ -41,10 +39,10 @@ module Arturo
         feature_cache.write(feature_or_symbol.symbol.to_sym, feature_or_symbol, :expires_in => cache_ttl)
         feature_or_symbol
       elsif (cached_feature = feature_cache.read(feature_or_symbol.to_sym))
-        cached_feature == NO_SUCH_FEATURE ? nil : cached_feature
+        cached_feature
       else
         symbol = feature_or_symbol.to_sym
-        feature = to_feature_without_caching(symbol) || NO_SUCH_FEATURE
+        feature = to_feature_without_caching(symbol) || Arturo::NoSuchFeature.new(symbol)
         feature_cache.write(symbol, feature, :expires_in => cache_ttl)
         feature
       end
