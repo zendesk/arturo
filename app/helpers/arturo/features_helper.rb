@@ -1,7 +1,3 @@
-require 'action_view'
-require 'action_view/helpers/tag_helper'
-require 'action_view/helpers/form_tag_helper'
-
 module Arturo
   module FeaturesHelper
     include ActionView::Helpers::TagHelper
