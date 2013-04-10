@@ -30,6 +30,14 @@ module Arturo
       self.where(:symbol => symbol).first || Arturo::NoSuchFeature.new(symbol)
     end
 
+    # Looks up a feature by symbol. Also accepts a Feature as input.
+    # @param [Symbol, Arturo::Feature] feature_or_name a Feature or the Symbol of a Feature
+    # @return [Arturo::Feature, nil] the Feature if found, else nil
+    def self.find_feature(feature_or_symbol)
+      feature = to_feature(feature_or_symbol)
+      feature.is_a?(Arturo::NoSuchFeature) ? nil : feature
+    end
+
     # Create a new Feature
     def initialize(*args, &block)
       args[0] = DEFAULT_ATTRIBUTES.merge(args[0] || {})
