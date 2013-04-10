@@ -42,7 +42,7 @@ module Arturo
         cached_feature
       else
         symbol = feature_or_symbol.to_sym
-        feature = to_feature_without_caching(symbol) || Arturo::NoSuchFeature.new(symbol)
+        feature = to_feature_without_caching(symbol)
         feature_cache.write(symbol, feature, :expires_in => cache_ttl)
         feature
       end
