@@ -17,7 +17,7 @@ class ArturoFeatureTest < ActiveSupport::TestCase
   def test_to_feature
     assert_equal feature, ::Arturo::Feature.to_feature(feature)
     assert_equal feature, ::Arturo::Feature.to_feature(feature.symbol)
-    assert_nil ::Arturo::Feature.to_feature(:does_not_exist)
+    assert_equal Arturo::NoSuchFeature, ::Arturo::Feature.to_feature(:does_not_exist).class
   end
 
   def test_feature_enabled_for_existent_feature

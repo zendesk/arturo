@@ -23,10 +23,11 @@ module Arturo
 
     # Looks up a feature by symbol. Also accepts a Feature as input.
     # @param [Symbol, Arturo::Feature] feature_or_name a Feature or the Symbol of a Feature
-    # @return [Arturo::Feature, nil] the Feature if found, else nil
+    # @return [Arturo::Feature, nil] the Feature if found, else Arturo::NoSuchFeature
     def self.to_feature(feature_or_symbol)
       return feature_or_symbol if feature_or_symbol.kind_of?(self)
-      self.where(:symbol => feature_or_symbol.to_sym).first
+      symbol = feature_or_symbol.to_sym
+      self.where(:symbol => symbol).first || Arturo::NoSuchFeature.new(symbol)
     end
 
     # Create a new Feature
