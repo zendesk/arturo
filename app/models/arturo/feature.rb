@@ -28,8 +28,8 @@ module Arturo
       self.find(:first, :conditions => { :symbol => feature_or_symbol.to_s })
     end
 
-    class << self
-      alias find_feature to_feature
+    def self.find_feature(*args)
+      to_feature(*args)
     end
 
     # Create a new Feature

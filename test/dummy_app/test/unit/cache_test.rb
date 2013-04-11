@@ -44,6 +44,13 @@ class CacheTest < ActiveSupport::TestCase
     Arturo::Feature.to_feature(@feature.symbol)
   end
 
+  def test_find_hit_cache
+    Arturo::Feature.expects(:find).once.returns(@feature)
+    Arturo::Feature.find_feature(@feature.symbol)
+    Arturo::Feature.find_feature(@feature.symbol)
+    Arturo::Feature.find_feature(@feature.symbol)
+  end
+
   def test_nils_are_cached
     Arturo::Feature.expects(:find).once.returns(nil)
     assert_nil Arturo::Feature.to_feature(:ramen)
