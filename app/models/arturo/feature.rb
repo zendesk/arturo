@@ -28,6 +28,10 @@ module Arturo
       self.find(:first, :conditions => { :symbol => feature_or_symbol.to_s })
     end
 
+    class << self
+      alias find_feature to_feature
+    end
+
     # Create a new Feature
     def initialize(attributes = {})
       super(DEFAULT_ATTRIBUTES.merge(attributes || {}))
