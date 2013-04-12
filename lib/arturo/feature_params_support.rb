@@ -15,7 +15,7 @@ module Arturo
     end
 
     module WithStrongParams
-      PERMITTED_ATTRIBUTES = [ :symbol, :deployment_percentage ]
+      PERMITTED_ATTRIBUTES = [ :symbol, :deployment_percentage, :owner_email, :reason_to_keep_forever, :phase, :external_beta_subdomains ]
 
       def feature_params
         params.permit(:feature => PERMITTED_ATTRIBUTES)[:feature]
