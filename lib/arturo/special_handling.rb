@@ -25,8 +25,6 @@ module Arturo
   # different processes or on several servers.
   module SpecialHandling
 
-    ALL_FEATURES = :__all_features__
-
     def self.included(base)
       base.extend Arturo::SpecialHandling::ClassMethods
     end
@@ -34,20 +32,30 @@ module Arturo
     module ClassMethods
 
       def whitelists
-        @whitelists ||= {}
+        @whitelists ||= []
       end
 
       def blacklists
-        @blacklists ||= {}
+        @blacklists ||= []
       end
 
-      def whitelist(feature_symbol = ALL_FEATURES, &block)
-        whitelists[feature_symbol.to_sym] = block
+      def whitelist(feature_symbol = nil, &block)
+        whitelists << two_arg_block(feature_symbol, block)
       end
 
-      def blacklist(feature_symbol = ALL_FEATURES, &block)
-        blacklists[feature_symbol.to_sym] = block
+      def blacklist(feature_symbol = nil, &block)
+        blacklists << two_arg_block(feature_symbol, block)
       end
+
+      private
+
+      def two_arg_block(symbol, block)
+        return block if symbol.nil?
+        lambda do |feature, recipient|
+          feature.symbol == symbol && block.call(recipient)
+        end
+      end
+
     end
 
     protected
@@ -60,12 +68,8 @@ module Arturo
       x_listed?(self.class.blacklists, feature_recipient)
     end
 
-    def x_listed?(list_map, feature_recipient)
-      list = list_map[ALL_FEATURES]
-      return true if list && list.call(self, feature_recipient)
-
-      list = list_map[self.symbol.to_sym]
-      list.present? && list.call(feature_recipient)
+    def x_listed?(lists, feature_recipient)
+      lists.any? { |block| block.call(self, feature_recipient) }
     end
 
   end

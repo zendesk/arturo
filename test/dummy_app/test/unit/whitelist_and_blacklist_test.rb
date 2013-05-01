@@ -30,8 +30,8 @@ class ArturoWhitelistAndBlacklistTest < ActiveSupport::TestCase
   end
 
   def test_lists_can_be_defined_before_feature_is_created
-    Arturo::Feature.whitelists[:does_not_exist] = lambda { |thing| thing == 'whitelisted' }
-    Arturo::Feature.blacklists[:does_not_exist] = lambda { |thing| thing == 'blacklisted' }
+    Arturo::Feature.whitelist(:does_not_exist) { |thing| thing == 'whitelisted' }
+    Arturo::Feature.blacklist(:does_not_exist) { |thing| thing == 'blacklisted' }
     @feature = create(:feature, :symbol => :does_not_exist)
     assert  feature.enabled_for?('whitelisted')
     assert !feature.enabled_for?('blacklisted')
