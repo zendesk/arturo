@@ -7,7 +7,7 @@ require 'arturo/feature_params_support'
 module Arturo
 
   # Handles all Feature actions. Clients of the Arturo engine
-  # should redefine Arturo::FeaturesController#permitted? to
+  # should redefine Arturo::FeaturesController#may_manage_features? to
   # return true only for users who are permitted to manage features.
   class FeaturesController < ApplicationController
     include Arturo::FeatureManagement
