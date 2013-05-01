@@ -37,4 +37,19 @@ class ArturoWhitelistAndBlacklistTest < ActiveSupport::TestCase
     assert !feature.enabled_for?('blacklisted')
   end
 
+  def test_global_whitelisting
+    feature.deployment_percentage = 0
+    other_feature = create(:feature, :deployment_percentage => 0)
+    Arturo::Feature.whitelist { |feature, recipient| feature == other_feature }
+    refute feature.enabled_for?(:a_thing)
+    assert other_feature.enabled_for?(:a_thing)
+  end
+
+  def test_global_blacklisting
+    feature.deployment_percentage = 100
+    other_feature = create(:feature, :deployment_percentage => 100)
+    Arturo::Feature.blacklist { |feature, recipient| feature == other_feature }
+    assert feature.enabled_for?(:a_thing)
+    refute other_feature.enabled_for?(:a_thing)
+  end
 end
