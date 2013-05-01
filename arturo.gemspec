@@ -13,8 +13,11 @@ Gem::Specification.new do |gem|
   gem.require_paths = [".", "lib"]
   gem.has_rdoc = 'false'
   gem.specification_version = 2
-  gem.signing_key = File.expand_path("~/.ssh/gem-private_key.pem")
+
+  private_key_path = File.expand_path("~/.ssh/gem-private_key.pem")
+  gem.signing_key = private_key_path if File.exists?(private_key_path)
   gem.cert_chain = [ "gem-public_cert.pem" ]
+
   gem.add_runtime_dependency      'rails',        '> 3.0', '< 5.0'
   gem.add_development_dependency  'mocha'
   gem.add_development_dependency  'rake'
