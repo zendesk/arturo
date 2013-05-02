@@ -33,7 +33,7 @@ class ArturoFeatureTest < ActiveSupport::TestCase
   end
 
   def test_feature_enabled_for_non_existent_feature
-    assert !::Arturo.feature_enabled_for?(:does_not_exist, 'Paula')
+    refute ::Arturo.feature_enabled_for?(:does_not_exist, 'Paula')
   end
 
   def test_x_enabled_for
@@ -44,7 +44,7 @@ class ArturoFeatureTest < ActiveSupport::TestCase
 
   def test_requires_a_symbol
     feature.symbol = nil
-    assert !feature.valid?
+    refute feature.valid?
     assert feature.errors[:symbol].present?
   end
 
@@ -74,7 +74,7 @@ class ArturoFeatureTest < ActiveSupport::TestCase
 
   def test_requires_a_deployment_percentage
     feature.deployment_percentage = nil
-    assert !feature.valid?
+    refute feature.valid?
     assert feature.errors[:deployment_percentage].present?
   end
 
@@ -101,12 +101,12 @@ class ArturoFeatureTest < ActiveSupport::TestCase
 
   def test_enabled_for_returns_false_if_thing_is_nil
     feature.deployment_percentage = 100
-    assert !feature.enabled_for?(nil)
+    refute feature.enabled_for?(nil)
   end
 
   def test_enabled_for_returns_false_for_all_things_when_deployment_percentage_is_0
     feature.deployment_percentage = 0
-    bunch_of_things.each { |t| assert !feature.enabled_for?(t) }
+    bunch_of_things.each { |t| refute feature.enabled_for?(t) }
   end
 
   def test_returns_true_for_all_non_nil_things_when_deployment_percentage_is_100

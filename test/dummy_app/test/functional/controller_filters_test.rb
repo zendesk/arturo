@@ -14,7 +14,7 @@ class ArturoControllerFiltersTest < ActionController::TestCase
   end
 
   def test_on_feature_disabled_not_an_action
-    assert !@controller.action_methods.include?(:on_feature_disabled)
+    refute @controller.action_methods.include?(:on_feature_disabled)
   end
 
   def test_get_show
