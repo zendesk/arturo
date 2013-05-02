@@ -1,17 +1,22 @@
 module Arturo
 
-  # Adds whitelist and blacklist support to individual features by name.
-  # Blacklists override whitelists. (In the world of Apache, Features
-  # are "(deny,allow)".)
+  # Adds whitelist and blacklist support to individual features by name
+  # or for all features. Blacklists override whitelists. (In the world of
+  # Apache, Features are "(deny,allow)".)
   # @example
-  #   # allow admins:
+  #   # allow admins for some_feature:
   #   Arturo::Feature.whitelist(:some_feature) do |user|
   #     user.is_admin?
   #   end
   #
-  #   # disallow for small accounts:
+  #   # disallow for small accounts for another_feature:
   #   Arturo::Feature.blacklist(:another_feature) do |user|
   #     user.account.small?
+  #   end
+  #
+  #   # allow large accounts access to large features:
+  #   Arturo::Feature.whitelist do |feature, user|
+  #     feature.symbol.to_s =~ /^large/ && user.account.large?
   #   end
   #
   # Blacklists and whitelists can be defined before the feature exists
@@ -25,21 +30,32 @@ module Arturo
     end
 
     module ClassMethods
+
       def whitelists
-        @whitelists ||= {}
+        @whitelists ||= []
       end
 
       def blacklists
-        @blacklists ||= {}
+        @blacklists ||= []
       end
 
-      def whitelist(feature_symbol, &block)
-        whitelists[feature_symbol.to_sym] = block
+      def whitelist(feature_symbol = nil, &block)
+        whitelists << two_arg_block(feature_symbol, block)
       end
 
-      def blacklist(feature_symbol, &block)
-        blacklists[feature_symbol.to_sym] = block
+      def blacklist(feature_symbol = nil, &block)
+        blacklists << two_arg_block(feature_symbol, block)
       end
+
+      private
+
+      def two_arg_block(symbol, block)
+        return block if symbol.nil?
+        lambda do |feature, recipient|
+          feature.symbol == symbol && block.call(recipient)
+        end
+      end
+
     end
 
     protected
@@ -52,9 +68,8 @@ module Arturo
       x_listed?(self.class.blacklists, feature_recipient)
     end
 
-    def x_listed?(list_map, feature_recipient)
-      list = list_map[self.symbol.to_sym]
-      list.present? && list.call(feature_recipient)
+    def x_listed?(lists, feature_recipient)
+      lists.any? { |block| block.call(self, feature_recipient) }
     end
 
   end
