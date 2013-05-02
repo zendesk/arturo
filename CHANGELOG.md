@@ -50,3 +50,28 @@ Better error messages when managing features, and the addition of the
 
 Add `Feature.last_updated_at` to get the most recent `updated_at` among all
 `Feature`s.
+
+## v1.3.0
+
+Add `Arturo::Middleware`, which passes requests down the stack if an only if
+a particular feature is available.
+
+`TestSupport` methods use `Feature.to_feature`.
+
+## v 1.1.0 - cleanup
+
+ * changed `require_feature!` to `require_feature`
+ * replaced `Arturo.permit_management` and `Arturo.feature_recipient`
+   blocks with instance methods
+   `Arturo::FeatureManagement.may_manage_features?` and
+   `Arturo::FeatureAvailability.feature_recipient`
+
+## v 1.0.0 - Initial Release
+
+ * `require_feature!` controller filter
+ * `if_feature_enabled` controller and view method
+ * `feature_enabled?` controller and view method
+ * CRUD for features
+ * `Arturo.permit_management` to configure management permission
+ * `Arturo.feature_recipient` to configure on what basis features are deployed
+ * whitelists and blacklists
