@@ -195,6 +195,13 @@ If, on the other hand, no users on the free plan should have the
       user.account.free?
     end
 
+If you want to whitelist or blacklist large groups of features at once, you
+can move the feature argument into the block:
+
+    Arturo::Feature.whitelist do |feature, user|
+      user.account.has?(feature.to_sym)
+    end
+
 ### Feature Conditionals
 
 All that configuration is just a waste of time if Arturo didn't modify the
