@@ -15,7 +15,7 @@ as the first argument:
 
 ## v1.5.3
 
-Set `signing_key` in gemspect only if the file exists.
+Set `signing_key` in gemspec only if the file exists.
 
 The `FeaturesController` docs erroneously said to override `#permitted?`.
 The correct method name is `may_manage_features?`.
