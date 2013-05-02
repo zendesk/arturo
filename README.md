@@ -66,19 +66,18 @@ feature and deploy it to all users.
 
 ## Installation
 
-### In Rails 3, with Bundler
+### In Rails 3 or 4, with Bundler
 
     gem 'arturo', '~> 1.0'
 
-### In Rails 3, without Bundler
+### In Rails 3 or 4, without Bundler
 
     $ gem install arturo --version="~> 1.0"
 
 ### In Rails 2.3
 
-For Rails 2.3 support, see the
-[`rails_2_3` branch](http://github.com/jamesarosen/arturo/tree/rails_2_3)
-of Arturo.
+Rails 2.3 is no longer supported and has been archived on the
+[`rails_2_3` branch](http://github.com/jamesarosen/arturo/tree/rails_2_3).
 
 ## Configuration
 
