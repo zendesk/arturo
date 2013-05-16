@@ -283,3 +283,9 @@ percentage. See `Arturo::CacheSupport` for more information.
 Arturo gets its name from
 [Professor Maximillian Arturo](http://en.wikipedia.org/wiki/Maximillian_Arturo)
 on [Sliders](http://en.wikipedia.org/wiki/Sliders).
+
+## Quality Metrics
+
+[![Build Status](https://travis-ci.org/jamesarosen/arturo.png?branch=master)](https://travis-ci.org/jamesarosen/arturo)
+
+[![Code Quality](https://codeclimate.com/github/jamesarosen/arturo.png)](https://codeclimate.com/github/jamesarosen/arturo)
