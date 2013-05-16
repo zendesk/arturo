@@ -48,6 +48,16 @@ module Arturo
       end
     end
 
+    # Warms the cache by fetching all `Feature`s and caching them.
+    # This is perfect for use in an initializer.
+    def warm_cache!
+      raise "Cannot warm Feature Cache; caching is disabled" unless caches_features?
+
+      all.each do |feature|
+        feature_cache.write(feature.symbol.to_sym, feature, :expires_in => cache_ttl)
+      end
+    end
+
     protected
 
     # Quack like a Rails cache.

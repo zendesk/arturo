@@ -81,4 +81,13 @@ class CacheTest < ActiveSupport::TestCase
     Arturo::Feature.to_feature(@feature.symbol)
   end
 
+  def test_warm_cache
+    second_feature = create(:feature)
+    Arturo::Feature.warm_cache!
+
+    Arturo::Feature.expects(:where).never
+    assert_equal @feature, Arturo::Feature.to_feature(@feature.symbol)
+    assert_equal second_feature, Arturo::Feature.to_feature(second_feature.symbol)
+  end
+
 end
