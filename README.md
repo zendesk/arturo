@@ -266,11 +266,27 @@ Both check whether the `foo` feature exists and is enabled for `recipient`.
 
 #### Caching
 
-**Note**: Arturo does not yet have caching support. Be very careful when
+**Note**: Arturo has support for caching `Feature` lookups, but doesn't yet
+integrate with Rails's caching. This means you should be very careful when
 caching actions or pages that involve feature detection as you will get
 strange behavior when a user who has access to a feature requests a page
-just after one who does not (and vice versa). The following is the
-**intended** support for caching.
+just after one who does not (and vice versa).
+
+To enable caching `Feature` lookups, mix `Arturo::FeatureCaching` into
+`Arturo::Feature` and set the `cache_ttl`. This is best done in an
+initializer:
+
+    Arturo::Feature.extend(Arturo::FeatureCaching)
+    Arturo::Feature.cache_ttl = 10.minutes
+
+You can also warm the cache on startup:
+
+    Arturo::Feature.warm_cache!
+
+This will pre-fetch all `Feature`s and put them in the cache.
+
+
+The following is the **intended** support for integration with view caching:
 
 Both the `require_feature` before filter and the `if_feature_enabled` block
 evaluation automatically append a string based on the feature's
