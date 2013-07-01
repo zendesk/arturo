@@ -4,12 +4,12 @@
 
     <%= form.label(:symbol) %>
     <%= form.text_field(:symbol, :required => 'required', :pattern => Arturo::Feature::SYMBOL_REGEX.source, :class => 'symbol') %>
-    <%= error_messages_for(feature, :symbol) %>
+    <%= error_messages_for_feature(feature, :symbol) %>
 
     <%= form.label(:deployment_percentage) %>
     <%= form.range_field(:deployment_percentage, :min => '0', :max => '100', :step => '1', :class => 'deployment_percentage') %>
     <%= deployment_percentage_output_tag 'feature_deployment_percentage', feature.deployment_percentage %>
-    <%= error_messages_for(feature, :deployment_percentage) %>
+    <%= error_messages_for_feature(feature, :deployment_percentage) %>
 
     <footer><%= form.submit %></footer>
   </fieldset>
