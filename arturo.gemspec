@@ -2,7 +2,7 @@
 Gem::Specification.new do |gem|
   gem.version = '1.6.0'
   gem.name = 'arturo'
-  gem.files = Dir["lib/**/*", "app/**/*", "config/**/*"] + %w(README.md CHANGELOG.md)
+  gem.files = Dir["lib/**/*", "app/**/*", "config/**/*"] + %w(README.md CHANGELOG.md LICENSE)
   gem.summary = "Feature sliders, wrapped up in an engine"
   gem.description = "Deploy features incrementally to your users"
   gem.license = "APLv2"
