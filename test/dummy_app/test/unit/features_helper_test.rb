@@ -26,9 +26,9 @@ class ArturoFeaturesHelperTest < ActiveSupport::TestCase
     end
   end
 
-  def test_error_messages_for
+  test "error_messages_for_feature" do
     expected = "<ul class=\"errors\"><li class=\"error\">must be less than or equal to 100</li></ul>"
-    actual = error_messages_for(bad_feature, :deployment_percentage)
+    actual = error_messages_for_feature(bad_feature, :deployment_percentage)
 
     assert_equal expected, actual
     assert actual.html_safe?
