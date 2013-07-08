@@ -1,3 +1,10 @@
+## v1.6.1
+
+`Arturo::FeaturesHelper#error_messages_for` has been deprecated in favor of
+`error_messages_for_feature` because it conflicts with a Rails and DynamicForm
+method. It will be removed in v1.7.0. This only affects people who have written
+their own feature-management pages that use this helper.
+
 ## v1.6.0
 
 Formerly, whitelists and blacklists had to be *feature-specific*:
