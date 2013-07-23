@@ -10,3 +10,4 @@ matrix:
   exclude:
     - rvm: 2.0.0
       gemfile: gemfiles/rails3_0.gemfile
+script: "rake test"
