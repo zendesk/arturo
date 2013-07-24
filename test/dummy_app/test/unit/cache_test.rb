@@ -92,7 +92,7 @@ class CacheTest < ActiveSupport::TestCase
 
   def test_cache_warming
     Arturo::Feature.cache_warming_enabled = true
-    Arturo::Feature.expects(:find).once.returns(@feature)
+    Arturo::Feature.expects(:find).never
     Arturo::Feature.expects(:all).once.returns([@feature, Factory(:feature)])
     Arturo::Feature.feature_cache.expects(:write).times(3)
 
@@ -101,11 +101,10 @@ class CacheTest < ActiveSupport::TestCase
 
   def test_cache_warming_enabled
     Arturo::Feature.cache_warming_enabled = true
-    Arturo::Feature.expects(:find).once.returns(@feature)
+    Arturo::Feature.expects(:find).never
     Arturo::Feature.expects(:all).with(:order => "id DESC").once.returns([@feature])
     Arturo::Feature.to_feature(@feature.symbol)
   end
-
 
   def test_cache_warming_disabled
     Arturo::Feature.cache_warming_enabled = false
