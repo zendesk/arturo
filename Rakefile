@@ -34,4 +34,6 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-task :default => :test
+task :default do
+  sh "rake appraisal:install && rake appraisal test"
+end
