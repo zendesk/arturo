@@ -1,5 +1,5 @@
-require 'rubygems'
-require 'rake'
+require 'bundler/setup'
+require 'bump/tasks'
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |t|
@@ -19,17 +19,6 @@ rescue LoadError
   task :rcov do
     abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
   end
-end
-
-require 'rake/rdoctask'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "Betsy #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('Gemfile')
-  rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
 task :default => :test

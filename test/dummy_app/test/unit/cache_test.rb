@@ -5,6 +5,20 @@ class CacheTest < ActiveSupport::TestCase
 
   Arturo::Feature.extend(Arturo::FeatureCaching)
 
+  class StupidCache
+    def initialize
+      @data = {}
+    end
+
+    def read(key)
+      @data[key]
+    end
+
+    def write(key, value, options={})
+      @data[key] = value
+    end
+  end
+
   def setup
     @feature = Factory(:feature)
     Arturo::Feature.cache_ttl = 30.minutes
@@ -27,6 +41,29 @@ class CacheTest < ActiveSupport::TestCase
     Arturo::Feature.expects(:find).once.returns(@feature)
     Arturo::Feature.to_feature(@feature.symbol)
     Arturo::Feature.to_feature(@feature.symbol)
+    Arturo::Feature.to_feature(@feature.symbol)
+  end
+
+  def test_find_hit_cache
+    Arturo::Feature.expects(:find).once.returns(@feature)
+    Arturo::Feature.find_feature(@feature.symbol)
+    Arturo::Feature.find_feature(@feature.symbol)
+    Arturo::Feature.find_feature(@feature.symbol)
+  end
+
+  def test_nils_are_cached
+    Arturo::Feature.expects(:find).once.returns(nil)
+    assert_nil Arturo::Feature.to_feature(:ramen)
+    assert_nil Arturo::Feature.to_feature(:ramen)
+    assert_nil Arturo::Feature.to_feature(:ramen)
+  end
+
+  def test_works_with_other_cache_backend
+    Arturo::Feature.feature_cache = StupidCache.new
+    Arturo::Feature.expects(:find).once.returns(@feature)
+    Arturo::Feature.to_feature(@feature.symbol.to_sym)
+    Arturo::Feature.to_feature(@feature.symbol)
+    Arturo::Feature.to_feature(@feature.symbol.to_sym)
     Arturo::Feature.to_feature(@feature.symbol)
   end
 
@@ -55,20 +92,19 @@ class CacheTest < ActiveSupport::TestCase
 
   def test_cache_warming
     Arturo::Feature.cache_warming_enabled = true
-    Arturo::Feature.expects(:find).once.returns(@feature)
+    Arturo::Feature.expects(:find).never
     Arturo::Feature.expects(:all).once.returns([@feature, Factory(:feature)])
-    Arturo::Feature.feature_cache.expects(:write).twice
+    Arturo::Feature.feature_cache.expects(:write).times(3)
 
     Arturo::Feature.to_feature(@feature.symbol)
   end
 
   def test_cache_warming_enabled
     Arturo::Feature.cache_warming_enabled = true
-    Arturo::Feature.expects(:find).once.returns(@feature)
+    Arturo::Feature.expects(:find).never
     Arturo::Feature.expects(:all).with(:order => "id DESC").once.returns([@feature])
     Arturo::Feature.to_feature(@feature.symbol)
   end
-
 
   def test_cache_warming_disabled
     Arturo::Feature.cache_warming_enabled = false

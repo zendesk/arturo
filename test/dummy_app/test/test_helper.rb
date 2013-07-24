@@ -1,7 +1,8 @@
 ENV["RAILS_ENV"] = "test"
-require 'rubygems'
-require 'bundler'
-Bundler.setup
+require 'bundler/setup'
+require "active_support/core_ext/load_error"
+MissingSourceFile::REGEXPS << [/^cannot load such file -- (.+)$/i, 1]
+
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
 

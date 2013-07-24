@@ -20,6 +20,12 @@ class ArturoFeatureTest < ActiveSupport::TestCase
     assert_nil ::Arturo::Feature.to_feature(:does_not_exist)
   end
 
+  def test_find_feature
+    assert_equal feature, ::Arturo::Feature.find_feature(feature)
+    assert_equal feature, ::Arturo::Feature.find_feature(feature.symbol)
+    assert_nil ::Arturo::Feature.find_feature(:does_not_exist)
+  end
+
   def test_feature_enabled_for_existent_feature
     feature.update_attribute(:deployment_percentage, 100)
     recipient = stub('User', :to_s => 'Paula', :id => 12)
@@ -96,6 +102,11 @@ class ArturoFeatureTest < ActiveSupport::TestCase
     yes = 0
     bunch_of_things.each { |t| yes += 1 if feature.enabled_for?(t) }
     assert_in_delta 0.37 * bunch_of_things.length, yes, 0.02 * bunch_of_things.length
+  end
+
+  def test_returns_false_for_things_with_nil_id
+    feature.deployment_percentage = 99
+    refute feature.enabled_for?(stub(:id => nil))
   end
 
   def test_enabled_for_is_not_identical_across_features
