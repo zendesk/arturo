@@ -40,30 +40,30 @@ module Arturo
     def to_feature_with_caching(feature_or_symbol)
       if !caches_features?
         to_feature_without_caching(feature_or_symbol)
-      elsif (feature_or_symbol.kind_of?(Arturo::Feature))
-        feature_cache.write(feature_or_symbol.symbol.to_sym, feature_or_symbol, :expires_in => cache_ttl)
+      elsif feature_or_symbol.kind_of?(Arturo::Feature)
         feature_or_symbol
-      elsif (cached_feature = feature_cache.read(feature_or_symbol.to_sym))
-        cached_feature
       else
         symbol = feature_or_symbol.to_sym
-        feature = to_feature_without_caching(symbol)
-        feature_cache.write(symbol, feature, :expires_in => cache_ttl)
-        feature
+        cached_features[symbol] || Arturo::NoSuchFeature.new(symbol)
       end
     end
 
-    # Warms the cache by fetching all `Feature`s and caching them.
-    # This is perfect for use in an initializer.
     def warm_cache!
-      raise "Cannot warm Feature Cache; caching is disabled" unless caches_features?
-
-      all.each do |feature|
-        feature_cache.write(feature.symbol.to_sym, feature, :expires_in => cache_ttl)
-      end
+      warn "Deprecated, no longer necessary!"
     end
 
     protected
+
+    def cached_features
+      features = feature_cache.read("arturo.all")
+      if features && (feature_cache.read("arturo.current") || features.values.map(&:updated_at).max == maximum(:updated_at))
+        features
+      else
+        features = Hash[all.map { |f| [f.symbol.to_sym, f] }]
+        feature_cache.write("arturo.current", true, :expires_in => cache_ttl)
+        feature_cache.write("arturo.all", features)
+      end
+    end
 
     # Quack like a Rails cache.
     class Cache
