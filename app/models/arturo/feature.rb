@@ -28,6 +28,10 @@ module Arturo
       self.find(:first, :conditions => { :symbol => feature_or_symbol.to_s })
     end
 
+    def self.find_feature(*args)
+      to_feature(*args)
+    end
+
     # Create a new Feature
     def initialize(attributes = {})
       super(DEFAULT_ATTRIBUTES.merge(attributes || {}))
@@ -76,7 +80,7 @@ module Arturo
 
     def passes_threshold?(feature_recipient)
       threshold = self.deployment_percentage || 0
-      return false if threshold == 0
+      return false if threshold == 0 || !feature_recipient.id
       return true if threshold == 100
       (((feature_recipient.id + (self.id || 1) + 17) * 13) % 100) < threshold
     end
