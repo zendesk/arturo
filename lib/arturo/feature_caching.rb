@@ -30,6 +30,7 @@ module Arturo
       end
       base.cache_ttl = 0
       base.feature_cache = Arturo::FeatureCaching::Cache.new
+      base.caching_strategy = AllStrategy
     end
 
     def caches_features?
@@ -44,7 +45,7 @@ module Arturo
         feature_or_symbol
       else
         symbol = feature_or_symbol.to_sym
-        cached_features[symbol] || Arturo::NoSuchFeature.new(symbol)
+        caching_strategy.call(feature_cache, symbol) || Arturo::NoSuchFeature.new(symbol)
       end
     end
 
@@ -52,16 +53,23 @@ module Arturo
       warn "Deprecated, no longer necessary!"
     end
 
-    protected
+    class AllStrategy
+      def self.call(cache, symbol)
+        features = cache.read("arturo.all")
+        if features && (cache.read("arturo.current") || features.values.map(&:updated_at).max == Arturo::Feature.maximum(:updated_at))
+          features
+        else
+          features = Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
+          cache.write("arturo.current", true, :expires_in => cache_ttl)
+          cache.write("arturo.all", features)
+        end
+        features[symbol]
+      end
+    end
 
-    def cached_features
-      features = feature_cache.read("arturo.all")
-      if features && (feature_cache.read("arturo.current") || features.values.map(&:updated_at).max == maximum(:updated_at))
-        features
-      else
-        features = Hash[all.map { |f| [f.symbol.to_sym, f] }]
-        feature_cache.write("arturo.current", true, :expires_in => cache_ttl)
-        feature_cache.write("arturo.all", features)
+    class OneStrategy
+      def self.call(cache, symbol)
+        cache.read("arturo.#{symbol}")
       end
     end
 
