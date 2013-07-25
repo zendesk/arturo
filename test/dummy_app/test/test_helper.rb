@@ -2,10 +2,12 @@ ENV["RAILS_ENV"] = "test"
 require 'bundler/setup'
 
 require File.expand_path('../../config/environment', __FILE__)
-require 'rails/test_help'
 
 require 'minitest/unit'
+require 'minitest/spec'
 require 'minitest/rg'
+
+require 'rails/test_help'
 
 require 'factory_girl'
 require 'timecop'
@@ -29,6 +31,10 @@ class ActiveSupport::TestCase
     end
     I18n.backend.store_translations I18n.locale, hash
   end
+end
+
+Minitest::Spec.class_eval do
+  include ::FactoryGirl::Syntax::Methods
 end
 
 Arturo::IntegrationTest = defined?(ActionDispatch::IntegrationTest) ?
