@@ -21,9 +21,14 @@ module Arturo
     NO_SUCH_FEATURE = :NO_SUCH_FEATURE
 
     def self.extended(base)
-      class <<base
+      class << base
         alias_method_chain :to_feature, :caching
         attr_accessor :cache_ttl, :feature_cache, :cache_warming_enabled
+      end
+      base.send(:after_save) do |f|
+        if f.class.caches_features?
+          f.class.feature_cache.write(f.symbol.to_sym, f, :expires_in => base.cache_ttl)
+        end
       end
       base.cache_warming_enabled = false
       base.cache_ttl = 0
@@ -50,8 +55,7 @@ module Arturo
       else
         symbol = feature_or_symbol.to_sym
         feature = if cache_warming_enabled?
-          warm_feature_cache
-          feature_cache.read(symbol)
+          warm_feature_cache[feature_or_symbol]
         else
           to_feature_without_caching(feature_or_symbol)
         end
@@ -63,9 +67,9 @@ module Arturo
     protected
 
     def warm_feature_cache
-      all(:order => "id DESC").each do |f|
-        feature_cache.write(f.symbol, f, :expires_in => cache_ttl)
-      end
+      features = Hash[all(:order => "id DESC").map { |f| [f.symbol.to_sym, f] }]
+      features.each { |s,f| feature_cache.write(s, f, :expires_in => cache_ttl) }
+      features
     end
 
     # Quack like a Rails cache.
