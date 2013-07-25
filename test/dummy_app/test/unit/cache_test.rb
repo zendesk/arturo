@@ -6,16 +6,21 @@ class CacheTest < ActiveSupport::TestCase
   Arturo::Feature.extend(Arturo::FeatureCaching)
 
   class StupidCache
-    def initialize
+    def initialize(enabled=true)
+      @enabled = enabled
       @data = {}
     end
 
     def read(key)
-      @data[key]
+      @data[key] if @enabled
     end
 
     def write(key, value, options={})
       @data[key] = value
+    end
+
+    def clear
+      @data.clear
     end
   end
 
@@ -58,6 +63,13 @@ class CacheTest < ActiveSupport::TestCase
     Arturo::Feature.to_feature(@feature.symbol)
   end
 
+  def test_works_with_inconsistent_cache_backend
+    Arturo::Feature.feature_cache = StupidCache.new(false)
+    Arturo::Feature.expects(:where).twice.returns([@feature])
+    Arturo::Feature.to_feature(@feature.symbol.to_sym)
+    Arturo::Feature.to_feature(@feature.symbol.to_sym)
+  end
+
   def test_clear_cache
     Arturo::Feature.to_feature(@feature.symbol)
     Arturo::Feature.feature_cache.clear
@@ -90,4 +102,13 @@ class CacheTest < ActiveSupport::TestCase
     assert_equal second_feature, Arturo::Feature.to_feature(second_feature.symbol)
   end
 
+  def test_expires_cache_on_enable_or_disable
+    refute_equal 100, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
+
+    Arturo.enable_feature!(@feature.symbol)
+    assert_equal 100, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
+
+    Arturo.disable_feature!(@feature.symbol)
+    assert_equal 0, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
+  end
 end

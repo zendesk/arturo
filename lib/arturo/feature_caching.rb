@@ -19,9 +19,14 @@ module Arturo
   module FeatureCaching
 
     def self.extended(base)
-      class <<base
+      class << base
         alias_method_chain :to_feature, :caching
         attr_accessor :cache_ttl, :feature_cache
+      end
+      base.send(:after_save) do |f|
+        if f.class.caches_features?
+          f.class.feature_cache.write(f.symbol.to_sym, f, :expires_in => base.cache_ttl)
+        end
       end
       base.cache_ttl = 0
       base.feature_cache = Arturo::FeatureCaching::Cache.new
