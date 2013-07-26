@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency      'rails',        '> 3.0', '< 5.0'
   gem.add_development_dependency  'mocha'
   gem.add_development_dependency  'rake'
+  gem.add_development_dependency  'minitest', '< 5'
   gem.add_development_dependency  'minitest-rg'
   gem.add_development_dependency  'sqlite3'
   gem.add_development_dependency  'factory_girl', '~> 4.2'
