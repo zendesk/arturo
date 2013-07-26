@@ -1,8 +1,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 require 'arturo/features_helper'
 
-class CacheTest < ActiveSupport::TestCase
-
+describe "caching" do
   Arturo::Feature.extend(Arturo::FeatureCaching)
 
   class StupidCache
@@ -15,6 +14,10 @@ class CacheTest < ActiveSupport::TestCase
       @data[key] if @enabled
     end
 
+    def delete(key)
+      @data.delete(key)
+    end
+
     def write(key, value, options={})
       @data[key] = value
     end
@@ -24,115 +27,139 @@ class CacheTest < ActiveSupport::TestCase
     end
   end
 
-  def setup
+  before do
     @feature = Factory(:feature)
     Arturo::Feature.cache_ttl = 30.minutes
-    Arturo::Feature.cache_warming_enabled = false
-    Arturo::Feature.feature_cache.clear
+    Arturo::Feature.feature_cache = Arturo::FeatureCaching::Cache.new
   end
 
-  def teardown
-    Arturo::Feature.cache_warming_enabled = false
+  after do
     Arturo::Feature.cache_ttl = 0 # turn off for other tests
     Timecop.return
   end
 
-  def test_first_load_hits_database
-    Arturo::Feature.expects(:find).once.returns(@feature)
-    Arturo::Feature.to_feature(@feature.symbol)
+  # Rails 4 calls all when calling maximum :/
+  def lock_down_maximum
+    m = Arturo::Feature.maximum(:updated_at)
+    Arturo::Feature.stubs(:maximum).returns(m)
   end
 
-  def test_subsequent_loads_within_ttl_hit_cache
-    Arturo::Feature.expects(:find).once.returns(@feature)
-    Arturo::Feature.to_feature(@feature.symbol)
-    Arturo::Feature.to_feature(@feature.symbol)
-    Arturo::Feature.to_feature(@feature.symbol)
+  [Arturo::FeatureCaching::OneStrategy, Arturo::FeatureCaching::AllStrategy].each do |strategy|
+    describe "with #{strategy}" do
+      let(:method) { strategy == Arturo::FeatureCaching::OneStrategy ? :find : :all }
+
+      before do
+        Arturo::Feature.feature_caching_strategy = strategy
+      end
+
+      it "hits db on first load" do
+        Arturo::Feature.expects(method).once.returns([@feature])
+        Arturo::Feature.to_feature(@feature.symbol)
+      end
+
+      it "caches missing features" do
+        Arturo::Feature.expects(method).once.returns( strategy == Arturo::FeatureCaching::OneStrategy ? nil : [])
+        assert_nil Arturo::Feature.to_feature(:ramen)
+        assert_nil Arturo::Feature.to_feature(:ramen)
+        assert_nil Arturo::Feature.to_feature(:ramen)
+      end
+
+      it "works with other cache backends" do
+        Arturo::Feature.feature_cache = StupidCache.new
+        Arturo::Feature.expects(method).once.returns([@feature])
+        Arturo::Feature.to_feature(@feature.symbol.to_sym)
+        Arturo::Feature.to_feature(@feature.symbol)
+        Arturo::Feature.to_feature(@feature.symbol.to_sym)
+        Arturo::Feature.to_feature(@feature.symbol)
+      end
+
+      it "works with inconsistent cache backend" do
+        Arturo::Feature.feature_cache = StupidCache.new(false)
+        Arturo::Feature.expects(method).twice.returns([@feature])
+        Arturo::Feature.to_feature(@feature.symbol.to_sym)
+        Arturo::Feature.to_feature(@feature.symbol.to_sym)
+      end
+
+      it "can clear the cache" do
+        Arturo::Feature.to_feature(@feature.symbol)
+        Arturo::Feature.feature_cache.clear
+        Arturo::Feature.expects(method).once.returns([@feature])
+        Arturo::Feature.to_feature(@feature.symbol)
+      end
+
+      it "can turn off caching" do
+        Arturo::Feature.cache_ttl = 0
+        Arturo::Feature.expects(:find).twice.returns([@feature])
+        Arturo::Feature.to_feature(@feature.symbol)
+        Arturo::Feature.to_feature(@feature.symbol)
+      end
+
+      it "does not expire when inside cache ttl" do
+        Arturo::Feature.to_feature(@feature.symbol)
+        Arturo::Feature.expects(method).never
+
+        Timecop.travel(Time.now + Arturo::Feature.cache_ttl - 5.seconds)
+        Arturo::Feature.to_feature(@feature.symbol)
+      end
+
+      it "expires when outside of cache ttl" do
+        Arturo::Feature.to_feature(@feature.symbol)
+        Arturo::Feature.expects(method).once.returns([@feature])
+
+        Timecop.travel(Time.now + Arturo::Feature.cache_ttl * 3)
+        Arturo::Feature.to_feature(@feature.symbol)
+      end
+
+      it "expires cache on enable or disable" do
+        refute_equal 100, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
+
+        Arturo.enable_feature!(@feature.symbol)
+        assert_equal 100, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
+
+        Arturo.disable_feature!(@feature.symbol)
+        assert_equal 0, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
+      end
+    end
   end
 
-  def test_find_hit_cache
-    Arturo::Feature.expects(:find).once.returns(@feature)
-    Arturo::Feature.find_feature(@feature.symbol)
-    Arturo::Feature.find_feature(@feature.symbol)
-    Arturo::Feature.find_feature(@feature.symbol)
-  end
+  describe "with AllStrategy" do
+    before do
+      Arturo::Feature.feature_caching_strategy = Arturo::FeatureCaching::AllStrategy
+    end
 
-  def test_nils_are_cached
-    Arturo::Feature.expects(:find).once.returns(nil)
-    assert_nil Arturo::Feature.to_feature(:ramen)
-    assert_nil Arturo::Feature.to_feature(:ramen)
-    assert_nil Arturo::Feature.to_feature(:ramen)
-  end
+    it "caches all features in one cache" do
+      Arturo::Feature.expects(:all).once.returns([])
+      assert_nil Arturo::Feature.to_feature(:ramen)
+      assert_nil Arturo::Feature.to_feature(:amen)
+      assert_nil Arturo::Feature.to_feature(:laymen)
+    end
 
-  def test_works_with_other_cache_backend
-    Arturo::Feature.feature_cache = StupidCache.new
-    Arturo::Feature.expects(:find).once.returns(@feature)
-    Arturo::Feature.to_feature(@feature.symbol.to_sym)
-    Arturo::Feature.to_feature(@feature.symbol)
-    Arturo::Feature.to_feature(@feature.symbol.to_sym)
-    Arturo::Feature.to_feature(@feature.symbol)
-  end
+    it "does not expire when inside cache ttl" do
+      Arturo::Feature.to_feature(@feature.symbol)
+      lock_down_maximum
+      Arturo::Feature.expects(:all).never
 
-  def test_works_with_inconsistent_cache_backend
-    Arturo::Feature.feature_cache = StupidCache.new(false)
-    Arturo::Feature.expects(:find).twice.returns(@feature)
-    Arturo::Feature.to_feature(@feature.symbol.to_sym)
-    Arturo::Feature.to_feature(@feature.symbol.to_sym)
-  end
+      Timecop.travel(Time.now + Arturo::Feature.cache_ttl - 5.seconds)
+      Arturo::Feature.to_feature(@feature.symbol)
+    end
 
-  def test_clear_cache
-    Arturo::Feature.to_feature(@feature.symbol)
-    Arturo::Feature.feature_cache.clear
-    Arturo::Feature.expects(:find).once.returns(@feature)
-    Arturo::Feature.to_feature(@feature.symbol)
-  end
+    it "does not expire when outside of cache ttl and fresh" do
+      Arturo::Feature.to_feature(@feature.symbol)
+      lock_down_maximum
+      Arturo::Feature.expects(:all).never
 
-  def test_turn_off_caching
-    Arturo::Feature.cache_ttl = 0
-    Arturo::Feature.expects(:find).twice.returns(@feature)
-    Arturo::Feature.to_feature(@feature.symbol)
-    Arturo::Feature.to_feature(@feature.symbol)
-  end
+      Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
+      Arturo::Feature.to_feature(@feature.symbol)
+    end
 
-  def test_ttl_expiry
-    Arturo::Feature.to_feature(@feature.symbol)
-    Arturo::Feature.expects(:find).once.returns(@feature)
-    Timecop.travel(Time.now + Arturo::Feature.cache_ttl - 5.seconds)
-    Arturo::Feature.to_feature(@feature.symbol)
-    Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
-    Arturo::Feature.to_feature(@feature.symbol)
-  end
+    it "expires when outside of cache ttl and stale" do
+      Arturo::Feature.to_feature(@feature.symbol)
+      @feature.touch
+      lock_down_maximum
+      Arturo::Feature.expects(:all).once.returns([@feature])
 
-  def test_cache_warming
-    Arturo::Feature.cache_warming_enabled = true
-    Arturo::Feature.expects(:find).never
-    Arturo::Feature.expects(:all).once.returns([@feature, Factory(:feature)])
-    Arturo::Feature.feature_cache.expects(:write).times(3)
-
-    Arturo::Feature.to_feature(@feature.symbol)
-  end
-
-  def test_cache_warming_enabled
-    Arturo::Feature.cache_warming_enabled = true
-    Arturo::Feature.expects(:find).never
-    Arturo::Feature.expects(:all).with(:order => "id DESC").once.returns([@feature])
-    Arturo::Feature.to_feature(@feature.symbol)
-  end
-
-  def test_cache_warming_disabled
-    Arturo::Feature.cache_warming_enabled = false
-    Arturo::Feature.expects(:find).once.returns(@feature)
-    Arturo::Feature.expects(:all).never
-    Arturo::Feature.feature_cache.expects(:write).with(@feature.symbol, @feature, :expires_in => Arturo::Feature.cache_ttl)
-    Arturo::Feature.to_feature(@feature.symbol)
-  end
-
-  def test_expires_cache_on_enable_or_disable
-    refute_equal 100, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
-
-    Arturo.enable_feature!(@feature.symbol)
-    assert_equal 100, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
-
-    Arturo.disable_feature!(@feature.symbol)
-    assert_equal 0, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
+      Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
+      Arturo::Feature.to_feature(@feature.symbol)
+    end
   end
 end
