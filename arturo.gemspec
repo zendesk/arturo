@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.has_rdoc = 'false'
   gem.specification_version = 2
 
-  private_key_path = File.expand_path("~/.ssh/gem-private_key.pem")
+  private_key_path = File.expand_path("~/.ssh/rubgems/arturo-private_key.pem")
   gem.signing_key = private_key_path if File.exists?(private_key_path)
   gem.cert_chain = [ "gem-public_cert.pem" ]
 
