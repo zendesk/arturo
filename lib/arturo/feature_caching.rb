@@ -52,20 +52,35 @@ module Arturo
     end
 
     class AllStrategy
-      def self.fetch(cache, symbol, &block)
-        features = cache.read("arturo.all")
-        if features && (cache.read("arturo.current") || features.values.map(&:updated_at).max == Arturo::Feature.maximum(:updated_at))
-          features
-        else
-          features = Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
-          cache.write("arturo.current", true, :expires_in => Arturo::Feature.cache_ttl)
-          cache.write("arturo.all", features, :expires_in => Arturo::Feature.cache_ttl * 2)
-        end
-        features[symbol] || Arturo::NoSuchFeature.new(symbol)
-      end
+      class << self
+        def fetch(cache, symbol, &block)
+          features = cache.read("arturo.all")
 
-      def self.expire(cache, symbol)
-        cache.delete("arturo.all")
+          unless cache_is_current?(cache, features)
+            features = Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
+            mark_as_current!(cache)
+            cache.write("arturo.all", features, :expires_in => Arturo::Feature.cache_ttl * 10)
+          end
+
+          features[symbol] || Arturo::NoSuchFeature.new(symbol)
+        end
+
+        def expire(cache, symbol)
+          cache.delete("arturo.all")
+        end
+
+        private
+
+        def cache_is_current?(cache, features)
+          return unless features
+          return true if cache.read("arturo.current")
+          return false if features.values.map(&:updated_at).max != Arturo::Feature.maximum(:updated_at)
+          mark_as_current!(cache)
+        end
+
+        def mark_as_current!(cache)
+          cache.write("arturo.current", true, :expires_in => Arturo::Feature.cache_ttl)
+        end
       end
     end
 
