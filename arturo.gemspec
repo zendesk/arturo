@@ -14,9 +14,10 @@ Gem::Specification.new do |gem|
   gem.has_rdoc = 'false'
   gem.specification_version = 2
 
-  private_key_path = File.expand_path("~/.ssh/gem-private_key.pem")
-  gem.signing_key = private_key_path if File.exists?(private_key_path)
-  gem.cert_chain = [ "gem-public_cert.pem" ]
+  if ENV["USER"] == "james"
+    gem.signing_key = File.expand_path("~/.ssh/gem-private_key.pem")
+    gem.cert_chain = [ "gem-public_cert.pem" ]
+  end
 
   gem.add_runtime_dependency      'rails',        '> 3.0', '< 5.0'
   gem.add_development_dependency  'mocha'
