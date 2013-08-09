@@ -181,5 +181,13 @@ describe "caching" do
       Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
       Arturo::Feature.to_feature(@feature.symbol)
     end
+
+    it "does not crash on nil updated_at" do
+      @feature.class.update_all({:updated_at => nil}, :id => @feature.id)
+      Factory(:feature)
+      Arturo::Feature.to_feature(@feature.symbol)
+      Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
+      Arturo::Feature.to_feature(@feature.symbol)
+    end
   end
 end
