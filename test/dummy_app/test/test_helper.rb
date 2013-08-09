@@ -4,6 +4,9 @@ require "active_support/core_ext/load_error"
 MissingSourceFile::REGEXPS << [/^cannot load such file -- (.+)$/i, 1]
 
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
+require 'minitest/autorun'
+require 'minitest/spec'
+require 'minitest/rg'
 require 'test_help'
 
 require 'mocha'
