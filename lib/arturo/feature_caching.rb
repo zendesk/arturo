@@ -23,53 +23,82 @@ module Arturo
     def self.extended(base)
       class << base
         alias_method_chain :to_feature, :caching
-        attr_accessor :cache_ttl, :feature_cache, :cache_warming_enabled
+        attr_accessor :cache_ttl, :feature_cache, :feature_caching_strategy
       end
       base.send(:after_save) do |f|
-        if f.class.caches_features?
-          f.class.feature_cache.write(f.symbol.to_sym, f, :expires_in => base.cache_ttl)
-        end
+        f.class.feature_caching_strategy.expire(f.class.feature_cache, f.symbol.to_sym) if f.class.caches_features?
       end
-      base.cache_warming_enabled = false
       base.cache_ttl = 0
       base.feature_cache = Arturo::FeatureCaching::Cache.new
+      base.feature_caching_strategy = AllStrategy
     end
 
     def caches_features?
       self.cache_ttl.to_i > 0
     end
 
-    def cache_warming_enabled?
-      caches_features? && (true == cache_warming_enabled)
-    end
-
     # Wraps Arturo::Feature.to_feature with in-memory caching.
     def to_feature_with_caching(feature_or_symbol)
-      if !self.caches_features?
-        return to_feature_without_caching(feature_or_symbol)
-      elsif (feature_or_symbol.kind_of?(Arturo::Feature))
-        feature_cache.write(feature_or_symbol.symbol.to_sym, feature_or_symbol, :expires_in => cache_ttl)
+      if !caches_features?
+        to_feature_without_caching(feature_or_symbol)
+      elsif feature_or_symbol.kind_of?(Arturo::Feature)
         feature_or_symbol
-      elsif (cached_feature = feature_cache.read(feature_or_symbol.to_sym))
-        cached_feature == NO_SUCH_FEATURE ? nil : cached_feature
       else
         symbol = feature_or_symbol.to_sym
-        feature = if cache_warming_enabled?
-          warm_feature_cache[feature_or_symbol]
-        else
-          to_feature_without_caching(feature_or_symbol)
-        end
-        feature_cache.write(symbol, feature || NO_SUCH_FEATURE, :expires_in => cache_ttl)
-        feature
+        feature = feature_caching_strategy.fetch(feature_cache, symbol) { to_feature_without_caching(symbol) }
+        feature unless feature == NO_SUCH_FEATURE
       end
     end
 
-    protected
+    def warm_cache!
+      warn "Deprecated, no longer necessary!"
+    end
 
-    def warm_feature_cache
-      features = Hash[all(:order => "id DESC").map { |f| [f.symbol.to_sym, f] }]
-      features.each { |s,f| feature_cache.write(s, f, :expires_in => cache_ttl) }
-      features
+    class AllStrategy
+      class << self
+        def fetch(cache, symbol, &block)
+          features = cache.read("arturo.all")
+
+          unless cache_is_current?(cache, features)
+            features = Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
+            mark_as_current!(cache)
+            cache.write("arturo.all", features, :expires_in => Arturo::Feature.cache_ttl * 10)
+          end
+
+          features[symbol] || NO_SUCH_FEATURE
+        end
+
+        def expire(cache, symbol)
+          cache.delete("arturo.all")
+        end
+
+        private
+
+        def cache_is_current?(cache, features)
+          return unless features
+          return true if cache.read("arturo.current")
+          return false if features.values.map(&:updated_at).compact.max != Arturo::Feature.maximum(:updated_at)
+          mark_as_current!(cache)
+        end
+
+        def mark_as_current!(cache)
+          cache.write("arturo.current", true, :expires_in => Arturo::Feature.cache_ttl)
+        end
+      end
+    end
+
+    class OneStrategy
+      def self.fetch(cache, symbol, &block)
+        if feature = cache.read("arturo.#{symbol}")
+          feature
+        else
+          cache.write("arturo.#{symbol}", yield || NO_SUCH_FEATURE, :expires_in => Arturo::Feature.cache_ttl)
+        end
+      end
+
+      def self.expire(cache, symbol)
+        cache.delete("arturo.#{symbol}")
+      end
     end
 
     # Quack like a Rails cache.
@@ -77,8 +106,8 @@ module Arturo
       def initialize
         @data = {} # of the form {key => [value, expires_at or nil]}
       end
+
       def read(name, options = nil)
-        name = name.to_s
         value, expires_at = *@data[name]
         if value && (expires_at.blank? || expires_at > Time.now)
           value
@@ -86,8 +115,12 @@ module Arturo
           nil
         end
       end
+
+      def delete(name)
+        @data.delete(name)
+      end
+
       def write(name, value, options = nil)
-        name = name.to_s
         expires_at = if options && options.respond_to?(:[]) && options[:expires_in]
           Time.now + options.delete(:expires_in)
         else
@@ -97,6 +130,7 @@ module Arturo
           @data[name] = [value, expires_at]
         end
       end
+
       def clear
         @data.clear
       end
