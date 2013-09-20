@@ -106,7 +106,7 @@ describe "caching" do
         Arturo::Feature.to_feature(@feature.symbol)
         Arturo::Feature.expects(method).once.returns([@feature])
 
-        Timecop.travel(Time.now + Arturo::Feature.cache_ttl * 3)
+        Timecop.travel(Time.now + Arturo::Feature.cache_ttl * 12)
         Arturo::Feature.to_feature(@feature.symbol)
       end
 
@@ -128,6 +128,7 @@ describe "caching" do
     end
 
     it "caches all features in one cache" do
+      Arturo::Feature.expects(:maximum).never
       Arturo::Feature.expects(:all).once.returns([])
       assert_kind_of Arturo::NoSuchFeature, Arturo::Feature.to_feature(:ramen)
       assert_kind_of Arturo::NoSuchFeature, Arturo::Feature.to_feature(:amen)
@@ -136,20 +137,39 @@ describe "caching" do
 
     it "does not expire when inside cache ttl" do
       Arturo::Feature.to_feature(@feature.symbol)
-      lock_down_maximum
+      Arturo::Feature.expects(:maximum).never
       Arturo::Feature.expects(:all).never
 
       Timecop.travel(Time.now + Arturo::Feature.cache_ttl - 5.seconds)
       Arturo::Feature.to_feature(@feature.symbol)
     end
 
-    it "does not expire when outside of cache ttl and fresh" do
+    it "expires when only feature-cache is empty" do
       Arturo::Feature.to_feature(@feature.symbol)
-      lock_down_maximum
-      Arturo::Feature.expects(:all).never
+      Arturo::Feature.expects(:maximum).never
+      Arturo::Feature.expects(:all).returns([])
 
-      Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
+      Arturo::Feature.feature_cache.delete("arturo.all")
       Arturo::Feature.to_feature(@feature.symbol)
+    end
+
+    describe "when outside of cache ttl and fresh" do
+      before do
+        Arturo::Feature.to_feature(@feature.symbol)
+        lock_down_maximum
+        Arturo::Feature.expects(:all).never
+
+        Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
+        Arturo::Feature.to_feature(@feature.symbol)
+      end
+
+      it("does not expire"){}
+
+      it "does not ask for updated_at after finding out it's fresh" do
+        Arturo::Feature.unstub(:maximum)
+        Arturo::Feature.expects(:maximum).never
+        Arturo::Feature.to_feature(@feature.symbol)
+      end
     end
 
     it "expires when outside of cache ttl and stale" do
@@ -158,6 +178,14 @@ describe "caching" do
       lock_down_maximum
       Arturo::Feature.expects(:all).once.returns([@feature])
 
+      Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
+      Arturo::Feature.to_feature(@feature.symbol)
+    end
+
+    it "does not crash on nil updated_at" do
+      @feature.class.update_all({:updated_at => nil}, :id => @feature.id)
+      create(:feature)
+      Arturo::Feature.to_feature(@feature.symbol)
       Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
       Arturo::Feature.to_feature(@feature.symbol)
     end
