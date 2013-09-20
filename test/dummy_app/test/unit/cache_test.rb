@@ -163,7 +163,7 @@ describe "caching" do
         Arturo::Feature.to_feature(@feature.symbol)
       end
 
-      it("does not expires"){}
+      it("does not expire"){}
 
       it "does not ask for updated_at after finding out it's fresh" do
         Arturo::Feature.unstub(:maximum)
