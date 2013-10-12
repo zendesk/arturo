@@ -8,7 +8,6 @@ if (typeof(jQuery) === 'function') {
           var output = jQuery(output);
           var input = jQuery('#' + output.attr('for'));
           input.change(function() {
-            console.log('input value changed to ' + input.val());
             output.val(input.val());
           });
           output.removeClass('no_js');
@@ -16,7 +15,7 @@ if (typeof(jQuery) === 'function') {
       }
     }
   };
-  
+
   jQuery(function() {
     jQuery.arturo.linkAndShowOutputs();
   });
