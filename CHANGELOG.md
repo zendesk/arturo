@@ -1,3 +1,13 @@
+## v1.8.0
+
+Improvement: "All" caching strategy is now smarter about its use of the
+`update_at` attribute. It handles the case when a Feature's `updated_at` is
+`nil` and queries the database less often to figure out whether any features
+have changed.
+
+Bug fix: the engine's `source_root` relied on its `root_path`, which is not
+available on all versions of Rails.
+
 ## v1.7.0
 
 `Arturo::FeaturesHelper#error_messages_for` has been removed. This only affects
