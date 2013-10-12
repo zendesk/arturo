@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    arturo (0.2.4)
+    arturo (0.2.3.8)
       rails (~> 2.3.8)
 
 GEM
