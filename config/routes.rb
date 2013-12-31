@@ -8,6 +8,6 @@ if Rails::VERSION::MAJOR == 3 && Rails::VERSION::MINOR == 0
 else
   Arturo::Engine.routes.draw do
     resources :features, :controller => 'arturo/features'
-    put 'features', :to => 'arturo/features#update_all', :as => 'features'
+    put 'features', :to => 'arturo/features#update_all', :as => 'features_update_all'
   end
 end
