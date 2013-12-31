@@ -111,8 +111,6 @@ describe "caching" do
       end
 
       it "expires cache on enable or disable" do
-        refute_equal 100, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
-
         Arturo.enable_feature!(@feature.symbol)
         assert_equal 100, Arturo::Feature.to_feature(@feature.symbol).deployment_percentage
 
