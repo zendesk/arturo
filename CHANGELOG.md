@@ -1,3 +1,16 @@
+## v1.9.0
+
+Improvement: `Arturo::Feature` is defined in `lib/arturo/feature.rb` instead of
+`app/models/arturo/feature.rb`, which means consuming applications can load it
+without loading the whole engine.
+
+Improvement: `Arturo::Engine` no longer eagerly loads all engine files; instead,
+it uses Rails's `autoload_paths` to ensure classes are loaded as necessary.
+
+Bug fix: the route to `arturo/features_controller#update_all` is now called
+`features_update_all`; it had been called simply `features`, which caused
+conflict problems in Rails 4.0.
+
 ## v1.8.0
 
 Improvement: "All" caching strategy is now smarter about its use of the
