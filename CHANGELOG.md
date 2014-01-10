@@ -1,3 +1,10 @@
+## v1.10.0
+
+Improvement: Arturo no longer declares a hard runtime dependency on Rails, but
+instead only on ActiveRecord. This makes it possible to use `Arturo::Feature`
+in non-Rails settings. Feature *management* is still expressed as a Rails engine
+and requires `actionpack` and other parts of Rails.
+
 ## v1.9.0
 
 Improvement: `Arturo::Feature` is defined in `lib/arturo/feature.rb` instead of
