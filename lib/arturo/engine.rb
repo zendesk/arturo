@@ -1,3 +1,6 @@
+require 'arturo/controller_filters'
+require 'arturo/middleware'
+
 module Arturo
   class Engine < ::Rails::Engine
     ActiveSupport.on_load(:action_controller) do
