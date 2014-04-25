@@ -26,7 +26,7 @@ module Arturo
     # @return [Arturo::Feature, nil] the Feature if found, else Arturo::NoSuchFeature
     def self.to_feature(feature_or_symbol)
       return feature_or_symbol if feature_or_symbol.kind_of?(self)
-      symbol = feature_or_symbol.to_s
+      symbol = feature_or_symbol.to_sym.to_s
       self.where(:symbol => symbol).first || Arturo::NoSuchFeature.new(symbol)
     end
 
