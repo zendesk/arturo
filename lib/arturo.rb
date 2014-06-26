@@ -25,6 +25,7 @@ module Arturo
 
     def method_missing(symbol, *args, &block)
       if (args.length == 1 && match = ENABLED_FOR_METHOD_NAME.match(symbol.to_s))
+        warn "Arturos FEATURE_enabled_for?(OBJECT) methods are going away, use feature_enabled_for?(FEATURE, OBJECT)"
         feature_enabled_for?(match[1], args[0])
       else
         super(symbol, *args, &block)
