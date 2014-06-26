@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.signing_key = private_key_path if File.exists?(private_key_path)
   gem.cert_chain = [ "gem-public_cert.pem" ]
 
-  gem.add_runtime_dependency      'activerecord', '> 3.0', '< 5.0'
+  gem.add_runtime_dependency      'activerecord', '> 3.2', '< 5.0'
   gem.add_development_dependency  'rails'
   gem.add_development_dependency  'mocha'
   gem.add_development_dependency  'rake'
