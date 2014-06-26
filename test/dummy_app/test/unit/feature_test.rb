@@ -36,12 +36,6 @@ class ArturoFeatureTest < ActiveSupport::TestCase
     refute ::Arturo.feature_enabled_for?(:does_not_exist, 'Paula')
   end
 
-  def test_x_enabled_for
-    @feature = create(:feature, :deployment_percentage => 100, :symbol => :foo)
-    recipient = stub('User', :to_s => 'Paula', :id => 12)
-    assert ::Arturo.foo_enabled_for?(recipient), "#{feature} should be enabled for #{recipient}"
-  end
-
   def test_requires_a_symbol
     feature.symbol = nil
     refute feature.valid?
