@@ -49,19 +49,17 @@ class ArturoFeatureTest < ActiveSupport::TestCase
   end
 
   def test_last_updated_at
-    Timecop.travel(Time.local(2008, 9, 1, 12, 0, 0))
-    feature1 = create(:feature)
+    Arturo::Feature.delete_all
 
+    Timecop.freeze(Time.local(2008, 9, 1, 12, 0, 0)) { create(:feature) }
     updated_at = Time.local(2011, 9, 1, 12, 0, 0)
 
-    Timecop.freeze(updated_at) do
-      feature2 = create(:feature)
-    end
-
+    Timecop.freeze(updated_at) { create(:feature) }
     assert_equal updated_at, Arturo::Feature.last_updated_at
   end
 
   def test_last_updated_at_with_no_features
+    Arturo::Feature.delete_all
     assert_nil Arturo::Feature.last_updated_at
   end
 
