@@ -1,7 +1,6 @@
-require 'rubygems'
 require 'bundler/setup'
 require 'rake'
-require 'appraisal'
+require 'wwtd/tasks'
 
 require 'rake/testtask'
 Rake::TestTask.new do |t|
@@ -34,6 +33,4 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-task :default do
-  sh "rake appraisal:install && rake appraisal test"
-end
+task :default => "wwtd:local"
