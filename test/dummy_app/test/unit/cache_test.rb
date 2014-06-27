@@ -46,19 +46,19 @@ describe "caching" do
 
   [Arturo::FeatureCaching::OneStrategy, Arturo::FeatureCaching::AllStrategy].each do |strategy|
     describe "with #{strategy}" do
-      let(:method) { strategy == Arturo::FeatureCaching::OneStrategy ? :where : :all }
+      let(:feature_method) { strategy == Arturo::FeatureCaching::OneStrategy ? :where : :all }
 
       before do
         Arturo::Feature.feature_caching_strategy = strategy
       end
 
       it "hits db on first load" do
-        Arturo::Feature.expects(method).once.returns([@feature])
+        Arturo::Feature.expects(feature_method).once.returns([@feature])
         Arturo::Feature.to_feature(@feature.symbol)
       end
 
       it "caches missing features" do
-        Arturo::Feature.expects(method).once.returns([])
+        Arturo::Feature.expects(feature_method).once.returns([])
         assert_kind_of Arturo::NoSuchFeature, Arturo::Feature.to_feature(:ramen)
         assert_kind_of Arturo::NoSuchFeature, Arturo::Feature.to_feature(:ramen)
         assert_kind_of Arturo::NoSuchFeature, Arturo::Feature.to_feature(:ramen)
@@ -66,7 +66,7 @@ describe "caching" do
 
       it "works with other cache backends" do
         Arturo::Feature.feature_cache = StupidCache.new
-        Arturo::Feature.expects(method).once.returns([@feature])
+        Arturo::Feature.expects(feature_method).once.returns([@feature])
         Arturo::Feature.to_feature(@feature.symbol.to_sym)
         Arturo::Feature.to_feature(@feature.symbol)
         Arturo::Feature.to_feature(@feature.symbol.to_sym)
@@ -75,7 +75,7 @@ describe "caching" do
 
       it "works with inconsistent cache backend" do
         Arturo::Feature.feature_cache = StupidCache.new(false)
-        Arturo::Feature.expects(method).twice.returns([@feature])
+        Arturo::Feature.expects(feature_method).twice.returns([@feature])
         Arturo::Feature.to_feature(@feature.symbol.to_sym)
         Arturo::Feature.to_feature(@feature.symbol.to_sym)
       end
@@ -83,7 +83,7 @@ describe "caching" do
       it "can clear the cache" do
         Arturo::Feature.to_feature(@feature.symbol)
         Arturo::Feature.feature_cache.clear
-        Arturo::Feature.expects(method).once.returns([@feature])
+        Arturo::Feature.expects(feature_method).once.returns([@feature])
         Arturo::Feature.to_feature(@feature.symbol)
       end
 
@@ -96,7 +96,7 @@ describe "caching" do
 
       it "does not expire when inside cache ttl" do
         Arturo::Feature.to_feature(@feature.symbol)
-        Arturo::Feature.expects(method).never
+        Arturo::Feature.expects(feature_method).never
 
         Timecop.travel(Time.now + Arturo::Feature.cache_ttl - 5.seconds)
         Arturo::Feature.to_feature(@feature.symbol)
@@ -104,7 +104,7 @@ describe "caching" do
 
       it "expires when outside of cache ttl" do
         Arturo::Feature.to_feature(@feature.symbol)
-        Arturo::Feature.expects(method).once.returns([@feature])
+        Arturo::Feature.expects(feature_method).once.returns([@feature])
 
         Timecop.travel(Time.now + Arturo::Feature.cache_ttl * 12)
         Arturo::Feature.to_feature(@feature.symbol)
@@ -181,7 +181,7 @@ describe "caching" do
     end
 
     it "does not crash on nil updated_at" do
-      @feature.class.update_all({:updated_at => nil}, :id => @feature.id)
+      @feature.class.where(:id => @feature.id).update_all(:updated_at => nil)
       create(:feature)
       Arturo::Feature.to_feature(@feature.symbol)
       Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)

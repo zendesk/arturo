@@ -3,8 +3,7 @@ require 'bundler/setup'
 
 require File.expand_path('../../config/environment', __FILE__)
 
-require 'minitest/unit'
-require 'minitest/spec'
+require 'minitest/autorun'
 require 'minitest/rg'
 
 require 'rails/test_help'
