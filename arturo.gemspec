@@ -27,5 +27,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency  'sqlite3'
   gem.add_development_dependency  'factory_girl', '~> 4.2'
   gem.add_development_dependency  'timecop',      '~> 0.3'
-  gem.add_development_dependency  'appraisal',    '~> 0.5'
+  gem.add_development_dependency  'wwtd'
 end
