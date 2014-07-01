@@ -1,3 +1,11 @@
+## v2.0.0
+
+Bug fix: add missing require to initializer.
+
+Improvement: Remove support for `[feature]_enabled_for?` methods.
+
+Improvement: Use more specific gem versions for development dependencies.
+
 ## v1.11.0
 
 Depreaction: `[feature]_enabled_for?` methods
