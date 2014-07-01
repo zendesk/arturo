@@ -19,13 +19,13 @@ Gem::Specification.new do |gem|
   gem.cert_chain = [ "gem-public_cert.pem" ]
 
   gem.add_runtime_dependency      'activerecord', '> 3.2', '< 5.0'
-  gem.add_development_dependency  'rails'
-  gem.add_development_dependency  'mocha'
-  gem.add_development_dependency  'rake'
-  gem.add_development_dependency  'minitest'
-  gem.add_development_dependency  'minitest-rg'
-  gem.add_development_dependency  'sqlite3'
+  gem.add_development_dependency  'rails',        '> 3.2', '< 5.0'
+  gem.add_development_dependency  'mocha',        '~> 1.1'
+  gem.add_development_dependency  'rake',         '~> 10.3'
+  gem.add_development_dependency  'minitest',     '~> 5.1'
+  gem.add_development_dependency  'minitest-rg',  '~> 5.1'
+  gem.add_development_dependency  'sqlite3',      '~> 1.3'
   gem.add_development_dependency  'factory_girl', '~> 4.2'
   gem.add_development_dependency  'timecop',      '~> 0.3'
-  gem.add_development_dependency  'wwtd'
+  gem.add_development_dependency  'wwtd',         '~> 0.5'
 end
