@@ -1,3 +1,14 @@
+## v1.11.0
+
+Depreaction: `[feature]_enabled_for?` methods
+
+Bug fix: `Arturo.respond_to?` takes an optional second argument, per
+`Object.respond_to?`'s signature.
+
+Improvement: support Rails 4.1.
+
+Improvement: use Travis's multiple builds instead of Appraisal.
+
 ## v1.10.0
 
 Improvement: Arturo no longer declares a hard runtime dependency on Rails, but
