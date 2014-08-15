@@ -1,3 +1,8 @@
+## v.12.0
+
+Bug fix: database look-up uses `feature.to_sym.to_s` instead of `feature.to_s`
+since the latter is for humans and not meant to be a stable format.
+
 ## v1.11.0
 
 Depreaction: `[feature]_enabled_for?` methods
