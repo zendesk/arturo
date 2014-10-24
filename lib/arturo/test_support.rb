@@ -28,4 +28,19 @@ Arturo.instance_eval do
     end
   end
 
+  # Enable or disable a feature.  If enabling, create it if necessary.
+  # For use in testing. Not auto-required on load. To load,
+  #
+  #   require 'arturo/test_support'
+  #
+  # @param [Symbol, String] name the feature name
+  # @param Boolean enabled should the feature be enabled?
+  def set_feature!(name, enabled)
+    if enabled
+      enable_feature!(name)
+    else
+      disable_feature!(name)
+    end
+  end
+
 end
