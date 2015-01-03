@@ -1,10 +1,11 @@
 require File.expand_path('../../test_helper', __FILE__)
 require 'arturo/features_helper'
+require 'rails-dom-testing'
 
 class ArturoFeaturesHelperTest < ActiveSupport::TestCase
 
   include ActionView::Helpers::TagHelper
-  include ActionDispatch::Assertions::SelectorAssertions
+  include Rails::Dom::Testing::Assertions::SelectorAssertions
   include Arturo::FeaturesHelper
 
   attr_accessor :output_buffer
@@ -17,7 +18,7 @@ class ArturoFeaturesHelperTest < ActiveSupport::TestCase
   end
 
   def assert_select_in(html, selector, equality=nil, message=nil, &block)
-    assert_select(HTML::Document.new(html).root, selector, equality, &block)
+    assert_select(Nokogiri::HTML::Document.parse(html), selector, equality, &block)
   rescue ArgumentError => e
     if e.message =~ /assertion message must be String or Proc/
       raise Test::Unit::AssertionFailedError.new("Expected #{selector.inspect} to match, but it didn't")
