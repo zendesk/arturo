@@ -1,3 +1,13 @@
+## v2.1.0
+
+Bug fix: `Arturo::SpecialHandling` always compares symbols as strings
+
+Improvmement: Rails 4.2 compatibility
+
+Improvement: relax minitest version constraints
+
+Improvement: add `set_feature!` method to complement `enable_feature!`and `disable_feature!`
+
 ## v2.0.0
 
 Bug fix: add missing require to initializer.
