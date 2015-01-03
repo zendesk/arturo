@@ -1,6 +1,6 @@
 # my_rails_engine.gemspec
 Gem::Specification.new do |gem|
-  gem.version = '2.0.0'
+  gem.version = '2.1.0'
   gem.name = 'arturo'
   gem.files = Dir["lib/**/*", "app/**/*", "config/**/*"] + %w(README.md CHANGELOG.md LICENSE)
   gem.summary = "Feature sliders, wrapped up in an engine"
