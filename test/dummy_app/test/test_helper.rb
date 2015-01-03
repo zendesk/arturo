@@ -6,6 +6,8 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'minitest/autorun'
 require 'minitest/rg'
 
+require "mocha/mini_test"
+
 require 'rails/test_help'
 
 require 'factory_girl'

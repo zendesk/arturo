@@ -24,6 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency  'rake',         '~> 10.3'
   gem.add_development_dependency  'minitest',     '> 0', '< 6.0'
   gem.add_development_dependency  'minitest-rg',  '> 0', '< 6.0'
+  gem.add_development_dependency  'rails-dom-testing', '~> 1.0'
   gem.add_development_dependency  'sqlite3',      '~> 1.3'
   gem.add_development_dependency  'factory_girl', '~> 4.2'
   gem.add_development_dependency  'timecop',      '~> 0.3'

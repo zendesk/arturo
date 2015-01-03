@@ -52,7 +52,7 @@ module Arturo
       def two_arg_block(symbol, block)
         return block if symbol.nil?
         lambda do |feature, recipient|
-          feature.symbol == symbol && block.call(recipient)
+          feature.symbol.to_s == symbol.to_s && block.call(recipient)
         end
       end
 
