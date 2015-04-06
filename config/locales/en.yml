@@ -35,7 +35,7 @@ en:
         created: "Created %{name}"
         error_creating: "Sorry, there was an error creating the feature."
         updated: "Updated %{name}"
-        error_updating: "Could not update feature #%{id}: %{errors}."
+        error_updating: "Could not update %{name}: %{errors}."
         removed: "Removed %{name}"
         error_removing: "Sorry, there was an error removing %{name}"
     no_such_feature:
