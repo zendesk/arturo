@@ -58,6 +58,12 @@ class ArturoFeaturesControllerAdminTest < Arturo::IntegrationTest
     assert_redirected_to "/arturo/features/#{@features.first.to_param}"
   end
 
+  def test_put_invalid_update
+    put "/arturo/features/#{@features.first.id}", :feature => { :deployment_percentage => '-10' }
+    assert_response :success
+    assert_equal "Could not update #{@features.first.name}: Deployment Percentage must be greater than or equal to 0.", @controller.flash[:alert]
+  end
+
   def test_delete_destroy
     delete "/arturo/features/#{@features.first.id}"
     assert_redirected_to '/arturo/features'
