@@ -18,9 +18,23 @@ module Arturo
   # to use a shared cache like Memcached.
   module FeatureCaching
 
+    module PrependMethods
+      # Wraps Arturo::Feature.to_feature with in-memory caching.
+      def to_feature(feature_or_symbol)
+        if !caches_features?
+          super
+        elsif feature_or_symbol.kind_of?(Arturo::Feature)
+          feature_or_symbol
+        else
+          symbol = feature_or_symbol.to_sym
+          feature_caching_strategy.fetch(feature_cache, symbol) { super(symbol) }
+        end
+      end
+    end
+
     def self.extended(base)
       class << base
-        alias_method_chain :to_feature, :caching
+        prepend PrependMethods
         attr_accessor :cache_ttl, :feature_cache, :feature_caching_strategy
       end
       base.send(:after_save) do |f|
@@ -33,18 +47,6 @@ module Arturo
 
     def caches_features?
       self.cache_ttl.to_i > 0
-    end
-
-    # Wraps Arturo::Feature.to_feature with in-memory caching.
-    def to_feature_with_caching(feature_or_symbol)
-      if !caches_features?
-        to_feature_without_caching(feature_or_symbol)
-      elsif feature_or_symbol.kind_of?(Arturo::Feature)
-        feature_or_symbol
-      else
-        symbol = feature_or_symbol.to_sym
-        feature_caching_strategy.fetch(feature_cache, symbol) { to_feature_without_caching(symbol) }
-      end
     end
 
     def warm_cache!

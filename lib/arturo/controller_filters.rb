@@ -13,13 +13,14 @@ module Arturo
     end
 
     def on_feature_disabled(feature_name)
-      render :text => 'Forbidden', :status => 403
+      render (Rails::VERSION::MAJOR < 5 ? :text : :plain) => 'Forbidden', :status => 403
     end
 
     module ClassMethods
 
       def require_feature(name, options = {})
-        before_filter options do |controller|
+        method = respond_to?(:before_action) ? :before_action : :before_filter
+        send(method, options) do |controller|
           unless controller.feature_enabled?(name)
             controller.on_feature_disabled(name)
           end

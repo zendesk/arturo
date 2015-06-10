@@ -40,7 +40,7 @@ module Arturo
 
     # Create a new Feature
     def initialize(*args, &block)
-      args[0] = DEFAULT_ATTRIBUTES.merge(args[0] || {})
+      args[0] = DEFAULT_ATTRIBUTES.merge(args[0].try(:to_h) || {})
       super(*args, &block)
     end
 

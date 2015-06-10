@@ -23,10 +23,19 @@ class ArturoFeaturesControllerAdminTest < Arturo::IntegrationTest
   end
 
   def test_put_update_all
-    put "/arturo/features", :features => {
-      @features.first.id => { :deployment_percentage => '14' },
-      @features.last.id  => { :deployment_percentage => '98' }
+    params = {
+      features: {
+        @features.first.id => { deployment_percentage: '14' },
+        @features.last.id  => { deployment_percentage: '98' }
+      }
     }
+
+    if Rails::VERSION::MAJOR < 5
+      put "/arturo/features", params
+    else
+      put "/arturo/features", params: params
+    end
+
     assert_equal '14', @features.first.reload.deployment_percentage.to_s
     assert_equal '98', @features.last.reload.deployment_percentage.to_s
     assert_redirected_to '/arturo/features'
@@ -38,7 +47,11 @@ class ArturoFeaturesControllerAdminTest < Arturo::IntegrationTest
   end
 
   def test_post_create
-    post "/arturo/features", :feature => { :symbol => 'anything' }
+    if Rails::VERSION::MAJOR < 5
+      post "/arturo/features", feature: { symbol: 'anything' }
+    else
+      post "/arturo/features", params: { feature: { symbol: 'anything' } }
+    end
     assert Arturo::Feature.find_by_symbol('anything').present?
     assert_redirected_to '/arturo/features'
   end
@@ -54,12 +67,20 @@ class ArturoFeaturesControllerAdminTest < Arturo::IntegrationTest
   end
 
   def test_put_update
-    put "/arturo/features/#{@features.first.id}", :feature => { :deployment_percentage => '2' }
+    if Rails::VERSION::MAJOR < 5
+      put "/arturo/features/#{@features.first.id}", feature: { deployment_percentage: '2' }
+    else
+      put "/arturo/features/#{@features.first.id}", params: { feature: { deployment_percentage: '2' } }
+    end
     assert_redirected_to "/arturo/features/#{@features.first.to_param}"
   end
 
   def test_put_invalid_update
-    put "/arturo/features/#{@features.first.id}", :feature => { :deployment_percentage => '-10' }
+    if Rails::VERSION::MAJOR < 5
+      put "/arturo/features/#{@features.first.id}", feature: { deployment_percentage: '-10' }
+    else
+      put "/arturo/features/#{@features.first.id}", params: { feature: { deployment_percentage: '-10' } }
+    end
     assert_response :success
     assert_equal "Could not update #{@features.first.name}: Deployment Percentage must be greater than or equal to 0.", @controller.flash[:alert]
   end

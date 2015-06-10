@@ -15,14 +15,13 @@ module Arturo
 
     unloadable
     respond_to :html, :json, :xml
-    before_filter :require_permission
-    before_filter :load_feature, :only => [ :show, :edit, :update, :destroy ]
 
-    if Rails::VERSION::MAJOR == 3 && Rails::VERSION::MINOR == 0
-      def arturo_engine
-        self
-      end
-      helper_method :arturo_engine
+    if respond_to?(:before_action)
+      before_action :require_permission
+      before_action :load_feature, :only => [ :show, :edit, :update, :destroy ]
+    else
+      before_filter :require_permission
+      before_filter :load_feature, :only => [ :show, :edit, :update, :destroy ]
     end
 
     def index
@@ -110,4 +109,3 @@ module Arturo
   end
 
 end
-
