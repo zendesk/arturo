@@ -18,7 +18,11 @@ class ArturoFeaturesControllerNonAdminTest < Arturo::IntegrationTest
   end
 
   def test_post_create_is_forbidden
-    post "/arturo/features", :feature => { :deployment_percentage => '38' }
+    if Rails::VERSION::MAJOR < 5
+      post "/arturo/features", feature: { deployment_percentage: '38' }
+    else
+      post "/arturo/features", params: { feature: { deployment_percentage: '38' } }
+    end
     assert_response :forbidden
   end
 
@@ -33,7 +37,11 @@ class ArturoFeaturesControllerNonAdminTest < Arturo::IntegrationTest
   end
 
   def test_put_update_is_forbidden
-    put "/arturo/features/1", :feature => { :deployment_percentae => '81' }
+    if Rails::VERSION::MAJOR < 5
+      put "/arturo/features/1", feature: { deployment_percentage: '81' }
+    else
+      put "/arturo/features/1", params: { feature: { deployment_percentage: '81' } }
+    end
     assert_response :forbidden
   end
 

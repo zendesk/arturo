@@ -13,13 +13,14 @@ Gem::Specification.new do |gem|
   gem.require_paths = [".", "lib"]
   gem.has_rdoc = 'false'
   gem.specification_version = 2
+  gem.required_ruby_version = '>= 2.0'
 
   private_key_path = File.expand_path("~/.ssh/rubgems/arturo-private_key.pem")
   gem.signing_key = private_key_path if File.exists?(private_key_path)
   gem.cert_chain = [ "gem-public_cert.pem" ]
 
-  gem.add_runtime_dependency      'activerecord', '> 3.2', '< 5.0'
-  gem.add_development_dependency  'rails',        '> 3.2', '< 5.0'
+  gem.add_runtime_dependency      'activerecord', '> 3.2', '< 5.1'
+  gem.add_development_dependency  'rails',        '> 3.2', '< 5.1'
   gem.add_development_dependency  'mocha',        '~> 1.1'
   gem.add_development_dependency  'rake',         '~> 10.3'
   gem.add_development_dependency  'minitest',     '> 0', '< 6.0'

@@ -9,8 +9,8 @@ class ArturoControllerFiltersTest < ActionController::TestCase
       '2' => 'Jane Eyre',
       '3' => 'Robison Crusoe'
     })
-    create(:feature, :symbol => :books, :deployment_percentage => 100)
-    create(:feature, :symbol => :book_holds, :deployment_percentage => 0)
+    create(:feature, symbol: :books, deployment_percentage: 100)
+    create(:feature, symbol: :book_holds, deployment_percentage: 0)
   end
 
   def test_on_feature_disabled_not_an_action
@@ -18,12 +18,20 @@ class ArturoControllerFiltersTest < ActionController::TestCase
   end
 
   def test_get_show
-    get :show, :id => '2'
+    if Rails::VERSION::MAJOR < 5
+      get :show, id: '2'
+    else
+      get :show, params: { id: '2' }
+    end
     assert_response :success
   end
 
   def test_post_holds
-    post :holds, :id => '3'
+    if Rails::VERSION::MAJOR < 5
+      post :holds, id: '3'
+    else
+      post :holds, params: { id: '3' }
+    end
     assert_response :forbidden
   end
 

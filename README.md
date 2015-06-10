@@ -219,7 +219,7 @@ does not have the `:hold_book` feature.
     end
 
 `require_feature` accepts as a second argument a `Hash` that it passes on
-to `before_filter`, so you can use `:only` and `:except` to specify exactly
+to `before_action`, so you can use `:only` and `:except` to specify exactly
 which actions are filtered.
 
 If you want to customize the page that is rendered on 403 Forbidden
