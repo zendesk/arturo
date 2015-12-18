@@ -18,14 +18,15 @@ module Arturo
       PERMITTED_ATTRIBUTES = [ :symbol, :deployment_percentage ]
 
       def feature_params
-        params.permit(:feature => PERMITTED_ATTRIBUTES)[:feature]
+        if feature = params[:feature]
+          feature.permit(PERMITTED_ATTRIBUTES)
+        end
       end
 
       def features_params
-        permitted = PERMITTED_ATTRIBUTES
         features = params[:features]
         features.each do |id, attributes|
-          features[id] = ActionController::Parameters.new(attributes).permit(*permitted)
+          features[id] = ActionController::Parameters.new(attributes).permit(*PERMITTED_ATTRIBUTES)
         end
       end
     end
