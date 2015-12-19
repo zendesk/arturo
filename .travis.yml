@@ -1,10 +1,15 @@
 rvm:
   - 1.9.3
   - 2.0.0
-  - 2.1.2
+  - 2.1.7
+  - 2.2.3
+sudo: false
+cache: bundler
+language: ruby
 gemfile:
   - gemfiles/rails3_2.gemfile
   - gemfiles/rails4_0.gemfile
   - gemfiles/rails4_1.gemfile
   - gemfiles/rails4_2.gemfile
-script: "rake test"
+before_install: gem i bundler
+script: bundle exec rake test
