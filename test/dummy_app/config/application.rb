@@ -38,5 +38,7 @@ module DummyApp
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+
+    config.assets.precompile += %w( arturo.js )
   end
 end
