@@ -19,7 +19,8 @@ module Arturo
     module ClassMethods
 
       def require_feature(name, options = {})
-        before_filter options do |controller|
+        method = respond_to?(:before_action) ? :before_action : :before_filter
+        send(method, options) do |controller|
           unless controller.feature_enabled?(name)
             controller.on_feature_disabled(name)
           end
