@@ -26,6 +26,7 @@ module Arturo
       def features_params
         features = params[:features]
         features.each do |id, attributes|
+          attributes = attributes.to_unsafe_h if attributes.respond_to?(:to_unsafe_h)
           features[id] = ActionController::Parameters.new(attributes).permit(*PERMITTED_ATTRIBUTES)
         end
       end
@@ -36,4 +37,3 @@ module Arturo
   end
 
 end
-
