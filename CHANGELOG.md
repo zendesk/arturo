@@ -1,3 +1,11 @@
+## v2.2.0
+
+Bug fix: making a feature-update request that fails strict params checks now returns a sensible error instead of throwing an exception
+
+Improvement: better failed-to-update error messages
+
+Support Matrix changes: add Rails 5.0, drop Rails 3.2, add Ruby 2.1.7, add Ruby 2.2.3, drop Ruby 1.9.3
+
 ## v2.1.0
 
 Bug fix: `Arturo::SpecialHandling` always compares symbols as strings
