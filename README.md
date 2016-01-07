@@ -302,6 +302,6 @@ on [Sliders](http://en.wikipedia.org/wiki/Sliders).
 
 ## Quality Metrics
 
-[![Build Status](https://travis-ci.org/jamesarosen/arturo.png?branch=master)](https://travis-ci.org/jamesarosen/arturo)
+[![Build Status](https://travis-ci.org/zendesk/arturo.png?branch=master)](https://travis-ci.org/zendesk/arturo)
 
-[![Code Quality](https://codeclimate.com/github/jamesarosen/arturo.png)](https://codeclimate.com/github/jamesarosen/arturo)
+[![Code Quality](https://codeclimate.com/github/zendesk/arturo.png)](https://codeclimate.com/github/zendesk/arturo)
