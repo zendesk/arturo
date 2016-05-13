@@ -1,0 +1,55 @@
+# frozen_string_literal: true
+require 'spec_helper'
+require 'arturo/features_controller'
+
+describe Arturo::FeaturesController, type: :request do
+
+  before do
+    allow_any_instance_of(Arturo::FeaturesController)
+      .to receive(:current_user).and_return(nil)
+  end
+
+  it 'returns forbidden with get on index' do
+    get '/arturo/features'
+    expect(response).to have_http_status(:forbidden)
+  end
+
+  it 'returns forbidden with get on new' do
+    get '/arturo/features/new'
+    expect(response).to have_http_status(:forbidden)
+  end
+
+  it 'returns forbidden with post on create' do
+    if Rails::VERSION::MAJOR < 5
+      post '/arturo/features', feature: { deployment_percentage: '38' }
+    else
+      post '/arturo/features', params: { feature: { deployment_percentage: '38' } }
+    end
+    expect(response).to have_http_status(:forbidden)
+  end
+
+  it 'returns forbidden with get on show' do
+    get '/arturo/features/1'
+    expect(response).to have_http_status(:forbidden)
+  end
+
+  it 'returns forbidden with get on edit' do
+    get '/arturo/features/1'
+    expect(response).to have_http_status(:forbidden)
+  end
+
+  it 'returns forbidden with put on update' do
+    if Rails::VERSION::MAJOR < 5
+      put '/arturo/features/1', feature: { deployment_percentage: '81' }
+    else
+      put '/arturo/features/1', params: { feature: { deployment_percentage: '81' } }
+    end
+    expect(response).to have_http_status(:forbidden)
+  end
+
+  it 'returns forbidden with delete on destroy' do
+    delete '/arturo/features/1'
+    expect(response).to have_http_status(:forbidden)
+  end
+
+end
