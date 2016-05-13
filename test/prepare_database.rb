@@ -7,4 +7,4 @@ ActiveRecord::Base.establish_connection(
 )
 
 ActiveRecord::Schema.verbose = false
-require File.expand_path('../../db/schema.rb', __FILE__)
+require_relative 'dummy_app/db/schema.rb'

@@ -2,7 +2,7 @@
 ENV["RAILS_ENV"] = "test"
 require 'bundler/setup'
 
-require File.expand_path('../../config/environment', __FILE__)
+require_relative 'dummy_app/config/environment'
 
 require 'minitest/autorun'
 require 'minitest/rg'
@@ -14,7 +14,7 @@ require 'rails/test_help'
 require 'factory_girl'
 require 'timecop'
 
-require File.expand_path('../prepare_database', __FILE__)
+require_relative 'prepare_database'
 require 'arturo'
 require 'arturo/feature'
 require 'arturo/feature_factories'
