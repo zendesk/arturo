@@ -1,6 +1,7 @@
 require 'bundler/setup'
 require 'rake'
 require 'wwtd/tasks'
+require 'bundler/gem_tasks'
 
 require 'rake/testtask'
 Rake::TestTask.new do |t|
