@@ -1,3 +1,4 @@
+<%# frozen_string_literal: true %>
 <tr class='feature' id="feature_<%= feature.id %>">
   <td><code class='ruby symbol'><%= feature.symbol %></code></td>
   <td><%= deployment_percentage_range_and_output_tags("features[#{feature.id}][deployment_percentage]", feature.deployment_percentage) %></td>

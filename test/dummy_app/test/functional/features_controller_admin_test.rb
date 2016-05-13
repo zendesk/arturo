@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.expand_path('../../test_helper', __FILE__)
 require 'arturo/features_controller'
 
@@ -18,7 +19,7 @@ class ArturoFeaturesControllerAdminTest < Arturo::IntegrationTest
     get "/arturo/features"
     assert_response :success
     assert_select 'table tbody tr input[type=range]'
-    assert_select 'table tfoot a[href=?]', '/arturo/features/new'
+    assert_select "table tfoot a[href='/arturo/features/new']"
     assert_select 'table tfoot input[type=submit]'
   end
 

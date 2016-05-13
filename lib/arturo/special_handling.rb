@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Arturo
 
   # Adds whitelist and blacklist support to individual features by name

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 DummyApp::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Arturo
 
   # A mixin that provides #feature_enabled? and #if_feature_enabled

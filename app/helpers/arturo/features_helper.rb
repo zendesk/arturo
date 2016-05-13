@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Arturo
   module FeaturesHelper
     include ActionView::Helpers::TagHelper

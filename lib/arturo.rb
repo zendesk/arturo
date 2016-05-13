@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Arturo
 
   require 'arturo/special_handling'

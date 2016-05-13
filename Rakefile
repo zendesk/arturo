@@ -9,6 +9,8 @@ Rake::TestTask.new do |t|
   t.verbose = true
 end
 
+task default: :test
+
 begin
   require 'rcov/rcovtask'
   Rcov::RcovTask.new do |test|
@@ -32,5 +34,3 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('Gemfile')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
-
-task :default => "wwtd:local"

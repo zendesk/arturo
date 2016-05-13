@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'arturo/no_such_feature'
 
 module Arturo

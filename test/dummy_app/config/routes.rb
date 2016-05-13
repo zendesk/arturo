@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 DummyApp::Application.routes.draw do
   mount Arturo::Engine => "/arturo"
 

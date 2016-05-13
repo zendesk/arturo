@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Arturo
 
   # Adds before filters to controllers for specifying that actions

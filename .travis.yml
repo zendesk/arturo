@@ -1,21 +1,26 @@
-rvm:
-  - 2.0.0
-  - 2.1.7
-  - 2.2.3
 sudo: false
-cache: bundler
 language: ruby
+
+cache: bundler
+bundler_args: ""
+
+branches:
+  only: master
+
+rvm:
+  - 2.1.9
+  - 2.2.5
+  - 2.3.1
+
 gemfile:
-  - gemfiles/rails3_2.gemfile
-  - gemfiles/rails4_0.gemfile
-  - gemfiles/rails4_1.gemfile
-  - gemfiles/rails4_2.gemfile
-  - gemfiles/rails5_0.gemfile
-before_install: gem i bundler
-script: bundle exec rake test
+  - gemfiles/rails3.2.gemfile
+  - gemfiles/rails4.1.gemfile
+  - gemfiles/rails4.2.gemfile
+  - gemfiles/rails5.0.gemfile
+
 matrix:
   exclude:
-    - rvm: 2.0.0
-      gemfile: gemfiles/rails5_0.gemfile
-    - rvm: 2.1.7
-      gemfile: gemfiles/rails5_0.gemfile
+    - rvm: 2.3.1
+      gemfile: gemfiles/rails3.2.gemfile
+    - rvm: 2.1.9
+      gemfile: gemfiles/rails5.0.gemfile

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Arturo
   # A Rack middleware that requires a feature to be present. By default,
   # checks feature availability against an `arturo.recipient` object
