@@ -1,0 +1,7 @@
+source 'https://rubygems.org'
+
+gemspec path: Bundler.root.sub('/gemfiles', '')
+
+gem 'rails', '~> 3.2.18'
+gem 'minitest', '< 5'
+gem 'test-unit-minitest'

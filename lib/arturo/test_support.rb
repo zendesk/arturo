@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Arturo.instance_eval do
 
   # Enable a feature; create it if necessary.

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Arturo
 
   # A Null-Object stand-in for a Feature.

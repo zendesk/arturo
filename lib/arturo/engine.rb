@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'arturo/controller_filters'
 require 'arturo/middleware'
 

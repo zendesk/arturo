@@ -1,3 +1,4 @@
+<%# frozen_string_literal: true %>
 <%= form_for(feature, :as => 'feature', :url => (feature.new_record? ? arturo_engine.features_path : arturo_engine.feature_path(feature))) do |form| %>
   <fieldset>
     <legend><%= legend %></legend>

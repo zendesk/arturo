@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   sequence(:feature_symbol) { |n| "feature_#{n}".to_sym }
 

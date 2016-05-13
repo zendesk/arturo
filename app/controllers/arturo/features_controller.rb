@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'action_controller'
 require 'arturo/feature_params_support'
 

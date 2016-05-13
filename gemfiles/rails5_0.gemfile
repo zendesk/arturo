@@ -1,7 +1,0 @@
-source "https://rubygems.org"
-
-gemspec :path=>"../"
-
-gem "rails", github: "rails"
-gem "arel", github: "rails/arel"
-gem "responders", "~> 2.0"

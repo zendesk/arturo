@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Arturo
 
   # Mix in to FeaturesController. Provides the logic for getting parameters

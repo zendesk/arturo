@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Arturo
 
   # A mixin that is included by Arturo::FeaturesController and is declared
