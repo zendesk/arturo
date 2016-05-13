@@ -17,12 +17,9 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency      'activerecord', '> 3.2', '< 5.1'
 
   s.add_development_dependency  'rails',        '> 3.2', '< 5.1'
-  s.add_development_dependency  'mocha',        '~> 1.1'
-  s.add_development_dependency  'minitest',     '> 0', '< 6.0'
-  s.add_development_dependency  'minitest-rg',  '> 0', '< 6.0'
-  s.add_development_dependency  'rails-dom-testing', '~> 1.0'
-  s.add_development_dependency  'sqlite3',      '~> 1.3'
-  s.add_development_dependency  'factory_girl', '~> 4.2'
-  s.add_development_dependency  'timecop',      '~> 0.3'
+  s.add_development_dependency  'sqlite3'
+  s.add_development_dependency  'rspec-rails'
+  s.add_development_dependency  'factory_girl'
+  s.add_development_dependency  'timecop'
   s.add_development_dependency  'wwtd'
 end

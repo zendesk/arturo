@@ -3,14 +3,9 @@ require 'rake'
 require 'wwtd/tasks'
 require 'bundler/gem_tasks'
 
-require 'rake/testtask'
-Rake::TestTask.new do |t|
-  t.libs << 'app/controllers' << 'app/mailers' << 'app/models' << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
-
-task default: :test
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
+task default: :spec
 
 begin
   require 'rcov/rcovtask'

@@ -3,4 +3,5 @@ source 'https://rubygems.org'
 gemspec path: Bundler.root.sub('/gemfiles', '')
 
 gem 'rails', '~> 5.0.0.rc1'
+gem 'rspec-rails', '~> 3.5.0.beta3'
 gem 'responders', '~> 2.0'
