@@ -4,3 +4,6 @@
 /gemfiles/*.gemfile.lock
 /Gemfile.lock
 tags
+**/*.sqlite3
+**/*.log
+**/tmp/**/*
