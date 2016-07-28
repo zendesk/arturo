@@ -6,9 +6,11 @@ module Arturo
   class Engine < ::Rails::Engine
     ActiveSupport.on_load(:action_controller) do
       include Arturo::FeatureAvailability
-      helper  Arturo::FeatureAvailability
       include Arturo::ControllerFilters
-      helper  Arturo::FeatureManagement
+      if respond_to?(:helper)
+        helper  Arturo::FeatureAvailability
+        helper  Arturo::FeatureManagement
+      end
     end
 
     root = File.expand_path("../../..", __FILE__)
