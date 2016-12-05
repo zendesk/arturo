@@ -55,7 +55,7 @@ module Arturo
       return false if feature_recipient.nil?
       return false if blacklisted?(feature_recipient)
       return true if  whitelisted?(feature_recipient)
-      passes_threshold?(feature_recipient)
+      passes_threshold?(feature_recipient, self.deployment_percentage || 0)
     end
 
     def name
@@ -81,8 +81,7 @@ module Arturo
 
     protected
 
-    def passes_threshold?(feature_recipient)
-      threshold = self.deployment_percentage || 0
+    def passes_threshold?(feature_recipient, threshold)
       return true if threshold == 100
       return false if threshold == 0 || !feature_recipient.id
       (((feature_recipient.id + (self.id || 1) + 17) * 13) % 100) < threshold
