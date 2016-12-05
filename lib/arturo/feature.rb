@@ -55,7 +55,7 @@ module Arturo
       return false if feature_recipient.nil?
       return false if blacklisted?(feature_recipient)
       return true if  whitelisted?(feature_recipient)
-      passes_threshold?(feature_recipient, self.deployment_percentage || 0)
+      passes_threshold?(feature_recipient, deployment_percentage || 0)
     end
 
     def name
@@ -79,8 +79,7 @@ module Arturo
       maximum(:updated_at)
     end
 
-    protected
-
+    # made public so as to allow for thresholds stored outside of the model
     def passes_threshold?(feature_recipient, threshold)
       return true if threshold == 100
       return false if threshold == 0 || !feature_recipient.id
