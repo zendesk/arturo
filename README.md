@@ -7,11 +7,8 @@ but offers more fine-grained control. It supports deploying features only for
 a given percent* of your users and whitelisting and blacklisting users based
 on any criteria you can express in Ruby.
 
-    * The selection isn't random. It's not even pseudo-random. It's completely
-      deterministic. This assures that if a user has a feature on Monday, the
-      user will still have it on Tuesday (unless, of course, you *decrease*
-      the feature's deployment percentage or change its white- or blacklist
-      settings).
+The selection is deterministic. So if a user has a feature on Monday, the
+user will still have it on Tuesday (unless, you *decrease* feature's deployment percentage or change its white- or blacklist settings).
 
 ### A quick example
 
@@ -19,38 +16,44 @@ Trish, a developer is working on a new feature: a live feed of recent postings
 in the user's city that shows up in the user's sidebar. First, she uses Arturo's
 view helpers to control who sees the sidebar widget:
 
-    <%# in app/views/layout/_sidebar.html.erb: %>
-    <% if_feature_enabled(:live_postings) do %>
-    <div class='widget'>
-      <h3>Recent Postings</h3>
-      <ol id='live_postings'>
-      </ol>
-    </div>
-    <% end %>
+```ERB
+<%# in app/views/layout/_sidebar.html.erb: %>
+  <% if_feature_enabled(:live_postings) do %>
+  <div class='widget'>
+    <h3>Recent Postings</h3>
+    <ol id='live_postings'>
+    </ol>
+  </div>
+<% end %>
+```
 
 Then Trish writes some Javascript that will poll the server for recent
 postings and put them in the sidebar widget:
 
-    // in public/javascript/live_postings.js:
-    $(function() {
-      var livePostingsList = $('#live_postings');
-      if (livePostingsList.length > 0) {
-        var updatePostingsList = function() {
-          livePostingsList.load('/listings/recent');
-          setTimeout(updatePostingsList, 30);
-        }
-        updatePostingsList();
-      }
-    });
+```js
+// in public/javascript/live_postings.js:
+$(function() {
+  var livePostingsList = $('#live_postings');
+  if (livePostingsList.length > 0) {
+    var updatePostingsList = function() {
+      livePostingsList.load('/listings/recent');
+      setTimeout(updatePostingsList, 30);
+    }
+    updatePostingsList();
+  }
+});
+````
 
 Trish uses Arturo's Controller filters to control who has access to
 the feature:
 
-    # in app/controllers/postings_controller:
-    class PostingsController < ApplicationController
-      require_feature :live_postings, :only => :recent
-      # ...
-    end
+```Ruby
+# in app/controllers/postings_controller:
+class PostingsController < ApplicationController
+  require_feature :live_postings, only: :recent
+  # ...
+end
+```
 
 Trish then deploys this code to production. Nobody will see the feature yet,
 since it's not on for anyone. (In fact, the feature doesn't yet exist
@@ -66,18 +69,10 @@ feature and deploy it to all users.
 
 ## Installation
 
-### In Rails 3 or 4, with Bundler
 
-    gem 'arturo', '~> 1.0'
-
-### In Rails 3 or 4, without Bundler
-
-    $ gem install arturo --version="~> 1.0"
-
-### In Rails 2.3
-
-Rails 2.3 is no longer supported and has been archived on the
-[`rails_2_3` branch](http://github.com/jamesarosen/arturo/tree/rails_2_3).
+```Ruby
+gem 'arturo', '~> 1.0'
+```
 
 ## Configuration
 
@@ -85,14 +80,18 @@ Rails 2.3 is no longer supported and has been archived on the
 
 #### Run the generators:
 
-    $ rails g arturo:migration
-    $ rails g arturo:initializer
-    $ rails g arturo:routes
-    $ rails g arturo:assets
+```
+rails g arturo:migration
+rails g arturo:initializer
+rails g arturo:routes
+rails g arturo:assets
+```
 
 #### Run the migration:
 
-    $ rake db:migrate
+```
+rake db:migrate
+```
 
 #### Edit the generated migration as necessary
 
@@ -134,15 +133,19 @@ the context of a Controller or View instance. It should return `true` if
 and only if the current user may manage permissions. The default implementation
 is as follows:
 
-    current_user.present? && current_user.admin?
+```Ruby
+current_user.present? && current_user.admin?
+```
 
 You can change the implementation in
 `config/initializers/arturo_initializer.rb`. A reasonable implementation
 might be
 
-    Arturo.permit_management do
-      signed_in? && current_user.can?(:manage_features)
-    end
+```Ruby
+Arturo.permit_management do
+  signed_in? && current_user.can?(:manage_features)
+end
+```
 
 ### <span id='featurerecipients'>Feature Recipients</span>
 
@@ -163,15 +166,19 @@ The default implementation simply returns `current_user`. Like
 in `config/initializers/arturo_initializer.rb`. If you want to deploy features
 on a per-account basis, a reasonable implementation might be
 
-    Arturo.feature_recipient do
-      current_account
-    end
+```Ruby
+Arturo.feature_recipient do
+  current_account
+end
+```
 
 or
 
-    Arturo.feature_recipient do
-      current_user.account
-    end
+```Ruby
+Arturo.feature_recipient do
+  current_user.account
+end
+```
 
 If the block returns `nil`, the feature will be disabled.
 
@@ -182,24 +189,30 @@ will have a feature. For example, if all premium users should have the
 `:awesome` feature, place the following in
 `config/initializers/arturo_initializer.rb`:
 
-    Arturo::Feature.whitelist(:awesome) do |user|
-      user.account.premium?
-    end
+```Ruby
+Arturo::Feature.whitelist(:awesome) do |user|
+  user.account.premium?
+end
+```
 
 If, on the other hand, no users on the free plan should have the
 `:awesome` feature, place the following in
 `config/initializers/arturo_initializer.rb`:
 
-    Arturo::Feature.blacklist(:awesome) do |user|
-      user.account.free?
-    end
+```Ruby
+Arturo::Feature.blacklist(:awesome) do |user|
+  user.account.free?
+end
+```
 
 If you want to whitelist or blacklist large groups of features at once, you
 can move the feature argument into the block:
 
-    Arturo::Feature.whitelist do |feature, user|
-      user.account.has?(feature.to_sym)
-    end
+```Ruby
+Arturo::Feature.whitelist do |feature, user|
+  user.account.has?(feature.to_sym)
+end
+```
 
 ### Feature Conditionals
 
@@ -214,9 +227,11 @@ use a before filter. The following will raise a 403 Forbidden error for
 every action within `BookHoldsController` that is invoked by a user who
 does not have the `:hold_book` feature.
 
-    class BookHoldsController < ApplicationController
-      require_feature :hold_book
-    end
+```Ruby
+class BookHoldsController < ApplicationController
+  require_feature :hold_book
+end
+```
 
 `require_feature` accepts as a second argument a `Hash` that it passes on
 to `before_action`, so you can use `:only` and `:except` to specify exactly
@@ -229,26 +244,32 @@ check there before falling back on Arturo's forbidden page.
 
 #### Conditional Evaluation
 
-Both controllers and views have access to the `if_feature_enabled` and
+Both controllers and views have access to the `if_feature_enabled?` and
 `feature_enabled?` methods. The former is used like so:
 
-    <% if_feature_enabled?(:reserve_table) %>
-      <%= link_to 'Reserve a table', new_restaurant_reservation_path(:restaurant_id => @restaurant) %>
-    <% end %>
+```ERB
+<% if_feature_enabled?(:reserve_table) %>
+  <%= link_to 'Reserve a table', new_restaurant_reservation_path(:restaurant_id => @restaurant) %>
+<% end %>
+```
 
 The latter can be used like so:
 
-    def widgets_for_sidebar
-      widgets = []
-      widgets << twitter_widget if feature_enabled?(:twitter_integration)
-      ...
-      widgets
-    end
+```Ruby
+def widgets_for_sidebar
+  widgets = []
+  widgets << twitter_widget if feature_enabled?(:twitter_integration)
+  ...
+  widgets
+end
+```
 
 #### Rack Middleware
 
-    require 'arturo'
-    use Arturo::Middleware, :feature => :my_feature
+```Ruby
+require 'arturo'
+use Arturo::Middleware, feature: :my_feature
+```
 
 #### Outside a Controller
 
@@ -256,11 +277,15 @@ If you want to check availability outside of a controller or view (really
 outside of something that has `Arturo::FeatureAvailability` mixed in), you
 can ask either
 
-    Arturo.feature_enabled_for?(:foo, recipient)
+```Ruby
+Arturo.feature_enabled_for?(:foo, recipient)
+```
 
 or the slightly fancier
 
-    Arturo.foo_enabled_for?(recipient)
+```Ruby
+Arturo.foo_enabled_for?(recipient)
+```
 
 Both check whether the `foo` feature exists and is enabled for `recipient`.
 
@@ -276,12 +301,16 @@ To enable caching `Feature` lookups, mix `Arturo::FeatureCaching` into
 `Arturo::Feature` and set the `cache_ttl`. This is best done in an
 initializer:
 
-    Arturo::Feature.extend(Arturo::FeatureCaching)
-    Arturo::Feature.cache_ttl = 10.minutes
+```Ruby
+Arturo::Feature.extend(Arturo::FeatureCaching)
+Arturo::Feature.cache_ttl = 10.minutes
+````
 
 You can also warm the cache on startup:
 
-    Arturo::Feature.warm_cache!
+```Ruby
+Arturo::Feature.warm_cache!
+```
 
 This will pre-fetch all `Feature`s and put them in the cache.
 
