@@ -111,6 +111,13 @@ describe Arturo::Feature do
       end
     end
 
+    it 'returns true for certain accounts when deployment percentage is 50' do
+      feature.deployment_percentage = 50
+      { 58 => false, 61 => true, 112 => false, 116 => true }.each do |id, expected|
+        expect(feature.enabled_for?(double('Thing', id: id))).to be(expected)
+      end
+    end
+
     it 'returns true for about deployment percentage percent of things' do
       feature.deployment_percentage = 37
       yes = 0
