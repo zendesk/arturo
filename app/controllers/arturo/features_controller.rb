@@ -26,7 +26,7 @@ module Arturo
     end
 
     def index
-      @features = Arturo::Feature.all
+      @features = Arturo::Feature.order("id desc").all
       respond_with @features
     end
 
