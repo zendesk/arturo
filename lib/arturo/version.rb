@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 module Arturo
-  VERSION = '2.3.0'
+  VERSION = '2.4.1'
 end
