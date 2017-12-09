@@ -22,7 +22,7 @@ describe Arturo::FeaturesController, type: :request do
 
   it 'responds to a get on index' do
     get '/arturo/features'
-    expect(response).to be_success
+    expect(response).to be_successful
 
     assert_select('table tbody tr input[type=range]')
     assert_select("table tfoot a[href='/arturo/features/new']")
@@ -50,7 +50,7 @@ describe Arturo::FeaturesController, type: :request do
 
   it 'responds to a get on new' do
     get '/arturo/features/new'
-    expect(response).to be_success
+    expect(response).to be_successful
   end
 
   it 'responds to a post on create' do
