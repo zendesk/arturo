@@ -22,7 +22,7 @@ describe BooksController, type: :controller do
     else
       get :show, params: { id: '2' }
     end
-    expect(response).to be_success
+    expect(response).to be_successful
   end
 
   it 'works with a post on holds' do

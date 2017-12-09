@@ -2,7 +2,7 @@
 ENV['RAILS_ENV'] = 'test'
 require 'dummy_app/config/environment'
 require 'rspec/rails'
-require 'factory_girl'
+require 'factory_bot'
 require 'timecop'
 require 'support/prepare_database'
 require 'arturo'
@@ -11,7 +11,7 @@ require 'arturo/feature_factories'
 require 'arturo/test_support'
 
 RSpec.configure do |config|
-  config.include ::FactoryGirl::Syntax::Methods
+  config.include ::FactoryBot::Syntax::Methods
   config.use_transactional_fixtures = true
 
   def reset_translations!
