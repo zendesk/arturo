@@ -78,12 +78,16 @@ module Arturo
         def cache_is_current?(cache, features)
           return unless features
           return true if cache.read("arturo.current")
-          return false if features.values.map(&:updated_at).compact.max != Arturo::Feature.maximum(:updated_at)
+          return false if origin_changed?
           mark_as_current!(cache)
         end
 
         def mark_as_current!(cache)
           cache.write("arturo.current", true, :expires_in => Arturo::Feature.cache_ttl)
+        end
+
+        def origin_changed?(features)
+          features.values.map(&:updated_at).compact.max != Arturo::Feature.maximum(:updated_at)
         end
       end
     end
