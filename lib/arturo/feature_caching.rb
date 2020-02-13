@@ -78,7 +78,16 @@ module Arturo
         def cache_is_current?(cache, features)
           return unless features
           return true if cache.read("arturo.current")
-          return false if origin_changed?
+          begin
+            return false if origin_changed?(features)  
+          rescue ActiveRecord::ActiveRecordError
+            if Arturo::Feature.extend_cache_on_failure
+              update_and_extend_cache!(cache, features)
+              return true
+            else
+              raise
+            end
+          end
           mark_as_current!(cache)
         end
 
@@ -88,6 +97,11 @@ module Arturo
 
         def origin_changed?(features)
           features.values.map(&:updated_at).compact.max != Arturo::Feature.maximum(:updated_at)
+        end
+
+        def update_and_extend_cache!(cache, features)
+          mark_as_current!(cache)
+          cache.write("arturo.all", features, :expires_in => Arturo::Feature.cache_ttl * 10)
         end
       end
     end
