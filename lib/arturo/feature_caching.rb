@@ -61,7 +61,7 @@ module Arturo
           features = cache.read("arturo.all")
 
           unless cache_is_current?(cache, features)
-            features = Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
+            features = arturos_from_origin
             mark_as_current!(cache)
             cache.write("arturo.all", features, :expires_in => Arturo::Feature.cache_ttl * 10)
           end
@@ -74,6 +74,10 @@ module Arturo
         end
 
         private
+
+        def arturos_from_origin
+          Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
+        end
 
         def cache_is_current?(cache, features)
           return unless features
