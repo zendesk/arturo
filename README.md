@@ -314,6 +314,11 @@ Arturo::Feature.warm_cache!
 
 This will pre-fetch all `Feature`s and put them in the cache.
 
+To use the current cache state when you can't fetch updates from origin:
+
+```Ruby
+Arturo::Feature.extend_cache_on_failure = true
+```
 
 The following is the **intended** support for integration with view caching:
 
