@@ -36,12 +36,13 @@ module Arturo
     def self.extended(base)
       class << base
         prepend PrependMethods
-        attr_accessor :cache_ttl, :feature_cache, :feature_caching_strategy
+        attr_accessor :cache_ttl, :feature_cache, :feature_caching_strategy, :extend_cache_on_failure
       end
       base.send(:after_save) do |f|
         f.class.feature_caching_strategy.expire(f.class.feature_cache, f.symbol.to_sym) if f.class.caches_features?
       end
       base.cache_ttl = 0
+      base.extend_cache_on_failure = false
       base.feature_cache = Arturo::FeatureCaching::Cache.new
       base.feature_caching_strategy = AllStrategy
     end
