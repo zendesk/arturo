@@ -36,7 +36,8 @@ module Arturo
     def self.extended(base)
       class << base
         prepend PrependMethods
-        attr_accessor :cache_ttl, :feature_cache, :feature_caching_strategy, :extend_cache_on_failure
+        attr_accessor :cache_ttl, :feature_cache, :feature_caching_strategy
+        attr_writer :extend_cache_on_failure
       end
       base.send(:after_save) do |f|
         f.class.feature_caching_strategy.expire(f.class.feature_cache, f.symbol.to_sym) if f.class.caches_features?
@@ -45,6 +46,10 @@ module Arturo
       base.extend_cache_on_failure = false
       base.feature_cache = Arturo::FeatureCaching::Cache.new
       base.feature_caching_strategy = AllStrategy
+    end
+
+    def extend_cache_on_failure?
+      !!@extend_cache_on_failure
     end
 
     def caches_features?
@@ -91,7 +96,7 @@ module Arturo
         def arturos_from_origin(fallback:)
           Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
         rescue ActiveRecord::ActiveRecordError
-          raise unless Arturo::Feature.extend_cache_on_failure
+          raise unless Arturo::Feature.extend_cache_on_failure?
 
           fallback
         end
@@ -107,7 +112,7 @@ module Arturo
           begin
             return false if origin_changed?(features)  
           rescue ActiveRecord::ActiveRecordError
-            raise unless Arturo::Feature.extend_cache_on_failure
+            raise unless Arturo::Feature.extend_cache_on_failure?
 
             update_and_extend_cache!(cache, features)
             return true
