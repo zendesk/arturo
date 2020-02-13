@@ -196,5 +196,81 @@ describe Arturo::FeatureCaching do
         Arturo::Feature.to_feature(@feature.symbol)
       }.to_not raise_error
     end
+
+    describe 'database errors' do
+      before do
+        Arturo::Feature.to_feature(@feature.symbol)
+        @feature.touch
+        Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
+
+        allow(ActiveRecord::Base).
+          to receive(:connection).
+          and_raise(ActiveRecord::ActiveRecordError)
+      end
+
+      context 'with extend_cache_on_failure enabled' do
+        before { Arturo::Feature.extend_cache_on_failure = true }
+
+        context 'with error checking origin changes' do
+          it 'does not raise error' do
+            expect { Arturo::Feature.to_feature(@feature.symbol) }.
+              not_to raise_error
+          end
+
+          it 'extends the cache' do
+            expect(Arturo::Feature.feature_caching_strategy).
+              to receive(:mark_as_current!)
+            Arturo::Feature.to_feature(@feature.symbol)
+          end
+
+          it 'returns the cached result' do
+            expect(Arturo::Feature.to_feature(@feature.symbol)).to eq(@feature)
+          end
+        end
+
+        context 'with error while refetching origin' do
+          before do
+            allow(Arturo::Feature).to receive(:origin_changed?).and_return(true)
+          end
+
+          it 'does not raise error' do
+            expect { Arturo::Feature.to_feature(@feature.symbol) }.
+              not_to raise_error
+          end
+
+          it 'extends the cache' do
+            expect(Arturo::Feature.feature_caching_strategy).
+              to receive(:mark_as_current!)
+            Arturo::Feature.to_feature(@feature.symbol)
+          end
+
+          it 'returns the cached result' do
+            expect(Arturo::Feature.to_feature(@feature.symbol)).to eq(@feature)
+          end
+        end
+      end
+
+      context 'with extend_cache_on_failure disabled' do
+        before { Arturo::Feature.extend_cache_on_failure = false } 
+
+        context 'with error checking origin changes' do
+          it 'reraises the error' do
+            expect { Arturo::Feature.to_feature(@feature.symbol) }.
+              to raise_error(ActiveRecord::ActiveRecordError)
+          end
+        end
+
+        context 'with error while refetching origin' do
+          before do
+            allow(Arturo::Feature).to receive(:origin_changed?).and_return(true)
+          end
+
+          it 'reraises the error' do
+            expect { Arturo::Feature.to_feature(@feature.symbol) }.
+              to raise_error(ActiveRecord::ActiveRecordError)
+          end
+        end
+      end
+    end
   end
 end

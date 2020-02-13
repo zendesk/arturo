@@ -61,9 +61,8 @@ module Arturo
           features = cache.read("arturo.all")
 
           unless cache_is_current?(cache, features)
-            features = arturos_from_origin
-            mark_as_current!(cache)
-            cache.write("arturo.all", features, :expires_in => Arturo::Feature.cache_ttl * 10)
+            features = arturos_from_origin(features)
+            update_and_extend_cache!(cache, features)
           end
 
           features[symbol] || Arturo::NoSuchFeature.new(symbol)
@@ -75,8 +74,10 @@ module Arturo
 
         private
 
-        def arturos_from_origin
+        def arturos_from_origin(fallback_features)
           Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
+        rescue ActiveRecord::ActiveRecordError
+          Arturo::Feature.extend_cache_on_failure ? fallback_features : raise
         end
 
         def cache_is_current?(cache, features)
