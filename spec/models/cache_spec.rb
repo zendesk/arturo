@@ -226,6 +226,17 @@ describe Arturo::FeatureCaching do
           it 'returns the cached result' do
             expect(Arturo::Feature.to_feature(@feature.symbol)).to eq(@feature)
           end
+
+          context 'with a cold cache' do
+            before do
+              Arturo::Feature.feature_caching_strategy.expire(Arturo::Feature.feature_cache, 'all')
+            end
+
+            it 'raises error' do
+              expect { Arturo::Feature.to_feature(@feature.symbol) }.
+                to raise_error(ActiveRecord::ActiveRecordError)
+            end
+          end
         end
 
         context 'with error while refetching origin' do
@@ -246,6 +257,17 @@ describe Arturo::FeatureCaching do
 
           it 'returns the cached result' do
             expect(Arturo::Feature.to_feature(@feature.symbol)).to eq(@feature)
+          end
+
+          context 'with a cold cache' do
+            before do
+              Arturo::Feature.feature_caching_strategy.expire(Arturo::Feature.feature_cache, 'all')
+            end
+
+            it 'raises error' do
+              expect { Arturo::Feature.to_feature(@feature.symbol) }.
+                to raise_error(ActiveRecord::ActiveRecordError)
+            end
           end
         end
       end
