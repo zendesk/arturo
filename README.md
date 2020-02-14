@@ -102,6 +102,7 @@ rake db:migrate
 Open up the newly-generated `config/initializers/arturo_initializer.rb`.
 There are configuration options for the following:
 
+ * logging capabilities (see [logging](#logging))
  * the method that determines whether a user has permission to manage features
    (see [admin permissions](#adminpermissions))
  * the method that returns the object that has features
@@ -125,6 +126,15 @@ extracting key pieces into mixins, though this isn't done yet. Open an
 work with you on support for your favorite framework.
 
 ## Deep-Dive
+
+### <span id='logging'>Logging</span>
+
+You can provide a logger in order to inspect Arturo usage.
+A potential implementation for Rails would be:
+
+```Ruby
+Arturo.logger = Rails.logger
+```
 
 ### <span id='adminpermissions'>Admin Permissions</span>
 
