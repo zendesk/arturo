@@ -68,7 +68,7 @@ module Arturo
         # @return [Arturo::Feature, Arturo::NoSuchFeature] 
         #
         def fetch(cache, symbol, &block)
-          existing_features = cache.read("arturo.all") || {}
+          existing_features = cache.read("arturo.all")
 
           features = if cache_is_current?(cache, existing_features)
             existing_features
@@ -96,10 +96,15 @@ module Arturo
         def arturos_from_origin(fallback:)
           Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
         rescue ActiveRecord::ActiveRecordError
-          raise if fallback.blank?
           raise unless Arturo::Feature.extend_cache_on_failure?
 
-          fallback
+          if fallback.blank?
+            log_empty_cache
+            raise
+          else
+            log_stale_cache
+            fallback
+          end
         end
 
         ##
@@ -110,16 +115,35 @@ module Arturo
         def cache_is_current?(cache, features)
           return unless features
           return true if cache.read("arturo.current")
+
           begin
             return false if origin_changed?(features)  
           rescue ActiveRecord::ActiveRecordError
-            raise if features.blank?
             raise unless Arturo::Feature.extend_cache_on_failure?
 
-            update_and_extend_cache!(cache, features)
+            if features.blank?
+              log_empty_cache
+              raise
+            else
+              log_stale_cache
+              update_and_extend_cache!(cache, features)
+            end
+
             return true
           end
           mark_as_current!(cache)
+        end
+
+        def formatted_log(namespace, msg)
+          "[Arturo][#{namespace}] #{msg}"
+        end
+
+        def log_empty_cache
+          Arturo.logger.error(formatted_log('extend_cache_on_failure', 'Fallback cache is empty'))
+        end
+
+        def log_stale_cache
+          Arturo.logger.warn(formatted_log('extend_cache_on_failure', 'Falling back to stale cache'))
         end
 
         ##
