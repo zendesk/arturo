@@ -68,7 +68,7 @@ module Arturo
         # @return [Arturo::Feature, Arturo::NoSuchFeature] 
         #
         def fetch(cache, symbol, &block)
-          existing_features = cache.read("arturo.all")
+          existing_features = cache.read("arturo.all") || {}
 
           features = if cache_is_current?(cache, existing_features)
             existing_features
@@ -96,6 +96,7 @@ module Arturo
         def arturos_from_origin(fallback:)
           Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
         rescue ActiveRecord::ActiveRecordError
+          raise if fallback.blank?
           raise unless Arturo::Feature.extend_cache_on_failure?
 
           fallback
@@ -112,6 +113,7 @@ module Arturo
           begin
             return false if origin_changed?(features)  
           rescue ActiveRecord::ActiveRecordError
+            raise if features.blank?
             raise unless Arturo::Feature.extend_cache_on_failure?
 
             update_and_extend_cache!(cache, features)
