@@ -37,13 +37,19 @@ module Arturo
       class << base
         prepend PrependMethods
         attr_accessor :cache_ttl, :feature_cache, :feature_caching_strategy
+        attr_writer :extend_cache_on_failure
       end
       base.send(:after_save) do |f|
         f.class.feature_caching_strategy.expire(f.class.feature_cache, f.symbol.to_sym) if f.class.caches_features?
       end
       base.cache_ttl = 0
+      base.extend_cache_on_failure = false
       base.feature_cache = Arturo::FeatureCaching::Cache.new
       base.feature_caching_strategy = AllStrategy
+    end
+
+    def extend_cache_on_failure?
+      !!@extend_cache_on_failure
     end
 
     def caches_features?
@@ -56,13 +62,20 @@ module Arturo
 
     class AllStrategy
       class << self
+        ##
+        # @param cache [Arturo::Cache] cache backend
+        # @param symbol [Symbol] arturo identifier
+        # @return [Arturo::Feature, Arturo::NoSuchFeature] 
+        #
         def fetch(cache, symbol, &block)
-          features = cache.read("arturo.all")
+          existing_features = cache.read("arturo.all")
 
-          unless cache_is_current?(cache, features)
-            features = Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
-            mark_as_current!(cache)
-            cache.write("arturo.all", features, :expires_in => Arturo::Feature.cache_ttl * 10)
+          features = if cache_is_current?(cache, existing_features)
+            existing_features
+          else
+            arturos_from_origin(fallback: existing_features).tap do |updated_features|
+              update_and_extend_cache!(cache, updated_features)
+            end
           end
 
           features[symbol] || Arturo::NoSuchFeature.new(symbol)
@@ -74,15 +87,85 @@ module Arturo
 
         private
 
+        ##
+        # @param fallback [Hash] features to use on database failure
+        # @return [Hash] updated features from origin or fallback
+        # @raise [ActiveRecord::ActiveRecordError] on database failure
+        #   without cache extension option
+        #
+        def arturos_from_origin(fallback:)
+          Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
+        rescue ActiveRecord::ActiveRecordError
+          raise unless Arturo::Feature.extend_cache_on_failure?
+
+          if fallback.blank?
+            log_empty_cache
+            raise
+          else
+            log_stale_cache
+            fallback
+          end
+        end
+
+        ##
+        # @return [Boolean] whether the current cache has to be updated from origin
+        # @raise [ActiveRecord::ActiveRecordError] on database failure
+        #   without cache extension option
+        #
         def cache_is_current?(cache, features)
           return unless features
           return true if cache.read("arturo.current")
-          return false if features.values.map(&:updated_at).compact.max != Arturo::Feature.maximum(:updated_at)
+
+          begin
+            return false if origin_changed?(features)  
+          rescue ActiveRecord::ActiveRecordError
+            raise unless Arturo::Feature.extend_cache_on_failure?
+
+            if features.blank?
+              log_empty_cache
+              raise
+            else
+              log_stale_cache
+              update_and_extend_cache!(cache, features)
+            end
+
+            return true
+          end
           mark_as_current!(cache)
         end
 
+        def formatted_log(namespace, msg)
+          "[Arturo][#{namespace}] #{msg}"
+        end
+
+        def log_empty_cache
+          Arturo.logger.error(formatted_log('extend_cache_on_failure', 'Fallback cache is empty'))
+        end
+
+        def log_stale_cache
+          Arturo.logger.warn(formatted_log('extend_cache_on_failure', 'Falling back to stale cache'))
+        end
+
+        ##
+        # @return [True]
+        #
         def mark_as_current!(cache)
-          cache.write("arturo.current", true, :expires_in => Arturo::Feature.cache_ttl)
+          cache.write("arturo.current", true, expires_in: Arturo::Feature.cache_ttl)
+        end
+
+        ##
+        # The Arturo origin might return a big payload, so checking for the latest
+        # update is a cheaper operation.
+        #
+        # @return [Boolean] if origin has been updated since the last cache update.
+        #
+        def origin_changed?(features)
+          features.values.map(&:updated_at).compact.max != Arturo::Feature.maximum(:updated_at)
+        end
+
+        def update_and_extend_cache!(cache, features)
+          mark_as_current!(cache)
+          cache.write("arturo.all", features, expires_in: Arturo::Feature.cache_ttl * 10)
         end
       end
     end
@@ -92,7 +175,7 @@ module Arturo
         if feature = cache.read("arturo.#{symbol}")
           feature
         else
-          cache.write("arturo.#{symbol}", yield || Arturo::NoSuchFeature.new(symbol), :expires_in => Arturo::Feature.cache_ttl)
+          cache.write("arturo.#{symbol}", yield || Arturo::NoSuchFeature.new(symbol), expires_in: Arturo::Feature.cache_ttl)
         end
       end
 
