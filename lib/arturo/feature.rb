@@ -15,7 +15,7 @@ module Arturo
     attr_readonly :symbol
 
     validates_presence_of :symbol, :deployment_percentage
-    validates_uniqueness_of :symbol, :allow_blank => true
+    validates_uniqueness_of :symbol, :allow_blank => true, :case_sensitive => false
     validates_numericality_of :deployment_percentage,
                                             :only_integer => true,
                                             :allow_blank => true,
