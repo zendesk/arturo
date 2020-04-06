@@ -25,3 +25,20 @@ RSpec.configure do |config|
     I18n.backend.store_translations I18n.locale, hash
   end
 end
+
+if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.6.0') && ActionPack.version < Gem::Version.new('5.0.0')
+  module ActionControllerTestResponseThreadingPatch
+    def recycle!
+      # hack to avoid MonitorMixin double-initialize error:
+      @mon_mutex_owner_object_id = nil
+      @mon_mutex = nil
+      initialize
+    end
+  end
+
+  ActionController::TestResponse.prepend ActionControllerTestResponseThreadingPatch
+else
+  ActiveSupport::Deprecation.warn <<~WARN
+    ActionController::TestResponse monkey patch at #{__FILE__}:#{__LINE__} will no longer be needed when Rails 4.x support is dropped.
+  WARN
+end
