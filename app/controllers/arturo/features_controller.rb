@@ -37,7 +37,7 @@ module Arturo
         feature = Arturo::Feature.find_by_id(id)
         if feature.blank?
           errors << t('arturo.features.flash.no_such_feature', :id => id)
-        elsif feature.update_attributes(attributes)
+        elsif feature.update(attributes)
           updated_count += 1
         else
           errors << t('arturo.features.flash.error_updating', :id => id, :errors => feature.errors.full_messages.to_sentence)
@@ -76,7 +76,7 @@ module Arturo
     end
 
     def update
-      if @feature.update_attributes(feature_params)
+      if @feature.update(feature_params)
         flash[:notice] = t('arturo.features.flash.updated', :name => @feature.to_s)
         redirect_to arturo_engine.feature_path(@feature)
       else

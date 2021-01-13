@@ -15,23 +15,12 @@ jobs:
           - '2.6'
           - '2.7'
         gemfile:
-          - rails3.2
           - rails4.2
           - rails5.0
           - rails5.1
           - rails5.2
           - rails6.0
         exclude:
-          - ruby-version: '2.4'
-            gemfile: rails3.2
-          - ruby-version: '2.4'
-            gemfile: rails3.2
-          - ruby-version: '2.5'
-            gemfile: rails3.2
-          - ruby-version: '2.6'
-            gemfile: rails3.2
-          - ruby-version: '2.7'
-            gemfile: rails3.2
           - ruby-version: '2.6'
             gemfile: rails4.2
           - ruby-version: '2.7'
