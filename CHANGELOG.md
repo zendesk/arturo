@@ -1,5 +1,11 @@
 ## Unreleased
 
+## v2.5.2
+
+Drop support for Rails 3.2.
+
+Add support for Rails 6.1.
+
 Switch CI from Travis to GitHub Actions.
 
 ## v2.2.0
