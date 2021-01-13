@@ -1,3 +1,7 @@
+## Unreleased
+
+Switch CI from Travis to GitHub Actions.
+
 ## v2.2.0
 
 Bug fix: making a feature-update request that fails strict params checks now returns a sensible error instead of throwing an exception

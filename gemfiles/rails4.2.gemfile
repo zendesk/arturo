@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gemspec path: Bundler.root.sub('/gemfiles', '')
+gemspec path: '../'
 
 gem 'rails', '~> 4.2.6'
 gem 'responders', '~> 2.0'

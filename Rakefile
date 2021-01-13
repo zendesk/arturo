@@ -1,5 +1,4 @@
 require 'bundler/setup'
-require 'wwtd/tasks'
 require 'bundler/gem_tasks'
 require 'bump/tasks'
 

@@ -346,6 +346,6 @@ on [Sliders](http://en.wikipedia.org/wiki/Sliders).
 
 ## Quality Metrics
 
-[![Build Status](https://travis-ci.org/zendesk/arturo.png?branch=master)](https://travis-ci.org/zendesk/arturo)
+[![Build Status](https://github.com/zendesk/arturo/workflows/CI/badge.svg)](https://github.com/zendesk/arturo/actions?query=workflow%3ACI)
 
 [![Code Quality](https://codeclimate.com/github/zendesk/arturo.png)](https://codeclimate.com/github/zendesk/arturo)
