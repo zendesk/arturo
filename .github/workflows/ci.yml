@@ -1,0 +1,59 @@
+name: CI
+
+on: push
+
+jobs:
+  specs:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version:
+          - '2.4'
+          - '2.5'
+          - '2.6'
+          - '2.7'
+        gemfile:
+          - rails3.2
+          - rails4.2
+          - rails5.0
+          - rails5.1
+          - rails5.2
+          - rails6.0
+        exclude:
+          - ruby-version: '2.4'
+            gemfile: rails3.2
+          - ruby-version: '2.4'
+            gemfile: rails3.2
+          - ruby-version: '2.5'
+            gemfile: rails3.2
+          - ruby-version: '2.6'
+            gemfile: rails3.2
+          - ruby-version: '2.7'
+            gemfile: rails3.2
+          - ruby-version: '2.6'
+            gemfile: rails4.2
+          - ruby-version: '2.7'
+            gemfile: rails4.2
+          - ruby-version: '2.4'
+            gemfile: rails6.0
+    name: Ruby ${{ matrix.ruby-version }}, ${{ matrix.gemfile }}
+    env:
+      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+    steps:
+      - uses: zendesk/checkout@v2
+      - name: Set up Ruby
+        uses: zendesk/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler: 1
+        if: ${{ matrix.gemfile == 'rails4.2' }}
+      - name: Set up Ruby
+        uses: zendesk/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+        if: ${{ matrix.gemfile != 'rails4.2' }}
+      - run: bundle install --jobs 4
+      - name: RSpec
+        run: bundle exec rspec
