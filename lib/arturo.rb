@@ -5,7 +5,7 @@ module Arturo
   require 'arturo/feature_availability'
   require 'arturo/feature_management'
   require 'arturo/feature_caching'
-  require 'arturo/engine' if defined?(Rails::VERSION::MAJOR) && Rails::VERSION::MAJOR >= 3
+  require 'arturo/engine'
 
   class << self
     # Quick check for whether a feature is enabled for a recipient.

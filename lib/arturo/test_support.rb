@@ -10,8 +10,7 @@ Arturo.instance_eval do
   def enable_feature!(name)
     if feature = Arturo::Feature.find_feature(name)
       feature = feature.class.find(feature.id) if feature.frozen?
-      update_method = Rails::VERSION::MAJOR >= 6 ? :update : :update_attributes
-      feature.send(update_method, :deployment_percentage => 100)
+      feature.update(:deployment_percentage => 100)
     else
       Arturo::Feature.create!(:symbol => name, :deployment_percentage => 100)
     end
@@ -26,8 +25,7 @@ Arturo.instance_eval do
   def disable_feature!(name)
     if feature = Arturo::Feature.find_feature(name)
       feature = feature.class.find(feature.id) if feature.frozen?
-      update_method = Rails::VERSION::MAJOR >= 6 ? :update : :update_attributes
-      feature.send(update_method, :deployment_percentage => 0)
+      feature.update(:deployment_percentage => 0)
     end
   end
 

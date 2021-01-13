@@ -27,7 +27,7 @@ describe Arturo::Feature do
   end
 
   it 'finds existent features with feature_enabled_for' do
-    feature.update_attribute(:deployment_percentage, 100)
+    feature.update(:deployment_percentage => 100)
     recipient = double('User', to_s: 'Paula', id: 12)
     expect(::Arturo.feature_enabled_for?(feature.symbol, recipient)).to be(true), "#{feature} should be enabled for #{recipient}"
   end
