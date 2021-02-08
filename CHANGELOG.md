@@ -1,5 +1,9 @@
 ## Unreleased
 
+## v2.5.3
+
+Bug fix: Allow using Arturo with ActiveRecord, but without all of Rails.
+
 ## v2.5.2
 
 Drop support for Rails 3.2.
