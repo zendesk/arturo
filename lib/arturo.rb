@@ -5,7 +5,7 @@ module Arturo
   require 'arturo/feature_availability'
   require 'arturo/feature_management'
   require 'arturo/feature_caching'
-  require 'arturo/engine'
+  require 'arturo/engine' if defined?(Rails)
 
   class << self
     # Quick check for whether a feature is enabled for a recipient.
