@@ -2,13 +2,14 @@
 
 Arturo provides feature sliders for Rails. It lets you turn features on and off
 just like
-[feature flippers](http://code.flickr.com/blog/2009/12/02/flipping-out/),
+[feature flippers](https://code.flickr.net/2009/12/02/flipping-out/),
 but offers more fine-grained control. It supports deploying features only for
-a given percent* of your users and whitelisting and blacklisting users based
+a given percentage of your users and whitelisting and blacklisting users based
 on any criteria you can express in Ruby.
 
 The selection is deterministic. So if a user has a feature on Monday, the
-user will still have it on Tuesday (unless, you *decrease* feature's deployment percentage or change its white- or blacklist settings).
+user will still have it on Tuesday (unless you *decrease* the feature's
+deployment percentage or change its white- or blacklist settings).
 
 ### A quick example
 
@@ -71,7 +72,7 @@ feature and deploy it to all users.
 
 
 ```Ruby
-gem 'arturo', '~> 1.0'
+gem 'arturo'
 ```
 
 ## Configuration
@@ -113,16 +114,16 @@ There are configuration options for the following:
 
 ##### CSS
 
-Open up the newly-generated `public/stylehseets/arturo_customizations.css`.
+Open up the newly-generated `public/stylesheets/arturo_customizations.css`.
 You can add any overrides you like to the feature configuration page styles
-here. **Do not** edit `public/stylehseets/arturo.css` as that file may be
+here. **Do not** edit `public/stylesheets/arturo.css` as that file may be
 overwritten in future updates to Arturo.
 
 ### In other frameworks
 
 Arturo is a Rails engine. I want to promote reuse on other frameworks by
 extracting key pieces into mixins, though this isn't done yet. Open an
-[issue](http://github.com/jamesarosen/arturo/issues) and I'll be happy to
+[issue](http://github.com/zendesk/arturo/issues) and I'll be happy to
 work with you on support for your favorite framework.
 
 ## Deep-Dive
