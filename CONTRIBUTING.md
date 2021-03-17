@@ -1,4 +1,4 @@
-For bug reports, open an [issue](https://github.com/jamesarosen/arturo/issues)
+For bug reports, open an [issue](https://github.com/zendesk/arturo/issues)
 on GitHub.
 
 ## Getting Started
