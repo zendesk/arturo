@@ -317,14 +317,6 @@ Arturo::Feature.extend(Arturo::FeatureCaching)
 Arturo::Feature.cache_ttl = 10.minutes
 ````
 
-You can also warm the cache on startup:
-
-```Ruby
-Arturo::Feature.warm_cache!
-```
-
-This will pre-fetch all `Feature`s and put them in the cache.
-
 To use the current cache state when you can't fetch updates from origin:
 
 ```Ruby
