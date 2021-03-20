@@ -28,6 +28,12 @@ describe 'Grantlist and Blocklist' do
     expect(feature.enabled_for?(:a_thing)).to be(false)
   end
 
+  it 'prefers blacklist over whitelist (and these terms still work)' do
+    Arturo::Feature.whitelist(feature.symbol) { |thing| true }
+    Arturo::Feature.blacklist(feature.symbol) { |thing| true }
+    expect(feature.enabled_for?(:a_thing)).to be(false)
+  end
+
   it 'allow a grantlist or blocklist before the feature is created' do
     Arturo::Feature.grantlist(:does_not_exist) { |thing| thing == 'grantlisted' }
     Arturo::Feature.blocklist(:does_not_exist) { |thing| thing == 'blocklisted' }
