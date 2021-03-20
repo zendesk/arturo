@@ -4,6 +4,8 @@
 
 Bug fix: Allow using Arturo with ActiveRecord, but without all of Rails.
 
+Terminology: Switch to using blocklist and grantlist instead of blacklist and whitelist. Existing code (including initializers) using the deprecated terms will still work; you don't have to change unless you want to, but if you want to then you can.
+
 ## v2.5.2
 
 Drop support for Rails 3.2.
