@@ -1,15 +1,14 @@
 ## What
 
 Arturo provides feature sliders for Rails. It lets you turn features on and off
-just like
-[feature flippers](https://code.flickr.net/2009/12/02/flipping-out/),
+just like [feature flippers](https://code.flickr.net/2009/12/02/flipping-out/),
 but offers more fine-grained control. It supports deploying features only for
-a given percentage of your users and whitelisting and blacklisting users based
-on any criteria you can express in Ruby.
+a given percentage of your users, and grant-listing and block-listing users
+based on any criteria you can express in Ruby.
 
 The selection is deterministic. So if a user has a feature on Monday, the
 user will still have it on Tuesday (unless you *decrease* the feature's
-deployment percentage or change its white- or blacklist settings).
+deployment percentage or change its grant- or blocklist settings).
 
 ### A quick example
 
@@ -109,8 +108,8 @@ There are configuration options for the following:
  * the method that returns the object that has features
    (e.g. User, Person, or Account; see
    [feature recipients](#featurerecipients))
- * whitelists and blacklists for features
-   (see [white- and blacklisting](#wblisting))
+ * grantlists and blocklists for features
+   (see [grant- and blocklisting](#grantblocklisting))
 
 ##### CSS
 
@@ -193,15 +192,15 @@ end
 
 If the block returns `nil`, the feature will be disabled.
 
-### <span id='wblisting'>Whitelists & Blacklists</span>
+### <span id='grantblocklisting'>Grantlists & Blocklists</span>
 
-Whitelists and blacklists allow you to control exactly which users or accounts
+Grantlists and blocklists allow you to control exactly which users or accounts
 will have a feature. For example, if all premium users should have the
 `:awesome` feature, place the following in
 `config/initializers/arturo_initializer.rb`:
 
 ```Ruby
-Arturo::Feature.whitelist(:awesome) do |user|
+Arturo::Feature.grantlist(:awesome) do |user|
   user.account.premium?
 end
 ```
@@ -211,16 +210,16 @@ If, on the other hand, no users on the free plan should have the
 `config/initializers/arturo_initializer.rb`:
 
 ```Ruby
-Arturo::Feature.blacklist(:awesome) do |user|
+Arturo::Feature.blocklist(:awesome) do |user|
   user.account.free?
 end
 ```
 
-If you want to whitelist or blacklist large groups of features at once, you
+If you want to grantlist or blocklist large groups of features at once, you
 can move the feature argument into the block:
 
 ```Ruby
-Arturo::Feature.whitelist do |feature, user|
+Arturo::Feature.grantlist do |feature, user|
   user.account.has?(feature.to_sym)
 end
 ```

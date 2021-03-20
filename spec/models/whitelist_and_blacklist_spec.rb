@@ -1,53 +1,53 @@
 # frozen_string_literal: true
 require 'spec_helper'
 
-describe 'Whilelist and Blacklist' do
+describe 'Grantlist and Blocklist' do
 
   let(:feature) { create(:feature) }
 
   before do
-    Arturo::Feature.whitelists.clear
-    Arturo::Feature.blacklists.clear
+    Arturo::Feature.grantlists.clear
+    Arturo::Feature.blocklists.clear
   end
 
-  it 'overrides percent calculation with whitelist' do
+  it 'overrides percent calculation with grantlist' do
     feature.deployment_percentage = 0
-    Arturo::Feature.whitelist(feature.symbol) { |thing| true }
+    Arturo::Feature.grantlist(feature.symbol) { |thing| true }
     expect(feature.enabled_for?(:a_thing)).to be(true)
   end
 
-  it 'overrides percent calculation with blacklist' do
+  it 'overrides percent calculation with blocklist' do
     feature.deployment_percentage = 100
-    Arturo::Feature.blacklist(feature.symbol) { |thing| true }
+    Arturo::Feature.blocklist(feature.symbol) { |thing| true }
     expect(feature.enabled_for?(:a_thing)).to be(false)
   end
 
-  it 'prefers blacklist over whitelist' do
-    Arturo::Feature.whitelist(feature.symbol) { |thing| true }
-    Arturo::Feature.blacklist(feature.symbol) { |thing| true }
+  it 'prefers blocklist over grantlist' do
+    Arturo::Feature.grantlist(feature.symbol) { |thing| true }
+    Arturo::Feature.blocklist(feature.symbol) { |thing| true }
     expect(feature.enabled_for?(:a_thing)).to be(false)
   end
 
-  it 'allow a whitelist or blacklist before the feature is created' do
-    Arturo::Feature.whitelist(:does_not_exist) { |thing| thing == 'whitelisted' }
-    Arturo::Feature.blacklist(:does_not_exist) { |thing| thing == 'blacklisted' }
+  it 'allow a grantlist or blocklist before the feature is created' do
+    Arturo::Feature.grantlist(:does_not_exist) { |thing| thing == 'grantlisted' }
+    Arturo::Feature.blocklist(:does_not_exist) { |thing| thing == 'blocklisted' }
     feature = create(:feature, symbol: :does_not_exist)
-    expect(feature.enabled_for?('whitelisted')).to be(true)
-    expect(feature.enabled_for?('blacklisted')).to be(false)
+    expect(feature.enabled_for?('grantlisted')).to be(true)
+    expect(feature.enabled_for?('blocklisted')).to be(false)
   end
 
-  it 'works with global whitelisting' do
+  it 'works with global grantlisting' do
     feature.deployment_percentage = 0
     other_feature = create(:feature, deployment_percentage: 0)
-    Arturo::Feature.whitelist { |feature, recipient| feature == other_feature }
+    Arturo::Feature.grantlist { |feature, recipient| feature == other_feature }
     expect(feature.enabled_for?(:a_thing)).to be(false)
     expect(other_feature.enabled_for?(:a_thing)).to be(true)
   end
 
-  it 'works with global blacklisting' do
+  it 'works with global blocklisting' do
     feature.deployment_percentage = 100
     other_feature = create(:feature, deployment_percentage: 100)
-    Arturo::Feature.blacklist { |feature, recipient| feature == other_feature }
+    Arturo::Feature.blocklist { |feature, recipient| feature == other_feature }
     expect(feature.enabled_for?(:a_thing)).to be(true)
     expect(other_feature.enabled_for?(:a_thing)).to be(false)
   end
