@@ -1,5 +1,9 @@
 ## Unreleased
 
+## v2.5.4
+
+Bug fix: Explicitly require rails engine to avoid errors that ::Rails::Engine cannot be found.
+
 ## v2.5.3
 
 Bug fix: Allow using Arturo with ActiveRecord, but without all of Rails.
