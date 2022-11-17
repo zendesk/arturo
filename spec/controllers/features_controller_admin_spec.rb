@@ -37,11 +37,7 @@ describe Arturo::FeaturesController, type: :request do
       }
     }
 
-    if Rails::VERSION::MAJOR < 5
-      put '/arturo/features', params
-    else
-      put '/arturo/features', params: params
-    end
+    put '/arturo/features', params: params
 
     expect(features.first.reload.deployment_percentage.to_s).to eq('14')
     expect(features.last.reload.deployment_percentage.to_s).to eq('98')
@@ -54,11 +50,8 @@ describe Arturo::FeaturesController, type: :request do
   end
 
   it 'responds to a post on create' do
-    if Rails::VERSION::MAJOR < 5
-      post '/arturo/features', feature: { symbol: 'anything' }
-    else
-      post '/arturo/features', params: { feature: { symbol: 'anything' } }
-    end
+    post '/arturo/features', params: { feature: { symbol: 'anything' } }
+
     expect(Arturo::Feature.find_by_symbol('anything')).to be_present
     expect(response).to redirect_to('/arturo/features')
   end
@@ -74,20 +67,13 @@ describe Arturo::FeaturesController, type: :request do
   end
 
   def test_put_update
-    if Rails::VERSION::MAJOR < 5
-      put "/arturo/features/#{@features.first.id}", feature: { deployment_percentage: '2' }
-    else
-      put "/arturo/features/#{@features.first.id}", params: { feature: { deployment_percentage: '2' } }
-    end
+    put "/arturo/features/#{@features.first.id}", params: { feature: { deployment_percentage: '2' } }
+
     expect(response).to redirect_to("/arturo/features/#{@features.first.to_param}")
   end
 
   def test_put_invalid_update
-    if Rails::VERSION::MAJOR < 5
-      put '/arturo/features/#{@features.first.id}', feature: { deployment_percentage: '-10' }
-    else
-      put '/arturo/features/#{@features.first.id}', params: { feature: { deployment_percentage: '-10' } }
-    end
+    put '/arturo/features/#{@features.first.id}', params: { feature: { deployment_percentage: '-10' } }
 
     expect(response).to be_success
     expect(controller.flash[:alert])

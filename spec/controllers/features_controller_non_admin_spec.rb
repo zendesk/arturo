@@ -20,11 +20,8 @@ describe Arturo::FeaturesController, type: :request do
   end
 
   it 'returns forbidden with post on create' do
-    if Rails::VERSION::MAJOR < 5
-      post '/arturo/features', feature: { deployment_percentage: '38' }
-    else
-      post '/arturo/features', params: { feature: { deployment_percentage: '38' } }
-    end
+    post '/arturo/features', params: { feature: { deployment_percentage: '38' } }
+
     expect(response).to have_http_status(:forbidden)
   end
 
@@ -39,11 +36,8 @@ describe Arturo::FeaturesController, type: :request do
   end
 
   it 'returns forbidden with put on update' do
-    if Rails::VERSION::MAJOR < 5
-      put '/arturo/features/1', feature: { deployment_percentage: '81' }
-    else
-      put '/arturo/features/1', params: { feature: { deployment_percentage: '81' } }
-    end
+    put '/arturo/features/1', params: { feature: { deployment_percentage: '81' } }
+
     expect(response).to have_http_status(:forbidden)
   end
 

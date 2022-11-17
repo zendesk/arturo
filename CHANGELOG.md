@@ -1,5 +1,9 @@
 ## Unreleased
 
+Drop support for Rails 4.2
+
+Drop support for Ruby 2.4 & 2.5
+
 ## v2.5.4
 
 Bug fix: Explicitly require rails engine to avoid errors that ::Rails::Engine cannot be found.

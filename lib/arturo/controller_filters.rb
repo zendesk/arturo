@@ -14,7 +14,7 @@ module Arturo
     end
 
     def on_feature_disabled(feature_name)
-      render (Rails::VERSION::MAJOR < 5 ? :text : :plain) => 'Forbidden', :status => 403
+      render :plain => 'Forbidden', :status => 403
     end
 
     module ClassMethods

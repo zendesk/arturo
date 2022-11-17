@@ -10,42 +10,38 @@ jobs:
       fail-fast: false
       matrix:
         ruby-version:
-          - '2.4'
-          - '2.5'
           - '2.6'
           - '2.7'
         gemfile:
-          - rails4.2
           - rails5.0
           - rails5.1
           - rails5.2
           - rails6.0
           - rails6.1
-        exclude:
-          - ruby-version: '2.6'
-            gemfile: rails4.2
-          - ruby-version: '2.7'
-            gemfile: rails4.2
-          - ruby-version: '2.4'
-            gemfile: rails6.0
-          - ruby-version: '2.4'
-            gemfile: rails6.1
     name: Ruby ${{ matrix.ruby-version }}, ${{ matrix.gemfile }}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
-      - uses: zendesk/checkout@v2
+      - uses: zendesk/checkout@v3
       - name: Set up Ruby
         uses: zendesk/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-          bundler: 1
-        if: ${{ matrix.gemfile == 'rails4.2' }}
-      - name: Set up Ruby
-        uses: zendesk/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby-version }}
-        if: ${{ matrix.gemfile != 'rails4.2' }}
       - run: bundle install --jobs 4
       - name: RSpec
         run: bundle exec rspec
+
+  specs_successful:
+    name: Specs passing?
+    needs: specs
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if ${{ needs.specs.result == 'success' }}
+          then
+            echo "All specs pass"
+          else
+            echo "Some specs failed"
+            false
+          fi
