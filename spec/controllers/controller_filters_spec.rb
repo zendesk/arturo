@@ -17,20 +17,14 @@ describe BooksController, type: :controller do
   end
 
   it 'works with a get on show' do
-    if Rails::VERSION::MAJOR < 5
-      get :show, id: '2'
-    else
-      get :show, params: { id: '2' }
-    end
+    get :show, params: { id: '2' }
+
     expect(response).to be_successful
   end
 
   it 'works with a post on holds' do
-    if Rails::VERSION::MAJOR < 5
-      post :holds, id: '3'
-    else
-      post :holds, params: { id: '3' }
-    end
+    post :holds, params: { id: '3' }
+
     expect(response).to have_http_status(:forbidden)
   end
 
