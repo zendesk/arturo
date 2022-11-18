@@ -1,5 +1,9 @@
 ## Unreleased
 
+## v2.6.0
+
+Add support for Rails 7.0
+
 Add support for Ruby 3.0 & 3.1
 
 Drop support for Rails 4.2
