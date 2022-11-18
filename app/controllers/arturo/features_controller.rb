@@ -14,7 +14,6 @@ module Arturo
     include Arturo::FeatureManagement
     include Arturo::FeatureParamsSupport
 
-    unloadable
     respond_to :html, :json, :xml
 
     if respond_to?(:before_action)
