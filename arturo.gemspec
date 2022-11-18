@@ -14,9 +14,9 @@ Gem::Specification.new do |s|
   s.license = 'APLv2'
   s.required_ruby_version = '>= 2.6'
 
-  s.add_runtime_dependency      'activerecord', '>= 5.0', '< 6.2'
+  s.add_runtime_dependency      'activerecord', '>= 5.0', '< 7.1'
 
-  s.add_development_dependency  'rails',        '>= 5.0', '< 6.2'
+  s.add_development_dependency  'rails',        '>= 5.0', '< 7.1'
   s.add_development_dependency  'sqlite3'
   s.add_development_dependency  'rspec-rails'
   s.add_development_dependency  'factory_bot'

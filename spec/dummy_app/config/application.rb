@@ -10,7 +10,7 @@ module DummyApp
   class Application < Rails::Application
     config.encoding = "utf-8"
     config.filter_parameters += [:password]
-    config.assets.precompile += %w( arturo.js )
+    config.assets.precompile += %w( arturo.js ) if config.respond_to?(:assets)
     config.action_controller.action_on_unpermitted_parameters = :raise
     config.active_support.deprecation = :raise
     config.secret_key_base = 'dsdsdshjdshdshdshdshjdhjshjsdhjdsjhdshjds'
