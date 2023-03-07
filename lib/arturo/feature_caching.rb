@@ -85,7 +85,15 @@ module Arturo
           cache.delete("arturo.all")
         end
 
+        def register_cache_update_listener(&block)
+          cache_update_listeners << block
+        end
+
         private
+
+        def cache_update_listeners
+          @cache_update_listeners ||= []
+        end
 
         ##
         # @param fallback [Hash] features to use on database failure
@@ -166,6 +174,7 @@ module Arturo
         def update_and_extend_cache!(cache, features)
           mark_as_current!(cache)
           cache.write("arturo.all", features, expires_in: Arturo::Feature.cache_ttl * 10)
+          cache_update_listeners.each(&:call)
         end
       end
     end

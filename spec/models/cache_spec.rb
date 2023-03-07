@@ -177,14 +177,31 @@ describe Arturo::FeatureCaching do
       end
     end
 
-    it 'expires when outside of cache ttl and stale' do
-      Arturo::Feature.to_feature(@feature.symbol)
-      @feature.touch
-      lock_down_maximum
-      expect(Arturo::Feature).to receive(:all).and_return([@feature])
+    describe 'when outside of cache ttl and stale' do
+      let(:listener) { proc {} }
 
-      Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
-      Arturo::Feature.to_feature(@feature.symbol)
+      before do
+        Arturo::Feature.to_feature(@feature.symbol)
+        @feature.touch
+        lock_down_maximum
+        Arturo::Feature.feature_caching_strategy.register_cache_update_listener(&listener)
+        Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
+      end
+
+      after do
+        Timecop.return
+        Arturo::Feature.feature_caching_strategy.send(:cache_update_listeners).clear
+      end
+
+      it 'expires' do
+        expect(Arturo::Feature).to receive(:all).and_return([@feature])
+        Arturo::Feature.to_feature(@feature.symbol)
+      end
+
+      it 'triggers cache update listeners' do
+        expect(listener).to receive(:call)
+        Arturo::Feature.to_feature(@feature.symbol)
+      end
     end
 
     it 'does not crash on nil updated_at' do
