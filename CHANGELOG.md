@@ -1,5 +1,13 @@
 ## Unreleased
 
+## v2.8.0
+
+Drop support for Ruby 2.6
+
+Drop Support for Rails 5.0 & 5.1
+
+Add support for Ruby 3.2
+
 ## v2.7.0
 
 Adds ability to register cache update listeners with Arturo::FeatureCaching::AllStrategy that are called when the cache is updated
