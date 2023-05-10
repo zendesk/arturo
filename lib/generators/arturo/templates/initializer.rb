@@ -18,14 +18,14 @@ require 'arturo/feature'
 #   end
 # end
 
-# Whitelists and Blacklists:
+# Grantlists and Blocklists:
 #
 # Enable feature one for all admins:
-# Arturo::Feature.whitelist(:feature_one) do |user|
+# Arturo::Feature.grantlist(:feature_one) do |user|
 #   user.admin?
 # end
 #
 # Disable feature two for all small accounts:
-# Arturo::Feature.blacklist(:feature_two) do |user|
+# Arturo::Feature.blocklist(:feature_two) do |user|
 #   user.account.small?
 # end

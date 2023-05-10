@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 module Arturo
 
-  # Adds whitelist and blacklist support to individual features by name
-  # or for all features. Blacklists override whitelists. (In the world of
+  # Adds grantlist and blocklist support to individual features by name
+  # or for all features. Blocklists override grantlists. (In the world of
   # Apache, Features are "(deny,allow)".)
   # @example
   #   # allow admins for some_feature:
-  #   Arturo::Feature.whitelist(:some_feature) do |user|
+  #   Arturo::Feature.grantlist(:some_feature) do |user|
   #     user.is_admin?
   #   end
   #
   #   # disallow for small accounts for another_feature:
-  #   Arturo::Feature.blacklist(:another_feature) do |user|
+  #   Arturo::Feature.blocklist(:another_feature) do |user|
   #     user.account.small?
   #   end
   #
   #   # allow large accounts access to large features:
-  #   Arturo::Feature.whitelist do |feature, user|
+  #   Arturo::Feature.grantlist do |feature, user|
   #     feature.symbol.to_s =~ /^large/ && user.account.large?
   #   end
   #
-  # Blacklists and whitelists can be defined before the feature exists
+  # Blocklists and grantlists can be defined before the feature exists
   # and are not persisted, so they are best defined in initializers.
   # This is particularly important if your application runs in several
   # different processes or on several servers.
@@ -32,21 +32,25 @@ module Arturo
 
     module ClassMethods
 
-      def whitelists
-        @whitelists ||= []
+      def grantlists
+        @grantlists ||= []
       end
+      alias whitelists grantlists
 
-      def blacklists
-        @blacklists ||= []
+      def blocklists
+        @blocklists ||= []
       end
+      alias blacklists blocklists
 
-      def whitelist(feature_symbol = nil, &block)
-        whitelists << two_arg_block(feature_symbol, block)
+      def grantlist(feature_symbol = nil, &block)
+        grantlists << two_arg_block(feature_symbol, block)
       end
+      alias whitelist grantlist
 
-      def blacklist(feature_symbol = nil, &block)
-        blacklists << two_arg_block(feature_symbol, block)
+      def blocklist(feature_symbol = nil, &block)
+        blocklists << two_arg_block(feature_symbol, block)
       end
+      alias blacklist blocklist
 
       private
 
@@ -61,13 +65,15 @@ module Arturo
 
     protected
 
-    def whitelisted?(feature_recipient)
-      x_listed?(self.class.whitelists, feature_recipient)
+    def grantlisted?(feature_recipient)
+      x_listed?(self.class.grantlists, feature_recipient)
     end
+    alias whitelisted? grantlisted?
 
-    def blacklisted?(feature_recipient)
-      x_listed?(self.class.blacklists, feature_recipient)
+    def blocklisted?(feature_recipient)
+      x_listed?(self.class.blocklists, feature_recipient)
     end
+    alias blacklisted? blocklisted?
 
     def x_listed?(lists, feature_recipient)
       lists.any? { |block| block.call(self, feature_recipient) }

@@ -48,12 +48,12 @@ module Arturo
     #                 or other model with an #id method
     # @return [true,false] whether or not this feature is enabled
     #                      for feature_recipient
-    # @see Arturo::SpecialHandling#whitelisted?
-    # @see Arturo::SpecialHandling#blacklisted?
+    # @see Arturo::SpecialHandling#grantlisted?
+    # @see Arturo::SpecialHandling#blocklisted?
     def enabled_for?(feature_recipient)
       return false if feature_recipient.nil?
-      return false if blacklisted?(feature_recipient)
-      return true if  whitelisted?(feature_recipient)
+      return false if blocklisted?(feature_recipient)
+      return true if  grantlisted?(feature_recipient)
       passes_threshold?(feature_recipient, deployment_percentage || 0)
     end
 
