@@ -2,6 +2,7 @@
 module Arturo
   require 'arturo/null_logger'
   require 'arturo/special_handling'
+  require 'arturo/feature'
   require 'arturo/feature_availability'
   require 'arturo/feature_management'
   require 'arturo/feature_caching'

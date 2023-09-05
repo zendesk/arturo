@@ -86,6 +86,7 @@ rails g arturo:migration
 rails g arturo:initializer
 rails g arturo:routes
 rails g arturo:assets
+rails g arturo:feature_model
 ```
 
 #### Run the migration:

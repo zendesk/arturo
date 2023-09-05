@@ -1,41 +1,49 @@
 # frozen_string_literal: true
 require 'active_record'
+require 'active_support'
 
-# a stub
-# possible TODO: remove and and refactor into an acts_as_feature mixin
 module Arturo
-  class Feature < ::ActiveRecord::Base
-
+  module FeatureMethods
+    extend ActiveSupport::Concern
     include Arturo::SpecialHandling
 
-    Arturo::Feature::SYMBOL_REGEX = /^[a-zA-z][a-zA-Z0-9_]*$/
+    SYMBOL_REGEX = /^[a-zA-z][a-zA-Z0-9_]*$/
     DEFAULT_ATTRIBUTES = { :deployment_percentage => 0 }.with_indifferent_access
 
-    attr_readonly :symbol
+    included do
+      attr_readonly :symbol
 
-    validates_presence_of :symbol, :deployment_percentage
-    validates_uniqueness_of :symbol, :allow_blank => true, :case_sensitive => false
-    validates_numericality_of :deployment_percentage,
-                                            :only_integer => true,
-                                            :allow_blank => true,
-                                            :greater_than_or_equal_to => 0,
-                                            :less_than_or_equal_to => 100
-
-    # Looks up a feature by symbol. Also accepts a Feature as input.
-    # @param [Symbol, Arturo::Feature] feature_or_name a Feature or the Symbol of a Feature
-    # @return [Arturo::Feature, nil] the Feature if found, else Arturo::NoSuchFeature
-    def self.to_feature(feature_or_symbol)
-      return feature_or_symbol if feature_or_symbol.kind_of?(self)
-      symbol = feature_or_symbol.to_sym.to_s
-      self.where(:symbol => symbol).first || Arturo::NoSuchFeature.new(symbol)
+      validates_presence_of :symbol, :deployment_percentage
+      validates_uniqueness_of :symbol, :allow_blank => true, :case_sensitive => false
+      validates_numericality_of :deployment_percentage,
+                                :only_integer => true,
+                                :allow_blank => true,
+                                :greater_than_or_equal_to => 0,
+                                :less_than_or_equal_to => 100
     end
 
-    # Looks up a feature by symbol. Also accepts a Feature as input.
-    # @param [Symbol, Arturo::Feature] feature_or_name a Feature or the Symbol of a Feature
-    # @return [Arturo::Feature, nil] the Feature if found, else nil
-    def self.find_feature(feature_or_symbol)
-      feature = to_feature(feature_or_symbol)
-      feature.is_a?(Arturo::NoSuchFeature) ? nil : feature
+    class_methods do
+      # Looks up a feature by symbol. Also accepts a Feature as input.
+      # @param [Symbol, Arturo::Feature] feature_or_symbol a Feature or the Symbol of a Feature
+      # @return [Arturo::Feature, Arturo::NoSuchFeature] the Feature if found, else Arturo::NoSuchFeature
+      def to_feature(feature_or_symbol)
+        return feature_or_symbol if feature_or_symbol.kind_of?(self)
+
+        symbol = feature_or_symbol.to_sym.to_s
+        self.where(:symbol => symbol).first || Arturo::NoSuchFeature.new(symbol)
+      end
+
+      # Looks up a feature by symbol. Also accepts a Feature as input.
+      # @param [Symbol, Arturo::Feature] feature_or_symbol a Feature or the Symbol of a Feature
+      # @return [Arturo::Feature, nil] the Feature if found, else nil
+      def find_feature(feature_or_symbol)
+        feature = to_feature(feature_or_symbol)
+        feature.is_a?(Arturo::NoSuchFeature) ? nil : feature
+      end
+
+      def last_updated_at
+        maximum(:updated_at)
+      end
     end
 
     # Create a new Feature
@@ -59,6 +67,7 @@ module Arturo
 
     def name
       return I18n.translate("arturo.feature.nameless") if symbol.blank?
+
       I18n.translate("arturo.feature.#{symbol}", :default => symbol.to_s.titleize)
     end
 
@@ -72,10 +81,6 @@ module Arturo
 
     def inspect
       "<Arturo::Feature #{name}, deployed to #{deployment_percentage}%>"
-    end
-
-    def self.last_updated_at
-      maximum(:updated_at)
     end
 
     # made public so as to allow for thresholds stored outside of the model
