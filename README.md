@@ -99,6 +99,10 @@ rake db:migrate
 
 #### Edit the configuration
 
+#### Edit the Feature model
+
+By default, the generated model `Arturo::Feature` inherits from `ActiveRecord::Base`. However, if you’re using multiple databases your models should inherit from an abstract class that specifies a database connection, not directly from `ActiveRecord::Base`. Update the generated model in `app/models/arturo/feature.rb` to make it use a correct database. 
+
 ##### Initializer
 
 Open up the newly-generated `config/initializers/arturo_initializer.rb`.
