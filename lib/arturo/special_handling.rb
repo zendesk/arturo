@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+
+require 'active_support'
+
 module Arturo
 
   # Adds whitelist and blacklist support to individual features by name
@@ -25,13 +28,9 @@ module Arturo
   # This is particularly important if your application runs in several
   # different processes or on several servers.
   module SpecialHandling
+    extend ActiveSupport::Concern
 
-    def self.included(base)
-      base.extend Arturo::SpecialHandling::ClassMethods
-    end
-
-    module ClassMethods
-
+    class_methods do
       def whitelists
         @whitelists ||= []
       end
