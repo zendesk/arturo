@@ -57,7 +57,7 @@ module Arturo
     end
 
     def warm_cache!
-      warn "Deprecated, no longer necessary!"
+      to_feature(:fake_feature_to_force_cache_warming)
     end
 
     class AllStrategy
