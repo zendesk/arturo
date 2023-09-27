@@ -102,7 +102,7 @@ module Arturo
         #   without cache extension option
         #
         def arturos_from_origin(fallback:)
-          Arturo::Feature.all.each_with_object({}) { |f, hash| hash[f.symbol.to_sym] = f }
+          Arturo::Feature.all.to_h { |f| [f.symbol.to_sym, f] }
         rescue ActiveRecord::ActiveRecordError
           raise unless Arturo::Feature.extend_cache_on_failure?
 
