@@ -18,6 +18,7 @@ jobs:
           - rails6.0
           - rails6.1
           - rails7.0
+          - rails7.1
         include:
           - {ruby-version: '2.7', gemfile: rails5.2}
     name: Ruby ${{ matrix.ruby-version }}, ${{ matrix.gemfile }}
