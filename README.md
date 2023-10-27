@@ -86,6 +86,7 @@ rails g arturo:migration
 rails g arturo:initializer
 rails g arturo:routes
 rails g arturo:assets
+rails g arturo:feature_model
 ```
 
 #### Run the migration:
@@ -97,6 +98,10 @@ rake db:migrate
 #### Edit the generated migration as necessary
 
 #### Edit the configuration
+
+#### Edit the Feature model
+
+By default, the generated model `Arturo::Feature` inherits from `ActiveRecord::Base`. However, if you’re using multiple databases your models should inherit from an abstract class that specifies a database connection, not directly from `ActiveRecord::Base`. Update the generated model in `app/models/arturo/feature.rb` to make it use a correct database. 
 
 ##### Initializer
 

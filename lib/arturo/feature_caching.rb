@@ -57,7 +57,7 @@ module Arturo
     end
 
     def warm_cache!
-      warn "Deprecated, no longer necessary!"
+      to_feature(:fake_feature_to_force_cache_warming)
     end
 
     class AllStrategy
@@ -102,7 +102,7 @@ module Arturo
         #   without cache extension option
         #
         def arturos_from_origin(fallback:)
-          Hash[Arturo::Feature.all.map { |f| [f.symbol.to_sym, f] }]
+          Arturo::Feature.all.to_h { |f| [f.symbol.to_sym, f] }
         rescue ActiveRecord::ActiveRecordError
           raise unless Arturo::Feature.extend_cache_on_failure?
 

@@ -1,5 +1,11 @@
 ## Unreleased
 
+## v3.0.0
+
+Converts the Feature model into a mixin that should be used by services via a model generator.
+Brings back the `warm_cache!` method.
+Adds support for Rails 7.1.
+
 ## v2.8.0
 
 Drop support for Ruby 2.6
