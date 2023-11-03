@@ -1,13 +1,14 @@
 # frozen_string_literal: true
-module Arturo
-  require 'arturo/null_logger'
-  require 'arturo/special_handling'
-  require 'arturo/feature'
-  require 'arturo/feature_availability'
-  require 'arturo/feature_management'
-  require 'arturo/feature_caching'
-  require 'arturo/engine' if defined?(Rails)
 
+require_relative 'arturo/null_logger'
+require_relative 'arturo/special_handling'
+require_relative 'arturo/feature_methods'
+require_relative 'arturo/feature_availability'
+require_relative 'arturo/feature_management'
+require_relative 'arturo/feature_caching'
+require_relative 'arturo/engine' if defined?(Rails)
+
+module Arturo
   class << self
     # Quick check for whether a feature is enabled for a recipient.
     # @param [String, Symbol] feature_name
