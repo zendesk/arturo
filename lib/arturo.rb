@@ -15,6 +15,8 @@ module Arturo
     # @param [#id] recipient
     # @return [true,false] whether the feature exists and is enabled for the recipient
     def feature_enabled_for?(feature_name, recipient)
+      return false if recipient.nil?
+
       f = self::Feature.to_feature(feature_name)
       f && f.enabled_for?(recipient)
     end
