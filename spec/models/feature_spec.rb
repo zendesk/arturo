@@ -36,6 +36,11 @@ describe Arturo::Feature do
     expect(::Arturo.feature_enabled_for?(:does_not_exist, 'Paula')).to be(false)
   end
 
+  it 'does not find feature for nil recipients' do
+    expect(::Arturo.feature_enabled_for?(feature.symbol, nil)).to be(false)
+    expect(::Arturo.feature_enabled_for?(:does_not_exist, nil)).to be(false)
+  end
+
   it 'requires a symbol' do
     feature.symbol = nil
     expect(feature).to_not be_valid
