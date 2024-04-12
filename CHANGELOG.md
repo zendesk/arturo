@@ -1,5 +1,7 @@
 ## Unreleased
 
+Stops loading the Rails engine automatically. If you are using the engine, you need to require it explicitly by adding `require 'arturo/engine'` to `application.rb`.
+
 ## v3.0.0
 
 Converts the Feature model into a mixin that should be used by services via a model generator.
