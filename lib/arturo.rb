@@ -6,7 +6,6 @@ require_relative 'arturo/feature_methods'
 require_relative 'arturo/feature_availability'
 require_relative 'arturo/feature_management'
 require_relative 'arturo/feature_caching'
-require_relative 'arturo/engine' if defined?(Rails)
 
 module Arturo
   class << self
