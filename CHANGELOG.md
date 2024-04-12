@@ -1,6 +1,9 @@
 ## Unreleased
 
+## v4.0.0
 Stops loading the Rails engine automatically. If you are using the engine, you need to require it explicitly by adding `require 'arturo/engine'` to `application.rb`.
+Adds support for Ruby 3.3.
+Returns false immediately for `feature_enabled_for?` calls with `nil` recipients.
 
 ## v3.0.0
 
