@@ -1,14 +1,19 @@
 ## Unreleased
 
 ## v4.0.0
+
 Stops loading the Rails engine automatically. If you are using the engine, you need to require it explicitly by adding `require 'arturo/engine'` to `application.rb`.
+
 Adds support for Ruby 3.3.
+
 Returns false immediately for `feature_enabled_for?` calls with `nil` recipients.
 
 ## v3.0.0
 
 Converts the Feature model into a mixin that should be used by services via a model generator.
+
 Brings back the `warm_cache!` method.
+
 Adds support for Rails 7.1.
 
 ## v2.8.0

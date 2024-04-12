@@ -43,7 +43,7 @@ $(function() {
     updatePostingsList();
   }
 });
-````
+```
 
 Trish uses Arturo's Controller filters to control who has access to
 the feature:
@@ -69,7 +69,6 @@ and they clean up the last few bugs they found with the "live_postings"
 feature and deploy it to all users.
 
 ## Installation
-
 
 ```Ruby
 gem 'arturo'
@@ -101,7 +100,7 @@ rake db:migrate
 
 #### Edit the Feature model
 
-By default, the generated model `Arturo::Feature` inherits from `ActiveRecord::Base`. However, if you’re using multiple databases your models should inherit from an abstract class that specifies a database connection, not directly from `ActiveRecord::Base`. Update the generated model in `app/models/arturo/feature.rb` to make it use a correct database. 
+By default, the generated model `Arturo::Feature` inherits from `ActiveRecord::Base`. However, if you’re using multiple databases your models should inherit from an abstract class that specifies a database connection, not directly from `ActiveRecord::Base`. Update the generated model in `app/models/arturo/feature.rb` to make it use a correct database.
 
 ##### Initializer
 
@@ -320,7 +319,7 @@ initializer:
 ```Ruby
 Arturo::Feature.extend(Arturo::FeatureCaching)
 Arturo::Feature.cache_ttl = 10.minutes
-````
+```
 
 You can also warm the cache on startup:
 
