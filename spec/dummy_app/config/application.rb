@@ -3,7 +3,6 @@ require File.expand_path('../boot', __FILE__)
 
 require 'bundler/setup'
 require 'rails/all'
-require 'arturo/engine'
 
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 

@@ -13,9 +13,5 @@ module Arturo
         helper  Arturo::FeatureManagement
       end
     end
-
-    root = File.expand_path("../../..", __FILE__)
-    config.autoload_paths = ["#{root}/app/helpers", "#{root}/app/controllers"]
-    config.eager_load_paths = []
   end
 end
