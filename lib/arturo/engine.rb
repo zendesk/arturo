@@ -9,9 +9,11 @@ module Arturo
       include Arturo::FeatureAvailability
       include Arturo::ControllerFilters
       if respond_to?(:helper)
-        helper  Arturo::FeatureAvailability
-        helper  Arturo::FeatureManagement
+        helper Arturo::FeatureAvailability
+        helper Arturo::FeatureManagement
       end
     end
+
+    config.paths['app/controllers'] = []
   end
 end
