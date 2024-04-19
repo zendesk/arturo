@@ -1,5 +1,9 @@
 ## Unreleased
 
+## v4.0.1
+
+Fixes loading issues for apps not using the Rails engine.
+
 ## v4.0.0
 
 Stops loading the Rails engine automatically. If you are using the engine, you need to require it explicitly by adding `require 'arturo/engine'` to `application.rb`.
