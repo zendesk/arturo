@@ -220,9 +220,15 @@ describe Arturo::FeatureCaching do
         @feature.touch
         Timecop.travel(Time.now + Arturo::Feature.cache_ttl + 5.seconds)
 
-        allow(ActiveRecord::Base).
-          to receive(:connection).
-          and_raise(ActiveRecord::ActiveRecordError)
+        if ActiveRecord.version < Gem::Version.new("7.2")
+          allow(ActiveRecord::Base).
+            to receive(:connection).
+            and_raise(ActiveRecord::ActiveRecordError)
+        else
+          allow(Arturo::Feature).
+            to receive(:with_connection).
+            and_raise(ActiveRecord::ActiveRecordError)
+        end
       end
 
       context 'with extend_cache_on_failure enabled' do
