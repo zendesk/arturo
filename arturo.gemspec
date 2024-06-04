@@ -15,12 +15,4 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 3.0'
 
   s.add_runtime_dependency      'activerecord', '>= 6.0'
-
-  s.add_development_dependency  'rails',        '>= 6.0'
-  s.add_development_dependency  'sqlite3', '~> 1.4'
-  s.add_development_dependency  'rspec-rails'
-  s.add_development_dependency  'factory_bot'
-  s.add_development_dependency  'timecop'
-
-  s.add_development_dependency  'bump'
 end
