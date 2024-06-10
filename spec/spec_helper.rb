@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 ENV['RAILS_ENV'] = 'test'
+require 'debug/prelude'
+require 'debug/config'
 require 'dummy_app/config/environment'
 require 'rspec/rails'
 require 'factory_bot'
