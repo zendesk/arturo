@@ -1,5 +1,13 @@
 ## Unreleased
 
+## v4.1.0
+
+Removes upper boundary on ActiveRecord.
+
+Drops support for Ruby < 3.0.
+
+Drops support for Rails < 6.0.
+
 ## v4.0.1
 
 Fixes loading issues for apps not using the Rails engine.
