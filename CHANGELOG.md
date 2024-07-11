@@ -1,5 +1,9 @@
 ## Unreleased
 
+## v4.1.1
+
+Fixes missing indifferent_access import
+
 ## v4.1.0
 
 Removes upper boundary on ActiveRecord.
