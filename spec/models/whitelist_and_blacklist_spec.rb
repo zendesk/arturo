@@ -10,6 +10,11 @@ describe 'Whilelist and Blacklist' do
     Arturo::Feature.blacklists.clear
   end
 
+  after do
+    Arturo::Feature.whitelists.clear
+    Arturo::Feature.blacklists.clear
+  end
+
   it 'overrides percent calculation with whitelist' do
     feature.deployment_percentage = 0
     Arturo::Feature.whitelist(feature.symbol) { |thing| true }
