@@ -2,6 +2,7 @@
 
 require 'active_record'
 require 'active_support'
+require 'active_support/core_ext/hash/indifferent_access'
 
 module Arturo
   module FeatureMethods
