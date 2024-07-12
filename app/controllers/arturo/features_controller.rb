@@ -16,13 +16,8 @@ module Arturo
 
     respond_to :html, :json, :xml
 
-    if respond_to?(:before_action)
-      before_action :require_permission
-      before_action :load_feature, :only => [ :show, :edit, :update, :destroy ]
-    else
-      before_filter :require_permission
-      before_filter :load_feature, :only => [ :show, :edit, :update, :destroy ]
-    end
+    before_action :require_permission
+    before_action :load_feature, :only => [ :show, :edit, :update, :destroy ]
 
     def index
       @features = Arturo::Feature.all
