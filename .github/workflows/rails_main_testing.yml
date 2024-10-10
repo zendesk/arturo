@@ -1,4 +1,4 @@
-name: Rails Main Specs
+name: Test against Rails main
 
 on:
   schedule:
