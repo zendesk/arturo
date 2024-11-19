@@ -21,6 +21,7 @@ jobs:
           - rails7.1
     name: Ruby ${{ matrix.ruby-version }}, ${{ matrix.gemfile }}
     env:
+      RUBYOPT: --enable=frozen-string-literal
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
       - uses: actions/checkout@v4
