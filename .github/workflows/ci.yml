@@ -14,8 +14,6 @@ jobs:
           - '3.2'
           - "3.3"
         gemfile:
-          - rails6.0
-          - rails6.1
           - rails7.0
           - rails7.1
     name: Ruby ${{ matrix.ruby-version }}, ${{ matrix.gemfile }}
