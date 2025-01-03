@@ -6,6 +6,8 @@ Drops support for Rails 6.0 and 6.1.
 
 Adds tests against Ruby 3.4.
 
+Adds tests against Rails 7.2 and 8.0.
+
 ## v4.1.1
 
 Fixes missing indifferent_access import
