@@ -1,5 +1,7 @@
 ## Unreleased
 
+Drops support for Ruby 3.0.
+
 ## v4.1.1
 
 Fixes missing indifferent_access import
