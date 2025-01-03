@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         ruby-version:
-          - "3.3"
+          - "3.4"
         gemfile:
           - rails_main
     name: Ruby ${{ matrix.ruby-version }}, ${{ matrix.gemfile }}
