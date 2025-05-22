@@ -1,6 +1,6 @@
 ## Unreleased
 
-Drops support for Ruby 3.0.
+Drops support for Ruby 3.0 and 3.1.
 
 Drops support for Rails 6.0 and 6.1.
 
