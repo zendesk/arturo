@@ -2,6 +2,7 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'bundler/setup'
+require 'logger'
 require 'rails/all'
 require 'arturo/engine'
 
