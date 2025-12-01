@@ -2,6 +2,6 @@ source 'https://rubygems.org'
 
 eval_gemfile 'common.rb'
 
-gem 'rails', '~> 7.1.0'
+gem 'rails', '~> 8.1.0'
 gem 'responders', '~> 3.0'
-gem 'sqlite3', '~> 1.4'
+gem 'sqlite3', '~> 2.0'
