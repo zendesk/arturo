@@ -1,0 +1,14 @@
+#! /bin/bash
+# Usage: ./bundle_all <args>
+# This will update the lock files
+# in the gemfiles/ folder as well
+
+set -euo pipefail
+
+bundler_args=${*:-install}
+
+for gemfile in gemfiles/*.gemfile Gemfile
+do
+  echo "BUNDLE_GEMFILE=$gemfile bundle $bundler_args"
+  BUNDLE_GEMFILE=$gemfile bundle $bundler_args
+done
