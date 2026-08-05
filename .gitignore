@@ -5,3 +5,4 @@ tags
 **/*.sqlite3
 **/*.log
 **/tmp/**/*
+/vendor/bundle/

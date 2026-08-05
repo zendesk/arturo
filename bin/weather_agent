@@ -1,0 +1,100 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'optparse'
+
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+require 'weather_agent'
+
+options = {
+  locations: [],
+  mode: :once,
+  check_hour: 7,
+  check_minute: 0,
+  verbose: false
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: weather_agent [options]"
+
+  opts.on("-l", "--location LOCATION", "Location to check (can be specified multiple times)") do |loc|
+    options[:locations] << loc
+  end
+
+  opts.on("-s", "--schedule", "Run in scheduled mode (daily checks)") do
+    options[:mode] = :schedule
+  end
+
+  opts.on("-t", "--time HOUR:MINUTE", "Time for daily check (default: 07:00)") do |time|
+    parts = time.split(':')
+    options[:check_hour] = parts[0].to_i
+    options[:check_minute] = parts[1].to_i if parts[1]
+  end
+
+  opts.on("-j", "--json", "Output results as JSON") do
+    options[:format] = :json
+  end
+
+  opts.on("-v", "--verbose", "Enable verbose logging") do
+    options[:verbose] = true
+  end
+
+  opts.on("-h", "--help", "Show this help message") do
+    puts opts
+    exit
+  end
+
+  opts.on("--version", "Show version") do
+    puts "WeatherAgent 1.0.0"
+    exit
+  end
+end.parse!
+
+if options[:locations].empty?
+  options[:locations] = [ENV.fetch('WEATHER_LOCATION', 'New York')]
+end
+
+if options[:verbose]
+  require 'logger'
+  WeatherAgent.logger = Logger.new($stdout, level: Logger::DEBUG)
+end
+
+case options[:mode]
+when :schedule
+  scheduler = WeatherAgent::Scheduler.new(
+    locations: options[:locations],
+    check_hour: options[:check_hour],
+    check_minute: options[:check_minute]
+  )
+
+  trap('INT') do
+    puts "\nShutting down..."
+    scheduler.stop
+  end
+
+  trap('TERM') do
+    scheduler.stop
+  end
+
+  scheduler.start
+
+when :once
+  agent = WeatherAgent::Agent.new(locations: options[:locations])
+  agent.run
+
+  if options[:format] == :json
+    require 'json'
+    output = agent.results.transform_values do |result|
+      if result[:success]
+        result[:forecast].to_h
+      else
+        { error: result[:error] }
+      end
+    end
+    puts JSON.pretty_generate(output)
+  else
+    puts agent.summary_report
+  end
+
+  exit(agent.all_successful? ? 0 : 1)
+end
